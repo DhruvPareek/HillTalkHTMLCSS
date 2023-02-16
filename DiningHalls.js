@@ -17,4 +17,9 @@ function sortDiningHours() {
     /*TODO*/
     return;
 }
+
+function sortDiningLocation() {
+    /*TODO*/
+    return;
+}
         
