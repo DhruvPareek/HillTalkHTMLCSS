@@ -1,54 +1,33 @@
-// import './App.css';
-
-
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <h1>Test for Reveiws</h1>
-//       <div className="form">
-//         <label>Olympic Hall Cleanliness</label>
-//       <input type="text" name="Olympic Hall Cleanliness" />
-//       <label></label>
-//       <input type="text" name="Review" />
-//       </div>   
-//       <button onclick='buttonclick()' >Submit</button>
-//     </div>
-//   );
-// }
-
-// export default App;
 import React from "react";
-import { createRoot } from "react-dom/client";
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Home from "./Home";
+import DiningHalls from "./Dining Halls";
+import Contact from "./Contacts";
 
-function App()
-{
+function App() {
+  return (
+    <Router>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/DiningHalls">DiningHalls</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact</Link>
+          </li>
+        </ul>
+      </nav>
+      <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/DiningHalls" element={<DiningHalls />} />
+      <Route path="/contact" element={<Contact />} />
+      </Routes>
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <div>
-        <h1>Hello World</h1>
-        <Link to="about">About Us</Link>
-      </div>
-    ),
-  },
-  {
-    path: "about",
-    element: <div>About</div>,
-  },
-]);
-
-createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
-);
+    </Router>
+  );
 }
 
 export default App;
