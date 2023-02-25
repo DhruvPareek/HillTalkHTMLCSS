@@ -1,9 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./Home";
-import DiningHalls from "./Dining Halls";
+import DiningHalls from "./DiningHalls";
 import Contact from "./Contacts";
-// App.js
 
 function App() {
   return (
