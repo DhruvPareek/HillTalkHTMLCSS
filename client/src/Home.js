@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 
@@ -24,3 +25,19 @@
   }
   
   
+=======
+// Home.js
+
+import React from "react";
+
+function Home() {
+  return (
+    <div>
+      <h1>Home</h1>
+      <p>Welcome to my homepage!</p>
+    </div>
+  );
+}
+
+export default Home;
+>>>>>>> 5754dddb4601a1755539119adbf60ae0aec6deca
