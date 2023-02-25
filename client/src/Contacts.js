@@ -1,8 +1,8 @@
-export default function Topics(){
+export default function Contacts(){
     return (
         <div>
             <h3>
-                Topics
+                YAYYY
             </h3>
         </div>
     );
