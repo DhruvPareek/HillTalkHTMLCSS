@@ -1,16 +1,81 @@
 .App {
-  text-align: center;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.form input {
-width : 300px;
-height: 60px;
-margin: 10px;
-}
+	text-align: center;
+  }
+  
+  .form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+  }
+  
+  .form input {
+  width : 300px;
+  height: 60px;
+  margin: 10px;
+  }
+  
+  nav {
+	  display: flex;
+	  padding: 2%, 6%;
+	  justify-content: space-between;
+	  align-items: center;
+  }
+  
+  .nav-links {
+	  flex: 1;
+	  text-align: right;
+  }
+  
+  .nav-links ul li{
+	  list-style: none;
+	  display: inline-block;
+	  padding: 8px 12px;
+  }
+  
+  h1 {
+	  font-family: "Lucida Console";
+	  text-align: left;
+	  font-size: 35px;
+	  padding: 0px 15px;
+  }
+  
+  .map{
+	  display: block;
+	  margin-left: auto;
+	  margin-right: auto;
+	  width: 40%;
+	border: 5px solid #555;
+  }
+  
+  body {
+	text-align: center;
+  }
+  
+  .Bplate{
+	  display: block;
+	  margin-left: auto;
+	  margin-right: auto;
+	  width: 30%;
+	border: 5px solid #555;
+  }
+  
+  .tripleClassic{
+	  display: block;
+	  margin-left: auto;
+	  margin-right: auto;
+	  width: 40%;
+	border: 5px solid #555;
+  }
+  
+  .Bfit{
+	  display: block;
+	  margin-left: auto;
+	  margin-right: auto;
+	  width: 48%;
+	border: 5px solid #555;
+  }
+  
+  .CentennialOlympic{
+	  border: 5px solid #555;
+  }

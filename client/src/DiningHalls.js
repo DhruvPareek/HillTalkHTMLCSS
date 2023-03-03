@@ -1,4 +1,6 @@
 import React from 'react';
+import './App.css';
+
 class DiningHalls extends React.Component{
 
     constructor(props){
@@ -52,7 +54,7 @@ render() {
 </head>
 <body>
   <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20160/56a670f2bd26f54876001535_UCLAOlympicVillage6/UCLAOlympicVillage6_4d51350a-2c04-4d93-8fe3-ac4e6b248efc-prv.jpg" alt="Bplate" width="720" height="405" class = "Bplate" />
-  <h3>This page contains every dining hall, takeout and buffet style places from around the hill.</h3>
+  <p>This page contains every dining hall, takeout and buffet style places from around the hill.</p>
    <p>Sort By:</p>
    <ul>
     <ol><button type='button' className="btn btn-primary" onClick={() => { this.clickedSort(1);}}>Health{this.state.sortedby}</button></ol>
