@@ -15,6 +15,8 @@ class Dorms extends React.Component{
   this.clickedSort = this.clickedSort.bind(this)
   }
 
+  /*This function gets called when someone hits the button, it will set the state of the writingReview 
+  to the opposite of whatever it is at the moment */
   leaveReview(props)
   {
     if(this.state.writingReview == true){
@@ -76,12 +78,28 @@ render() {
     <br></br>
     <h3>Centennial/Olympic</h3>
     <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20218/614102382cfac27232f4ea45_Olympic+and+Centennial+Hall_5DM47510_Ext2/Olympic+and+Centennial+Hall_5DM47510_Ext2_hero.jpg"  width="250" height="200" class="CentennialOlympic"></img>
+    {/*The below line is how the button works, it checks the state for the variable 'writingReview', if writingReview
+    is set to true, that means the person in the act of writing a review, so the button should say submit review and a text box should pop up. 
+    If the bool writingReview is false, the button should say "Leave a Review" to give the person the option to write
+    a review */}
+    <br />
     <button type='button' className="ReviewButton" onClick={() => { this.leaveReview();}}>{this.state.writingReview ? "Submit Review" : "Leave a Review"}</button>
+    <div class="TextBox">
+      {this.state.writingReview ? renderTextBox() : " "}
+    </div>
 </body>
 
 </html>
   );
 }
+}
+
+function renderTextBox(){
+  return (
+    <html>
+      <input type="text" name="name" />
+    </html>
+  );
 }
 
 export default Dorms;
