@@ -84,6 +84,8 @@ render() {
     a review */}
     <br />
     <button type='button' className="ReviewButton" onClick={() => { this.leaveReview();}}>{this.state.writingReview ? "Submit Review" : "Leave a Review"}</button>
+    {/*The line below will render a text box by calling calling the function: renderTextBox()
+    if writingReview bool is true. Else is does nothing */}
     <div class="TextBox">
       {this.state.writingReview ? renderTextBox() : " "}
     </div>
@@ -94,10 +96,11 @@ render() {
 }
 }
 
+//This function actually returns the text box
 function renderTextBox(){
   return (
     <html>
-      <input type="text" name="name" />
+      <input type="text" name="review" />
     </html>
   );
 }
