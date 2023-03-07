@@ -111,7 +111,8 @@ function ReviewDatabase(string){
           {reviews.map((review) => {
             return (
                 <div className="eachReview">
-                    <p>{review.TextReview}</p>
+                    <p>Comment: {review.TextReview}</p>
+                    <p>Rating: {review.Rating}/5</p>
                 </div>
                 );
           })}
