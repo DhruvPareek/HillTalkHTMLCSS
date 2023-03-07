@@ -1,6 +1,10 @@
 // About.js
-import './App.css';
+import {useState, useEffect} from "react";
 import React from "react";
+import "./App.css";
+
+import {db} from "./firebase-config"
+import {collection, getDocs} from "firebase/firestore";
 
 function RecCenters() {
     return (
@@ -19,6 +23,14 @@ function RecCenters() {
     <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button></ol>
     <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Business{}</button></ol>
     </ul>
+    <br></br>
+        <h3>John Wooden Center</h3>
+        <img src="https://pbs.twimg.com/media/CgMViMxUIAAIU-p.jpg:large"  width="250" height="200" class="JWC"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase_JWC()}
+        </div>
+        <br />
 </body>
 </html>
     );
@@ -47,5 +59,32 @@ function clickedSort(props)
         alert('hello, this should show up if the page rendered lol, Sort by Business');  
     }
 }
+
+function ReviewDatabase_JWC(){
+    const [reviews, setReview] = useState([]);
+    const reviewCollectionRef = collection(db, "JWCReviews")
+  
+    useEffect(() => {
+      
+      const getReviews = async () => {
+        const data = await getDocs(reviewCollectionRef);
+        setReview(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+      }
+  
+      getReviews()
+    }, [])
+    return (
+      <div className="ReviewDatabase">
+          {reviews.map((review) => {
+            return (
+              <div>
+                {" "}
+                <p>{review.TextReview}</p>
+                </div>
+                );
+          })}
+      </div>
+    );
+  }
 
 export default RecCenters;
