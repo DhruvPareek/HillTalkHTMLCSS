@@ -14,7 +14,7 @@ function RecCenters() {
 </head>
 <body>
 <img src="https://linespace.com/wp-content/uploads/2018/03/UCLA_BeFit_091615_04-1170x658.jpg" alt="BFit" width="720" height="405" class = "Bfit"/>
-  <p>Here you can find every dorm on campus.</p>
+  <p>Here you can find every recreation center on campus.</p>
    <p>Sort By:</p>
    <ul>
     <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Facility Quaity{}</button></ol>
@@ -45,6 +45,22 @@ function RecCenters() {
         <div class="ListOfReviews">
           <h3>Reviews:</h3><br></br>
         {ReviewDatabase("SunsetRecReviews")}
+        </div>
+        <br />
+    <br></br>
+        <h3>Hitch Basketball Courts</h3>
+        <img src="https://i.pinimg.com/originals/97/d5/dc/97d5dc01f8ae8694c1e8c319ee3bbf00.png"  width="250" height="200" class="HITCHBB"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("HitchBBReviews")}
+        </div>
+        <br />
+    <br></br>
+        <h3>Intramural Field</h3>
+        <img src="https://recreation.ucla.edu/sites/default/files/styles/header_image/public/2022-03/facilities_IMfield_1156x420.jpg?itok=9NBBHMNs"  width="250" height="200" class="IMFIELD"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("IMFieldReviews")}
         </div>
         <br />
 </body>
