@@ -8,7 +8,6 @@ import {db} from "./firebase-config"
 import {collection, getDocs} from "firebase/firestore";
 
 function Dorms(){
-  ReviewDatabase();
   return (
     <html>
     <head>
@@ -27,6 +26,10 @@ function Dorms(){
         <br></br>
         <h3>Centennial/Olympic</h3>
         <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20218/614102382cfac27232f4ea45_Olympic+and+Centennial+Hall_5DM47510_Ext2/Olympic+and+Centennial+Hall_5DM47510_Ext2_hero.jpg"  width="250" height="200" class="CentennialOlympic"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase()}
+        </div>
         <br />
     </body>
     
@@ -63,11 +66,23 @@ function ReviewDatabase(){
     
     const getReviews = async () => {
       const data = await getDocs(reviewCollectionRef);
-      console.log(data);
+      setReview(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
     }
 
     getReviews()
   }, [])
+  return (
+    <div className="ReviewDatabase">
+        {reviews.map((review) => {
+          return (
+            <div>
+              {" "}
+              <p>{review.TextReview}</p>
+              </div>
+              );
+        })}
+    </div>
+  );
 }
 
 export default Dorms;
