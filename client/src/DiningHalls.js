@@ -1,5 +1,9 @@
+import {useState, useEffect} from "react";
 import React from 'react';
 import './App.css';
+
+import {db} from "./firebase-config"
+import {collection, getDocs, addDoc,} from "firebase/firestore";
 
 function DiningHalls() {
     return (
@@ -18,6 +22,79 @@ function DiningHalls() {
             <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Hours{}</button></ol>
             <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(5);}}>Location{}</button></ol>
             </ul> 
+            <br></br>
+        <h3>Rendezvous</h3>
+        <img src="https://www.sustain.ucla.edu/wp-content/uploads/2013/05/RNDZ_3_web_960x450.jpg"  width="250" height="200" class="Rendezvous"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Rendezvous")}
+        </div>
+        <br />
+        <br></br>
+        <h3>De Neve</h3>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_DeNeve.png"  width="250" height="200" class="DeNeve"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("De Neve")}
+        </div>
+        <br />
+        <br></br>
+        <h3>Epicuria</h3>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_EpicuriaAckerman2.png"  width="250" height="200" class="Epicuria"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Epicuria")}
+        </div>
+        <br />
+        <br></br>
+        <h3>Bplate</h3>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_Bruin%20Plate.png"  width="250" height="200" class="Bplate"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Bplate")}
+        </div>
+        <br />
+        <br></br>
+        <h3>The Study</h3>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_TheStudyatHedrick.png"  width="250" height="200" class="The Study"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Study")}
+        </div>
+        <br />
+        <br></br>
+        <h3>Bruin Cafe</h3>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_Bruin%20Cafe.png"  width="250" height="200" class="BCafe"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Bcafe")}
+        </div>
+        <br />
+        <br></br>
+        <h3>Bruin Bowl</h3>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_Bruin%20Bowl.png"  width="250" height="200" class="BruinBowl"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("BruinBowl")}
+        </div>
+        <br />
+        <br></br>
+        <h3>FEAST</h3>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_FEASTatRieber.png"  width="250" height="200" class="FEAST"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Feast")}
+        </div>
+        <br />
+        <br></br>
+        <h3>The Drey</h3>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_TheDrey_1.png"  width="250" height="200" class="Drey"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Drey")}
+        </div>
+        <br />
+
         </body>
         </html>
     );
@@ -46,5 +123,62 @@ function clickedSort(props)
         alert('hello, this should show up if the page rendered lol, Sort by Location'); 
     }
 }
+
+function ReviewDatabase(string){
+    const [RendeReviews, setRendeReview] = useState([]); //hook instead of class
+    const RendeReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
+    const [newReview, setNewReview] = useState("");
+    const [newRating, setNewRating] = useState(0);
+    const createReview = async () => {
+        await addDoc(RendeReviewCollectionRef, { Review: newReview, Rating: Number(newRating) });
+      };
+    useEffect(() => {
+      
+      const getReviews = async () => {
+        const data = await getDocs(RendeReviewCollectionRef); //getDocs returns all the documents from the collection of reviews
+        setRendeReview(data.docs.map((doc) => ({...doc.data(), id: doc.id}))); //doc.data return object containing fields and adds id field to new object
+      }
+  
+      getReviews()  
+    }, [])
+
+    return (
+      <div className="RendeReviewDatabase">
+        <input
+        placeholder="Review..."
+        onChange={(event) => {
+          setNewReview(event.target.value);
+        }}/>
+      <input
+        type="number"
+        placeholder2="Rating..."
+        onChange2={(event) => {
+          setNewRating(event.target.value);
+        }}
+      />
+
+      <button onClick={createReview}> Create User</button>
+      {RendeReviews.map((review) => {
+        return (
+          <div>
+            {" "}
+            <p>Review: {review.Review}</p>
+            <p>Rating: {review.Rating}</p>
+            {/* <button
+              onClick={() => {
+                updateReview(user.id, user.age);
+              }}
+            > */}
+
+            {/* </button> */}
+                {" "}
+                {/* <p>{review.Review}</p> */}
+                </div>
+                );
+          })}
+    </div>
+    );
+  }
+  
 
 export default DiningHalls;
