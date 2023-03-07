@@ -4,7 +4,9 @@ import React from "react";
 import "./App.css";
 
 import {db} from "./firebase-config"
-import {collection, getDocs} from "firebase/firestore";
+import {collection, getDocs, addDoc} from "firebase/firestore";
+
+
 
 function RecCenters() {
     return (
@@ -94,8 +96,13 @@ function clickedSort(props)
 
 
 function ReviewDatabase(string){
+    const [input, setInput] = useState(""); //this will be the input review from the user
+    const [rating, setRating] = useState(0); //this will be the inout rating from the user
     const [reviews, setReview] = useState([]);
     const reviewCollectionRef = collection(db, string)
+    const createReview = async() => {
+        await addDoc(reviewCollectionRef, { TextReview: input , Rating : rating })
+    }
   
     useEffect(() => {
       
@@ -106,8 +113,24 @@ function ReviewDatabase(string){
   
       getReviews()
     }, [])
+
     return (
       <div className="ReviewDatabase">
+
+        <input 
+            placeholder="Add Review Here"
+            onChange={(event) => 
+                {setInput(event.target.value)}
+            }
+        />
+        <input 
+            placeholder="Add Rating(/5) Here"
+            type="number"
+            onChange={(event) => 
+                {setRating(event.target.value)}
+            }
+        />
+        <button onClick={createReview}>Add a rating</button>
           {reviews.map((review) => {
             return (
                 <div className="eachReview">
