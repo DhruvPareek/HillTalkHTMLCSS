@@ -1,74 +1,46 @@
-// import './App.css';
-
-
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <h1>Test for Reveiws</h1>
-//       <div className="form">
-//         <label>Olympic Hall Cleanliness</label>
-//       <input type="text" name="Olympic Hall Cleanliness" />
-//       <label></label>
-//       <input type="text" name="Review" />
-//       </div>   
-//       <button onclick='buttonclick()' >Submit</button>
-//     </div>
-//   );
-// }
-
-// export default App;
-// import React from "react";
-// import { createRoot } from "react-dom/client";
-// import {
-//   createBrowserRouter,
-//   RouterProvider,
-//   Route,
-//   Link,
-// } from "react-router-dom";
-
-// function App()
-// {
-
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: (
-//       <div>
-//         <h1>Hello World</h1>
-//         <Link to="about">About Us</Link>
-//       </div>
-//     ),
-//   },
-//   {
-//     path: "about",
-//     element: <div>About</div>,
-//   },
-// ]);
-
-// createRoot(document.getElementById("root")).render(
-//   <RouterProvider router={router} />
-// );
-// }
-
-// App.js
-
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import About from './About';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Home from "./Home";
+import DiningHalls from "./DiningHalls";
+import Contact from "./Contacts";
+import Dorms from "./Dorms";
+import RecCenters from "./RecCenters";
+import './App.css';
 
 function App() {
   return (
-    <div>
+    <Router>
+      <h1> HillTalk </h1>
+      <nav>
+      <div class="nav-links">
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/DiningHalls">Dining Halls</Link>
+          </li>
+          <li>
+            <Link to="/Dorms">Dorms</Link>
+          </li>
+          <li>
+            <Link to="/RecCenters">Recreation Centers</Link>
+          </li>
+          <li>
+            <Link to="/contact">Contact Us</Link>
+          </li>
+        </ul>
+        </div>
+      </nav>
       <Routes>
-        <Route exact path="/">
-          <App />
-        </Route>
-        <Route path="/About">
-          <About />
-        </Route>
+      <Route path="/" element={<Home />} />
+      <Route path="/DiningHalls" element={<DiningHalls />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/Dorms" element={<Dorms />} />
+      <Route path="/RecCenters" element={<RecCenters />} />
       </Routes>
-    </div>
+    </Router>
+//>>>>>>> 735cf8fc38ff55bbf54b63544c458d6ab0fed92a
   );
 }
 
