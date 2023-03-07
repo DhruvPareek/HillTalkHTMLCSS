@@ -31,6 +31,14 @@ function RecCenters() {
         {ReviewDatabase_JWC()}
         </div>
         <br />
+    <br></br>
+        <h3>Bruin Fitness Center (Bfit)</h3>
+        <img src="https://conferences.ucla.edu/wp-content/uploads/2019/09/bfit.jpg"  width="250" height="200" class="BFIT"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase_BFIT()}
+        </div>
+        <br />
 </body>
 </html>
     );
@@ -63,6 +71,33 @@ function clickedSort(props)
 function ReviewDatabase_JWC(){
     const [reviews, setReview] = useState([]);
     const reviewCollectionRef = collection(db, "JWCReviews")
+  
+    useEffect(() => {
+      
+      const getReviews = async () => {
+        const data = await getDocs(reviewCollectionRef);
+        setReview(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+      }
+  
+      getReviews()
+    }, [])
+    return (
+      <div className="ReviewDatabase">
+          {reviews.map((review) => {
+            return (
+              <div>
+                {" "}
+                <p>{review.TextReview}</p>
+                </div>
+                );
+          })}
+      </div>
+    );
+  }
+
+function ReviewDatabase_BFIT(){
+    const [reviews, setReview] = useState([]);
+    const reviewCollectionRef = collection(db, "BFITReviews")
   
     useEffect(() => {
       
