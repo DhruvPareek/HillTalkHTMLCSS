@@ -21,7 +21,7 @@ function RecCenters() {
     <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Hours{}</button></ol>
     <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Space{}</button></ol>
     <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button></ol>
-    <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Business{}</button></ol>
+    <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(5);}}>Business{}</button></ol>
     </ul>
     <br></br>
         <h3>John Wooden Center</h3>
@@ -110,9 +110,8 @@ function ReviewDatabase(string){
       <div className="ReviewDatabase">
           {reviews.map((review) => {
             return (
-              <div>
-                {" "}
-                <p>{review.TextReview}</p>
+                <div className="eachReview">
+                    <p>{review.TextReview}</p>
                 </div>
                 );
           })}
