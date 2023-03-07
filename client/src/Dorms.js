@@ -59,17 +59,17 @@ function clickedSort(props)
 }
 
 function ReviewDatabase(){
-  const [reviews, setReview] = useState([]);
-  const reviewCollectionRef = collection(db, "Reviews")
+  const [reviews, setReview] = useState([]); //hook instead of class
+  const reviewCollectionRef = collection(db, "Reviews") //gets the collection of reviews from the database and stores into var
 
   useEffect(() => {
     
     const getReviews = async () => {
-      const data = await getDocs(reviewCollectionRef);
-      setReview(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+      const data = await getDocs(reviewCollectionRef); //getDocs returns all the documents from the collection of reviews
+      setReview(data.docs.map((doc) => ({...doc.data(), id: doc.id}))); //doc.data return object containing fields and adds id field to new object
     }
 
-    getReviews()
+    getReviews()  
   }, [])
   return (
     <div className="ReviewDatabase">
