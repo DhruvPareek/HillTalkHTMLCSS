@@ -39,6 +39,14 @@ function RecCenters() {
         {ReviewDatabase_BFIT()}
         </div>
         <br />
+    <br></br>
+        <h3>Sunset Canyon Recreation Center (Sunset Rec)</h3>
+        <img src="https://recreation.ucla.edu/sites/default/files/styles/resize_3_2/public/2022-03/facilities_pools_600x400_1.jpg?itok=97qpWsPL"  width="250" height="200" class="SUNSETREC"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase_Sunset()}
+        </div>
+        <br />
 </body>
 </html>
     );
@@ -98,6 +106,33 @@ function ReviewDatabase_JWC(){
 function ReviewDatabase_BFIT(){
     const [reviews, setReview] = useState([]);
     const reviewCollectionRef = collection(db, "BFITReviews")
+  
+    useEffect(() => {
+      
+      const getReviews = async () => {
+        const data = await getDocs(reviewCollectionRef);
+        setReview(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
+      }
+  
+      getReviews()
+    }, [])
+    return (
+      <div className="ReviewDatabase">
+          {reviews.map((review) => {
+            return (
+              <div>
+                {" "}
+                <p>{review.TextReview}</p>
+                </div>
+                );
+          })}
+      </div>
+    );
+  }
+
+function ReviewDatabase_Sunset(){
+    const [reviews, setReview] = useState([]);
+    const reviewCollectionRef = collection(db, "SunsetRecReviews")
   
     useEffect(() => {
       
