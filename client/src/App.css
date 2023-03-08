@@ -14,24 +14,42 @@
   height: 60px;
   margin: 10px;
   }
-  
-  nav {
-	  display: flex;
-	  padding: 2%, 6%;
-	  justify-content: space-between;
-	  align-items: center;
-  }
-  
-  .nav-links {
-	  flex: 1;
-	  text-align: right;
-  }
-  
-  .nav-links ul li{
-	  list-style: none;
-	  display: inline-block;
-	  padding: 8px 12px;
-  }
+  nav{
+    display: flex;
+    padding: 2% 6%;
+    justify-content: space-between;
+	align-items: center; /* add this property */
+	position: relative
+	}
+	
+
+.nav-links{
+    flex: 1;
+    text-align: right;
+}
+
+.nav-links ul li{
+    list-style: none;
+    display: inline-block;
+    padding: 8px 12px;
+}
+.nav-links ul li a{
+    color: #070101;
+    text-decoration: none;
+    font-size: 14px;
+}
+.nav-links ul li::after{ 
+    content: '';
+    width: 0%;
+    height: 2px;
+    background: #030201;
+    display: block;
+    margin: auto;
+    transition: 0.5s;
+}
+.nav-links ul li:hover::after{
+    width:100%;
+}
   
   h1 {
 	  font-family: "Lucida Console";
