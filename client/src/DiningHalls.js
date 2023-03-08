@@ -5,7 +5,7 @@ import './App.css';
 import{logged} from './Home.js';
 
 import {db} from "./firebase-config"
-import {collection, getDocs, addDoc,} from "firebase/firestore";
+import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
 
 function DiningHalls() {
     return (
@@ -127,30 +127,39 @@ function clickedSort(props)
 }
 
 function ReviewDatabase(string){
-    const [RendeReviews, setRendeReview] = useState([]); //hook instead of class
-    const RendeReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
+    const [Reviews, setReview] = useState([]); //hook instead of class
+    const ReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
     const [newReview, setNewReview] = useState("");
     const [newRating, setNewRating] = useState(0);
+
+    
     const createReview = async () => {
       if (logged){
-        await addDoc(RendeReviewCollectionRef, { Review: newReview, Rating: newRating });
+        await addDoc(ReviewCollectionRef, { Review: newReview, Rating: Number(newRating), upvotes: Number(0) });
       }
       else{
         alert("Need to be logged in to create a Review!!")
       }
       };
+
+      //for updating review when upvote button clicked
+      const updateReview = async (id, numUpvotes) => {
+        const reviewDoc = doc(db, string, id)
+        const newFields = {upvotes: numUpvotes+1}
+        await updateDoc(reviewDoc, newFields)
+      }
     useEffect(() => {
       
       const getReviews = async () => {
-        const data = await getDocs(RendeReviewCollectionRef); //getDocs returns all the documents from the collection of reviews
-        setRendeReview(data.docs.map((doc) => ({...doc.data(), id: doc.id}))); //doc.data return object containing fields and adds id field to new object
+        const data = await getDocs(ReviewCollectionRef); //getDocs returns all the documents from the collection of reviews
+        setReview(data.docs.map((doc) => ({...doc.data(), id: doc.id}))); //doc.data return object containing fields and adds id field to new object
       }
   
       getReviews()  
     }, [])
 
     return (
-      <div className="RendeReviewDatabase">
+      <div className="ReviewDatabase">
         <input
         placeholder="Review..."
         onChange={(event) => {
@@ -165,11 +174,13 @@ function ReviewDatabase(string){
       />
 
       <button onClick={createReview}> Add Review</button>
-      {RendeReviews.map((review) => {
+      {Reviews.map((review) => {
         return (
           <div>
             <p>Review: {review.Review}</p>
             <p>Rating: {review.Rating}</p>
+            <p>Upvotes: {review.upvotes}</p>
+            <button onClick={() => {updateReview(review.id, review.upvotes)}}>Upvote</button>{/*upvote button */}
                 </div>
                 );
           })}
