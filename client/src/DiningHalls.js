@@ -2,6 +2,8 @@ import {useState, useEffect} from "react";
 import React from 'react';
 import './App.css';
 
+import{logged} from './Home.js';
+
 import {db} from "./firebase-config"
 import {collection, getDocs, addDoc,} from "firebase/firestore";
 
@@ -130,7 +132,12 @@ function ReviewDatabase(string){
     const [newReview, setNewReview] = useState("");
     const [newRating, setNewRating] = useState(0);
     const createReview = async () => {
-        await addDoc(RendeReviewCollectionRef, { Review: newReview, Rating: Number(newRating) });
+      if (logged){
+        await addDoc(RendeReviewCollectionRef, { Review: newReview, Rating: newRating });
+      }
+      else{
+        alert("Need to be logged in to create a Review!!")
+      }
       };
     useEffect(() => {
       
@@ -151,28 +158,18 @@ function ReviewDatabase(string){
         }}/>
       <input
         type="number"
-        placeholder2="Rating..."
-        onChange2={(event) => {
+        placeholder="Rating..."
+        onChange={(event) => {
           setNewRating(event.target.value);
         }}
       />
 
-      <button onClick={createReview}> Create User</button>
+      <button onClick={createReview}> Add Review</button>
       {RendeReviews.map((review) => {
         return (
           <div>
-            {" "}
             <p>Review: {review.Review}</p>
             <p>Rating: {review.Rating}</p>
-            {/* <button
-              onClick={() => {
-                updateReview(user.id, user.age);
-              }}
-            > */}
-
-            {/* </button> */}
-                {" "}
-                {/* <p>{review.Review}</p> */}
                 </div>
                 );
           })}
