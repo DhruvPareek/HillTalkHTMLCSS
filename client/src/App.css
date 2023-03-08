@@ -1,6 +1,12 @@
 .App {
 	text-align: center;
   }
+
+  *{
+    margin: 5;
+    padding: 0;
+    font-family: Courier, monospace
+  }
   
   .form {
 	display: flex;
@@ -10,66 +16,72 @@
   }
   
   .form input {
-  width : 300px;
+  width : 350px;
   height: 60px;
   margin: 10px;
   }
+
+
   nav{
     display: flex;
-    padding: 2% 6%;
+    padding: 1% 2%;
     justify-content: space-between;
-	align-items: center; /* add this property */
-	position: relative
+    align-items: center;
+    position: relative
 	}
-	
 
-.nav-links{
-    flex: 1;
-    text-align: right;
-}
+  .nav-links{
+      flex: 1;
+      text-align: right;
+  }
 
-.nav-links ul li{
-    list-style: none;
-    display: inline-block;
-    padding: 8px 12px;
-}
-.nav-links ul li a{
-    color: #070101;
-    text-decoration: none;
-    font-size: 14px;
-}
-.nav-links ul li::after{ 
-    content: '';
-    width: 0%;
-    height: 2px;
-    background: #030201;
-    display: block;
-    margin: auto;
-    transition: 0.5s;
-}
-.nav-links ul li:hover::after{
-    width:100%;
-}
+  .nav-links ul li{
+      list-style: none;
+      display: inline-block;
+      padding: 8px 12px;
+  }
+  .nav-links ul li a{
+      color: #070101;
+      text-decoration: none;
+      font-size: 18px;
+      font-style: italic
+  }
+  .nav-links ul li::after{ 
+      content: '';
+      width: 0%;
+      height: 2px;
+      background: #030201;
+      display: block;
+      margin: auto;
+      transition: 0.5s;
+  }
+  .nav-links ul li:hover::after{
+      width:100%;
+  }
   
+  /* HILLTALK logo on top left corner  */
   h1 {
 	  font-family: "Lucida Console";
 	  text-align: left;
 	  font-size: 35px;
-	  padding: 0px 15px;
+	  padding: 0px 12px;
   }
   
   .map{
 	  display: block;
 	  margin-left: auto;
 	  margin-right: auto;
-	  width: 40%;
-	border: 5px solid #555;
+	  width: 50%;
+	  border: 5px solid #555;
+
   }
   
   body {
 	text-align: center;
+  background-color: rgb(247, 239, 228);
   }
-  
+
+  /* borders for pictures on each page  */
   .Bplate{
 	  display: block;
 	  margin-left: auto;
@@ -97,3 +109,21 @@
   .CentennialOlympic{
 	  border: 5px solid #555;
   }
+
+.btn-primary{
+  display: inline-block;
+  text-decoration: none;
+  color: #080000;
+  border: 1px solid #080000;
+  font-size: 13px;
+  padding: 6px 10px;
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+}
+
+.btn-primary:hover{
+  border: 1px solid #040404;
+  background: #ffffff;
+  transition: .6s;
+}
