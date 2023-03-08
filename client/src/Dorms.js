@@ -5,7 +5,7 @@ import React from "react";
 import "./App.css";
 
 import {db} from "./firebase-config"
-import {collection, getDocs, addDoc} from "firebase/firestore";
+import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
 
 function Dorms(){
   return (
@@ -32,7 +32,7 @@ function Dorms(){
         <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20218/614102382cfac27232f4ea45_Olympic+and+Centennial+Hall_5DM47510_Ext2/Olympic+and+Centennial+Hall_5DM47510_Ext2_hero.jpg"  width="250" height="200" class="CentennialOlympic"></img>
         <div class="ListOfReviews">
           <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("Centennial")}
+        {ReviewDatabase("Centennial")} <button>Upvote</button>
         </div>
         <br />
 
@@ -68,15 +68,15 @@ function Dorms(){
         </div>
         <br />
 
-{/* 
+
         <h3>Hedrick Hall</h3>
-        <img src="https://humansofuniversity.com/wp-content/uploads/2022/05/2b0fbb098d13dd26587a5841292cd4aa-1024x768.jpg"  width="40" height="40" class="HedrickPic"> </img>
+        <img src="https://humansofuniversity.com/wp-content/uploads/2022/05/2b0fbb098d13dd26587a5841292cd4aa-1024x768.jpg" width="250" height="200" class="HedrickPic"></img>
         <div class="ListOfReviews">
           <h3>Reviews:</h3><br></br>
         {ReviewDatabase("Hedrick")}
         </div>
-        <br />  */}
-        
+        <br /> 
+
         <h3>Hitch Suites</h3>
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ_zvnYnhBUwc_tFS-fniDWToVlSA_BgtF6g&usqp=CAU"  width="250" height="220" class="HitchSuitesPics"></img>
         <div class="ListOfReviews">
@@ -112,12 +112,20 @@ function ReviewDatabase(string){
 
   const [input, setInput] = useState(""); //empty state is "" bc its a empty string  
   const [rating, setRating] = useState(0); //empty state is "" bc its a empty string  
+  const [upvotes, setUpVotes] = useState(0) //empty state is 0 bc there are 0 votes at the beginning //NEW CHANGE
+  const [downvotes, setDownVotes] = useState(0)
 
   const [allReviews, setReview] = useState([]);
   const reviewCollectionRef = collection(db, string) //grabbing "CentennialReviews" collection and sets it equal to var
 
   const createReview = async () => {
-    await addDoc(reviewCollectionRef, { TextReview : input, Rating: rating })
+    await addDoc(reviewCollectionRef, { TextReview : input, Rating: rating, UpVotes: upvotes, DownVotes: downvotes})
+  }
+
+  const upVote = async (revID, upvotes) => { // NEW CHANGE
+    const userDoc = doc(db, "Reviews", revID);
+    const newFields = {upvotes: upvotes + 1};
+    await updateDoc(userDoc, newFields);
   }
 
   useEffect(() => {
@@ -155,6 +163,11 @@ function ReviewDatabase(string){
             <div>
               <p>Review: {review.TextReview}</p> 
               <p>Rating: {review.Rating}</p> 
+              <p>{review.UpVotes}</p>
+              <button onClick={upVote(review.revID, review.upvotes)}>Upvote</button> 
+              {/* NEW CHANGE */}
+              <button>Downvote</button>
+              <p>{review.DownVotes}</p>
               </div>
               );
         })}
