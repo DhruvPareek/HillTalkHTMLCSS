@@ -32,7 +32,7 @@ function Dorms(){
         <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20218/614102382cfac27232f4ea45_Olympic+and+Centennial+Hall_5DM47510_Ext2/Olympic+and+Centennial+Hall_5DM47510_Ext2_hero.jpg"  width="250" height="200" class="CentennialOlympic"></img>
         <div class="ListOfReviews">
           <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("Centennial")} <button>Upvote</button>
+        {ReviewDatabase("Centennial")}
         </div>
         <br />
 
@@ -112,21 +112,28 @@ function ReviewDatabase(string){
 
   const [input, setInput] = useState(""); //empty state is "" bc its a empty string  
   const [rating, setRating] = useState(0); //empty state is "" bc its a empty string  
-  const [upvotes, setUpVotes] = useState(0) //empty state is 0 bc there are 0 votes at the beginning //NEW CHANGE
-  const [downvotes, setDownVotes] = useState(0)
+  //const [upvotes, setUpVotes] = useState(0) //empty state is 0 bc there are 0 votes at the beginning //NEW CHANGE
+  //const [downvotes, setDownVotes] = useState(0)
 
   const [allReviews, setReview] = useState([]);
   const reviewCollectionRef = collection(db, string) //grabbing "CentennialReviews" collection and sets it equal to var
 
   const createReview = async () => {
-    await addDoc(reviewCollectionRef, { TextReview : input, Rating: rating, UpVotes: upvotes, DownVotes: downvotes})
+    await addDoc(reviewCollectionRef, { TextReview : input, Rating: rating, upvotes: Number(0), downvotes: Number(0)})
   }
 
-  const upVote = async (revID, upvotes) => { // NEW CHANGE
-    const userDoc = doc(db, "Reviews", revID);
-    const newFields = {upvotes: upvotes + 1};
-    await updateDoc(userDoc, newFields);
+  const upVote = async (id, numupvotes) => { // NEW CHANGE
+    const reviewDoc = doc(db, string, id);
+    const newFields = {upvotes: numupvotes + 1};
+    await updateDoc(reviewDoc, newFields);
   }
+
+  const downVote = async (id, numdownvotes) => { // NEW CHANGE
+    const reviewDoc = doc(db, string, id);
+    const newFields = {downvotes: numdownvotes + 1};
+    await updateDoc(reviewDoc, newFields);
+  }
+
 
   useEffect(() => {
     
@@ -163,10 +170,10 @@ function ReviewDatabase(string){
             <div>
               <p>Review: {review.TextReview}</p> 
               <p>Rating: {review.Rating}</p> 
-              <p>{review.UpVotes}</p>
-              <button onClick={upVote(review.revID, review.upvotes)}>Upvote</button> 
-              {/* NEW CHANGE */}
-              <button>Downvote</button>
+              <p>Upvotes: {review.upvotes}  Downvotes: {review.downvotes}</p>
+
+              <button onClick={() => {upVote(review.id, review.upvotes)}}>Upvote</button> 
+              <button onClick={() => {downVote(review.id, review.downvotes)}}>Downvote</button>
               <p>{review.DownVotes}</p>
               </div>
               );
