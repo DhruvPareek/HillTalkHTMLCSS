@@ -146,7 +146,7 @@ function ReviewDatabase(string){
         type="number"
         min={0}
         max={5}
-        placeholder="Rating..."
+        placeholder="1-5"
         onChange={(event) => {
           setRating(event.target.value);
         }}
@@ -156,15 +156,12 @@ function ReviewDatabase(string){
             return (
                 <div className="eachReview">
                     <p>Comment: {review.TextReview}</p>
-                    <p>Rating: {review.Rating}/5</p>
-                    <p>Upvotes: {review.upvotes}  Downvotes: {review.downvotes}</p>
-
-                    <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
-        &#x1F44D;</span></button> 
+                    <p>Rating: {review.Rating}/5  <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+        &#x1F44D;</span></button>{review.upvotes}
                     <button onClick={() => {downVote(review.id, review.downvotes)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
         &#x1F44E;
-      </span></button>
-                    <p>{review.DownVotes}</p>
+      </span></button>{review.downvotes}</p>
+                    
                 </div>
                 );
           })}
