@@ -187,8 +187,7 @@ function ReviewDatabase(string){
           return (
             <div className="eachReview">
               <p>Comment: {review.Review}</p> 
-              <p>Rating: {review.Rating}</p> 
-              <p><button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+              <p>Rating: {review.Rating}/5  <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
         &#x1F44D;</span></button>{review.upvotes}
               <button onClick={() => {downVote(review.id, review.downvotes)}}class="thumbsdown"><span role="img" aria-label="thumbs-down">
         &#x1F44E;
