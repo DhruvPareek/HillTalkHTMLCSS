@@ -181,6 +181,8 @@ function ReviewDatabase(string){
       <input
         type="number"
         placeholder="1-5"
+        min={0}
+        max={5}
         onChange={(event) => {
           setNewRating(event.target.value);
         }}class= "RatingBox"
