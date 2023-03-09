@@ -3,12 +3,15 @@ import {useState, useEffect} from "react";
 import React from "react";
 import "./App.css";
 
-import{logged} from './Home.js';
+
 
 import {db} from "./firebase-config"
 import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
 
-
+import {
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "./firebase-config";
 
 function RecCenters() {
     return (
@@ -21,7 +24,7 @@ function RecCenters() {
   <p>Here you can find every recreation center on campus.</p>
    <p>Sort By:</p>
    <ul>
-    <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Facility Quaity{}</button></ol>
+    <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Facility Quality{}</button></ol>
     <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Hours{}</button></ol>
     <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Space{}</button></ol>
     <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button></ol>
@@ -96,16 +99,37 @@ function clickedSort(props)
     }
 }
 
-
+let logged = false;
 function ReviewDatabase(string){
     const [input, setInput] = useState(""); //this will be the input review from the user
-    const [rating, setRating] = useState(-1); //this will be the inout rating from the user
+    const [FacilityQRating, setFacilityQRating] = useState(-1); //this will be the inout rating from the user
+    const [HoursRating, setHoursRating] = useState(-1); //this will be the inout rating from the user
+    const [SpaceRating, setSpaceRating] = useState(-1); //this will be the inout rating from the user
+    const [LocationRating, setLocationRating] = useState(-1); //this will be the inout rating from the user
+    const [BusinessRating, setBusinessRating] = useState(-1); //this will be the inout rating from the user
+
+    
     const [reviews, setReview] = useState([]);
     const reviewCollectionRef = collection(db, string)
+
+    const [user, setUser] = useState({});
+    useEffect(() => {
+
+      onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        if (currentUser){
+          logged = true; //we are logged in 
+        }
+        else{
+          logged = false;//we are logged out now
+        }
+      });
+      })  
+
     const createReview = async() => {
     if (logged){
-      if (rating != -1 && input != "" && rating >= 0 && rating <= 5) {
-        await addDoc(reviewCollectionRef, { TextReview: input , Rating : rating, upvotes: Number(0), downvotes: Number(0) })
+      if (BusinessRating != -1 && LocationRating != -1 && SpaceRating != -1 && HoursRating != -1 && FacilityQRating != -1 && input != "" && BusinessRating <= 5 && BusinessRating >= 0 && LocationRating <= 5 && LocationRating >= 0 && SpaceRating >= 0 && SpaceRating <= 5 && HoursRating >= 0 && HoursRating <= 5 && FacilityQRating >= 0 && FacilityQRating <= 5) {
+        await addDoc(reviewCollectionRef, { TextReview: input ,BusinessRating: BusinessRating, LocationRating: LocationRating, SpaceRating: SpaceRating, HoursRating: HoursRating, FacilityQRating : FacilityQRating, upvotes: Number(0), downvotes: Number(0) })
         alert("Review Submitted! Refresh page to view.")
       }
       else{
@@ -154,22 +178,73 @@ function ReviewDatabase(string){
         type="number"
         min={0}
         max={5}
-        placeholder="0-5"
+        placeholder="Facility Quality Rating"
         onChange={(event) => {
-          setRating(event.target.value);
+          setFacilityQRating(event.target.value);
         }}
         class="RatingBox"
         />
+
+      <input
+        type="number"
+        min={0}
+        max={5}
+        placeholder="Hours Rating"
+        onChange={(event) => {
+          setHoursRating(event.target.value);
+        }}
+        class="RatingBox"
+        />
+      <input
+        type="number"
+        min={0}
+        max={5}
+        placeholder="Space Rating"
+        onChange={(event) => {
+          setSpaceRating(event.target.value);
+        }}
+        class="RatingBox"
+        />
+
+      <input
+        type="number"
+        min={0}
+        max={5}
+        placeholder="Location Rating"
+        onChange={(event) => {
+          setLocationRating(event.target.value);
+        }}
+        class="RatingBox"
+        />
+      <input
+        type="number"
+        min={0}
+        max={5}
+        placeholder="Business Rating"
+        onChange={(event) => {
+          setBusinessRating(event.target.value);
+        }}
+        class="RatingBox"
+        />
+
+        
+        
         <button onClick={createReview}>Submit Review</button>
           {reviews.map((review) => {
             return (
                 <div className="eachReview">
                     <p>Comment: {review.TextReview}</p>
-                    <p>Rating: {review.Rating}/5  <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+                    <p>Facility Quality Rating: {review.FacilityQRating}/5 </p>
+                    <p>Hours Rating: {review.HoursRating}/5 </p>
+                    <p>Space Rating: {review.SpaceRating}/5 </p>
+                    <p>Location Rating: {review.LocationRating}/5 </p>
+                    <p>Business Rating: {review.BusinessRating}/5 </p>
+
+                     <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
         &#x1F44D;</span></button>{review.upvotes}
                     <button onClick={() => {downVote(review.id, review.downvotes)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
         &#x1F44E;
-      </span></button>{review.downvotes}</p>
+      </span></button>{review.downvotes}
                     
                 </div>
                 );

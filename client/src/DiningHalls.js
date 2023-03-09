@@ -30,9 +30,9 @@ function DiningHalls() {
            <ul>
             <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(1);}}>Health{}</button></ol>
             <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(2);}}>Quality{}</button></ol>
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(3);}}>Time{}</button></ol>
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(4);}}>Hours{}</button></ol>
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(5);}}>Location{}</button></ol>
+          {/* <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(3);}}>Time{}</button></ol> */}
+            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(3);}}>Hours{}</button></ol>
+            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button></ol>
             </ul> 
             <br></br>
         <h3>Rendezvous</h3>
@@ -140,16 +140,13 @@ function clickedSort(props)
     }
     if(props === 3)
     {
-        alert('hello, this should show up if the page rendered lol, Sort by Time');  
+        alert('hello, this should show up if the page rendered lol, Sort by Hours');  
     }
     if(props === 4)
     {
-        alert('hello, this should show up if the page rendered lol, Sort by Hours');  
+        alert('hello, this should show up if the page rendered lol, Sort by Location');  
     }
-    if(props === 5)
-    {
-        alert('hello, this should show up if the page rendered lol, Sort by Location'); 
-    }
+
 }
 
 
@@ -159,7 +156,11 @@ function ReviewDatabase(string){
     const [Reviews, setReview] = useState([]); //hook instead of class
     const ReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
     const [newReview, setNewReview] = useState("");
-    const [newRating, setNewRating] = useState(0);
+    const [newHealthRating, setNewHealthRating] = useState(0);
+    const [newQualityRating, setNewQualityRating] = useState(0);
+    const [newTimeRating, setNewTimeRating] = useState(0);
+    const [newLocationRating, setNewLocationRating] = useState(0);
+
 
     const [user, setUser] = useState({});
     useEffect(() => {
@@ -177,10 +178,16 @@ function ReviewDatabase(string){
     //end of what you need to copy
     const createReview = async () => {
       if (logged){
-        await addDoc(ReviewCollectionRef, { Review: newReview, Rating: Number(newRating), upvotes: Number(0) });
+        if((newLocationRating !=-1 && newTimeRating !=-1 && newHealthRating != -1 && newQualityRating != -1 && newReview != "" &&  newLocationRating >=0 && newLocationRating <=5 && newTimeRating >= 0 && newTimeRating <= 5 && newHealthRating >= 0 && newHealthRating <= 5 && newQualityRating >= 0 && newQualityRating <= 5)){
+        await addDoc(ReviewCollectionRef, { Review: newReview,LocationRating: Number(newLocationRating), TimeRating: Number(newTimeRating), HealthRating: Number(newHealthRating),QualityRating: Number(newQualityRating), upvotes: Number(0) });
+        alert("Review Submitted!! Refresh page to view.")
       }
       else{
-        alert("Need to be logged in to create a Review!!")
+        alert("Please leave a review and rating for each field (1-5) in order to submit")
+      }
+      }
+      else{
+        alert("Please Login at Home Page before leaving a review")
       }
       };
 
@@ -209,20 +216,53 @@ function ReviewDatabase(string){
         }}/>
       <input
         type="number"
-        placeholder="Rating..."
+        min={0}
+        max={5}
+        placeholder="Health Rating..."
         onChange={(event) => {
-          setNewRating(event.target.value);
+          setNewHealthRating(event.target.value);
+        }}
+      />
+      <input
+        type="number"
+        min={0}
+        max={5}
+        placeholder="Quality Rating..."
+        onChange={(event) => {
+          setNewQualityRating(event.target.value);
+        }}
+      />
+      <input
+        type="number"
+        min={0}
+        max={5}
+        placeholder="Time Rating..."
+        onChange={(event) => {
+          setNewTimeRating(event.target.value);
+        }}
+      />
+      <input
+        type="number"
+        min={0}
+        max={5}
+        placeholder="Location Rating..."
+        onChange={(event) => {
+          setNewLocationRating(event.target.value);
         }}
       />
 
-      <button onClick={createReview}> Add Review</button>
+
+      <button onClick={createReview}> Submit Review</button>
       {Reviews.map((review) => {
         return (
-          <div className="AllRevs">
+          <div className="eachReview">
 
             <p>Review: {review.Review}</p>
 
-            <p>Rating: {review.Rating}</p>
+            <p>Health Rating: {review.HealthRating}</p>
+            <p>Quality Rating: {review.QualityRating}</p>
+            <p>Time Rating: {review.TimeRating}</p>
+            <p>Location Rating: {review.LocationRating}</p>
             <p>Upvotes: {review.upvotes}</p>
             <button onClick={() => {updateReview(review.id, review.upvotes)}}>Upvote</button>{/*upvote button */}
                 </div>

@@ -3,10 +3,15 @@
 import {useState, useEffect} from "react";
 import React from "react";
 import "./App.css";
-import{logged} from './Home.js';
+
 
 import {db} from "./firebase-config"
 import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
+
+import {
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "./firebase-config";
 
 <i class='fas fa-thumbs-up'></i>
 
@@ -109,25 +114,41 @@ function Dorms(){
     </html>
   );
 }
-
+let logged = false;
 //centennial 
 function ReviewDatabase(string){
 
   const [input, setInput] = useState("");   
-  const [rating, setRating] = useState(-1); 
-  
+  const [CleanlinessRating, setCleanlinessRating] = useState(-1); 
+  const [QualityRating, setQualityRating] = useState(-1);   
+  const [SpaceRating, setSpaceRating] = useState(-1);  
+  const [LocationRating, setLocationRating] = useState(-1);  
 
   const [allReviews, setReview] = useState([]);
   const reviewCollectionRef = collection(db, string) //grabbing "CentennialReviews" collection and sets it equal to var
 
+
+  const [user, setUser] = useState({});
+    useEffect(() => {
+
+      onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        if (currentUser){
+          logged = true; //we are logged in 
+        }
+        else{
+          logged = false;//we are logged out now
+        }
+      });
+      })
   const createReview = async () => {
     if (logged){
-      if (rating != -1 && rating <= 5 && rating >= 0 && input != "") {
-        await addDoc(reviewCollectionRef, { Review: input , Rating : Number(rating), upvotes: Number(0), downvotes: Number(0) })
+      if (LocationRating !=1 && SpaceRating !=-1 && QualityRating !=-1 && CleanlinessRating != -1 && LocationRating <= 5 && LocationRating >= 0 && SpaceRating <= 5 && SpaceRating >= 0 && QualityRating <=5 && QualityRating >=0 && CleanlinessRating <= 5 && CleanlinessRating >= 0 && input != "") {
+        await addDoc(reviewCollectionRef, { Review: input , LocationRating: Number(LocationRating), QualityRating: Number(QualityRating), SpaceRating: Number(SpaceRating), CleanlinessRating: Number(CleanlinessRating), upvotes: Number(0), downvotes: Number(0) })
         alert("Review Submitted! Refresh page to view.")
       }
       else{
-          alert("Please leave a review and rating (1-5) in order to submit")
+        alert("Please leave a review and rating (1-5) in order to submit")
       }
     }
     else{
@@ -172,26 +193,63 @@ function ReviewDatabase(string){
     />
 
     <input 
-      placeholder="0-5" 
+      placeholder="Cleanliness Rating" 
       type="number"
       min={0}
       max={5}
       onChange={(event) => 
-        {setRating(event.target.value)
+        {setCleanlinessRating(event.target.value)
       }}
       class="RatingBox"
     />
+        <input 
+      placeholder="Quality Rating" 
+      type="number"
+      min={0}
+      max={5}
+      onChange={(event) => 
+        {setQualityRating(event.target.value)
+      }}
+      class="RatingBox"
+    />
+
+<input 
+      placeholder="Space Rating" 
+      type="number"
+      min={0}
+      max={5}
+      onChange={(event) => 
+        {setSpaceRating(event.target.value)
+      }}
+      class="RatingBox"
+    />
+
+<input 
+      placeholder="Location Rating" 
+      type="number"
+      min={0}
+      max={5}
+      onChange={(event) => 
+        {setLocationRating(event.target.value)
+      }}
+      class="RatingBox"
+    />
+    
     <button onClick={createReview}>Submit Review</button> 
 
         {allReviews.map((review) => {
           return (
             <div className="eachReview">
               <p>Comment: {review.Review}</p> 
-              <p>Rating: {review.Rating}/5  <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+              <p>Cleanliness Rating: {review.CleanlinessRating}/5  </p>
+              <p>Quality Rating: {review.QualityRating}/5</p>
+              <p>Space Rating: {review.SpaceRating}/5</p>
+              <p>Location Rating: {review.LocationRating}/5</p>
+              <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
         &#x1F44D;</span></button>{review.upvotes}
               <button onClick={() => {downVote(review.id, review.downvotes)}}class="thumbsdown"><span role="img" aria-label="thumbs-down">
         &#x1F44E;
-      </span></button>{review.downvotes}</p>
+      </span></button>{review.downvotes}
               
               </div>
               );
