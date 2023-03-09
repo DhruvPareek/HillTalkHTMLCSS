@@ -160,7 +160,7 @@ function ReviewDatabase(string){
         }}
         class="RatingBox"
         />
-        <button onClick={createReview}>Submit Rating</button>
+        <button onClick={createReview}>Submit Review</button>
           {reviews.map((review) => {
             return (
                 <div className="eachReview">
