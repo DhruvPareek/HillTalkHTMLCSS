@@ -129,13 +129,13 @@ function clickedSort(props)
 function ReviewDatabase(string){
     const [Reviews, setReview] = useState([]); //hook instead of class
     const ReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
-    const [newReview, setNewReview] = useState("N/A");
+    const [newReview, setNewReview] = useState("");
     const [newRating, setNewRating] = useState(-1);
 
     
     const createReview = async () => {
       if (logged){
-        if (newRating != -1) {
+        if (newRating != -1 && newRating <= 5 && newRating >= 0 && newReview != "") {
           await addDoc(ReviewCollectionRef, { Review: newReview , Rating : Number(newRating), upvotes: Number(0), downvotes: Number(0) })
           alert("Review Submitted! Refresh page to view.")
         }
