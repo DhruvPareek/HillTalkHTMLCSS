@@ -2,10 +2,20 @@ import {useState, useEffect} from "react";
 import React from 'react';
 import './App.css';
 
-import{logged} from './Home.js';
+//import{logged} from './Home.js';
 
 import {db} from "./firebase-config"
 import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
+
+
+import {
+  onAuthStateChanged,
+} from "firebase/auth";
+import { auth } from "./firebase-config";
+
+
+
+
 
 function DiningHalls() {
     return (
@@ -18,11 +28,11 @@ function DiningHalls() {
           <p>This page contains every dining hall, takeout and buffet style places from around the hill.</p>
            <p>Sort By:</p>
            <ul>
-            <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Health{}</button></ol>
-            <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Quality{}</button></ol>
-            <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Time{}</button></ol>
-            <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Hours{}</button></ol>
-            <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(5);}}>Location{}</button></ol>
+            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(1);}}>Health{}</button></ol>
+            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(2);}}>Quality{}</button></ol>
+            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(3);}}>Time{}</button></ol>
+            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(4);}}>Hours{}</button></ol>
+            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(5);}}>Location{}</button></ol>
             </ul> 
             <br></br>
         <h3>Rendezvous</h3>
@@ -101,12 +111,28 @@ function DiningHalls() {
         </html>
     );
   }
+let clickedHealth = false;
+let clickedQuality = false;
+let clickedTime = false;
+let clickedHours = false;
+let clickedLocation = false;
+
+let checker = "none";
 
 function clickedSort(props)
 {
     if(props === 1)
     {
-        alert('hello, this should show up if the page rendered lol, Sort by Health') 
+      if(!clickedHealth){
+        alert('Opening the health reviews') ;
+        clickedHealth = true;
+        checker = "Health"
+      }
+      else{
+        alert('Closing the health reviews');
+        clickedHealth = false;
+        checker = "none"
+      }
     }
     if(props === 2)
     {
@@ -126,41 +152,44 @@ function clickedSort(props)
     }
 }
 
+
+// copy this into every file where there are reviews for authenticatio, also need one import statement thats at the top
+let logged = false;
 function ReviewDatabase(string){
     const [Reviews, setReview] = useState([]); //hook instead of class
     const ReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
     const [newReview, setNewReview] = useState("");
-    const [newRating, setNewRating] = useState(-1);
+    const [newRating, setNewRating] = useState(0);
 
-    
-    const createReview = async () => {
-      if (logged){
-        if (newRating != -1 && newRating <= 5 && newRating >= 0 && newReview != "") {
-          await addDoc(ReviewCollectionRef, { Review: newReview , Rating : Number(newRating), upvotes: Number(0), downvotes: Number(0) })
-          alert("Review Submitted! Refresh page to view.")
+    const [user, setUser] = useState({});
+    useEffect(() => {
+
+      onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+        if (currentUser){
+          logged = true; //we are logged in 
         }
         else{
-            alert("Please leave a review and rating (1-5) in order to submit")
+          logged = false;//we are logged out now
         }
+      });
+      })
+    //end of what you need to copy
+    const createReview = async () => {
+      if (logged){
+        await addDoc(ReviewCollectionRef, { Review: newReview, Rating: Number(newRating), upvotes: Number(0) });
       }
       else{
-        alert("Please login at Home Page before leaving a review")
+        alert("Need to be logged in to create a Review!!")
       }
       };
 
       //for updating review when upvote button clicked
-      const upVote = async (id, numupvotes) => { // NEW CHANGE
-        const reviewDoc = doc(db, string, id);
-        const newFields = {upvotes: numupvotes + 1};
-        await updateDoc(reviewDoc, newFields);
+      const updateReview = async (id, numUpvotes) => {
+        const reviewDoc = doc(db, string, id)
+        const newFields = {upvotes: numUpvotes+1}
+        await updateDoc(reviewDoc, newFields)
       }
-
-      const downVote = async (id, numdownvotes) => { // NEW CHANGE
-        const reviewDoc = doc(db, string, id);
-        const newFields = {downvotes: numdownvotes + 1};
-        await updateDoc(reviewDoc, newFields);
-      }
-
     useEffect(() => {
       
       const getReviews = async () => {
@@ -174,38 +203,34 @@ function ReviewDatabase(string){
     return (
       <div className="ReviewDatabase">
         <input
-        placeholder="Review (Optional). . ."
+        placeholder="Review..."
         onChange={(event) => {
           setNewReview(event.target.value);
-        }}class= "ReviewBox"/>
+        }}/>
       <input
         type="number"
-        placeholder="0-5"
-        min={0}
-        max={5}
+        placeholder="Rating..."
         onChange={(event) => {
           setNewRating(event.target.value);
-        }}class= "RatingBox"
+        }}
       />
 
-      <button onClick={createReview}>Submit Review</button>
+      <button onClick={createReview}> Add Review</button>
       {Reviews.map((review) => {
         return (
-          <div className="eachReview">
-              <p>Comment: {review.Review}</p>
-              <p>Rating: {review.Rating}/5  <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
-  &#x1F44D;</span></button>{review.upvotes}
-              <button onClick={() => {downVote(review.id, review.downvotes)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
-  &#x1F44E;
-</span></button>{review.downvotes}</p>
-              
-          </div>
-          );
-    })}
-</div>
-);
-}
+          <div className="AllRevs">
 
+            <p>Review: {review.Review}</p>
+
+            <p>Rating: {review.Rating}</p>
+            <p>Upvotes: {review.upvotes}</p>
+            <button onClick={() => {updateReview(review.id, review.upvotes)}}>Upvote</button>{/*upvote button */}
+                </div>
+                );
+          })}
+    </div>
+    );
+  }
   
 
 export default DiningHalls;
