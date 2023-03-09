@@ -113,22 +113,26 @@ function Dorms(){
 //centennial 
 function ReviewDatabase(string){
 
-  const [input, setInput] = useState(""); //empty state is "" bc its a empty string  
-  const [rating, setRating] = useState(0); //empty state is "" bc its a empty string  
-  //const [upvotes, setUpVotes] = useState(0) //empty state is 0 bc there are 0 votes at the beginning //NEW CHANGE
-  //const [downvotes, setDownVotes] = useState(0)
+  const [input, setInput] = useState("");   
+  const [rating, setRating] = useState(-1); 
+  
 
   const [allReviews, setReview] = useState([]);
   const reviewCollectionRef = collection(db, string) //grabbing "CentennialReviews" collection and sets it equal to var
 
   const createReview = async () => {
     if (logged){
-      await addDoc(reviewCollectionRef, { TextReview : input, Rating: rating, upvotes: Number(0), downvotes: Number(0)})
+      if (rating != -1 && rating <= 5 && rating >= 0 && input != "") {
+        await addDoc(reviewCollectionRef, { Review: input , Rating : Number(rating), upvotes: Number(0), downvotes: Number(0) })
+        alert("Review Submitted! Refresh page to view.")
+      }
+      else{
+          alert("Please leave a review and rating (1-5) in order to submit")
+      }
     }
     else{
-      alert("Need to be logged in to create a Review!!")
+      alert("Please login at Home Page before leaving a review")
     }
-    
   }
 
   const upVote = async (id, numupvotes) => { // NEW CHANGE
@@ -160,7 +164,7 @@ function ReviewDatabase(string){
     <div className="ReviewDatabase">
     
     <input 
-      placeholder="Review..." 
+      placeholder="Review (Optional). . ." 
       onChange={(event) => 
         {setInput(event.target.value)
       }}
@@ -177,12 +181,12 @@ function ReviewDatabase(string){
       }}
       class="RatingBox"
     />
-    <button onClick={createReview}> Add a review</button> 
+    <button onClick={createReview}>Submit Review</button> 
 
         {allReviews.map((review) => {
           return (
             <div className="eachReview">
-              <p>Review: {review.TextReview}</p> 
+              <p>Comment: {review.Review}</p> 
               <p>Rating: {review.Rating}</p> 
               <p><button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
         &#x1F44D;</span></button>{review.upvotes}
