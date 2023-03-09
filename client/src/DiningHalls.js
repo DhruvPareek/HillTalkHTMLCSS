@@ -174,7 +174,7 @@ function ReviewDatabase(string){
     return (
       <div className="ReviewDatabase">
         <input
-        placeholder="Review. . ."
+        placeholder="Review (Optional). . ."
         onChange={(event) => {
           setNewReview(event.target.value);
         }}class= "ReviewBox"/>
