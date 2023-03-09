@@ -129,7 +129,7 @@ function clickedSort(props)
 function ReviewDatabase(string){
     const [Reviews, setReview] = useState([]); //hook instead of class
     const ReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
-    const [newReview, setNewReview] = useState("");
+    const [newReview, setNewReview] = useState("N/A");
     const [newRating, setNewRating] = useState(-1);
 
     
@@ -137,9 +137,10 @@ function ReviewDatabase(string){
       if (logged){
         if (newRating != -1) {
           await addDoc(ReviewCollectionRef, { Review: newReview , Rating : Number(newRating), upvotes: Number(0), downvotes: Number(0) })
+          alert("Review Submitted! Refresh page to view.")
         }
         else{
-            alert("Please leave a rating (1-5) in order to submit")
+            alert("Please leave a review and rating (1-5) in order to submit")
         }
       }
       else{
@@ -173,7 +174,7 @@ function ReviewDatabase(string){
     return (
       <div className="ReviewDatabase">
         <input
-        placeholder="Review (Optional). . ."
+        placeholder="Review. . ."
         onChange={(event) => {
           setNewReview(event.target.value);
         }}class= "ReviewBox"/>
