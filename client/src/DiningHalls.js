@@ -130,24 +130,36 @@ function ReviewDatabase(string){
     const [Reviews, setReview] = useState([]); //hook instead of class
     const ReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
     const [newReview, setNewReview] = useState("");
-    const [newRating, setNewRating] = useState(0);
+    const [newRating, setNewRating] = useState(-1);
 
     
     const createReview = async () => {
       if (logged){
-        await addDoc(ReviewCollectionRef, { Review: newReview, Rating: Number(newRating), upvotes: Number(0) });
+        if (newRating != -1) {
+          await addDoc(ReviewCollectionRef, { Review: newReview , Rating : Number(newRating), upvotes: Number(0), downvotes: Number(0) })
+        }
+        else{
+            alert("Please leave a rating (1-5) in order to submit")
+        }
       }
       else{
-        alert("Need to be logged in to create a Review!!")
+        alert("Please login at Home Page before leaving a review")
       }
       };
 
       //for updating review when upvote button clicked
-      const updateReview = async (id, numUpvotes) => {
-        const reviewDoc = doc(db, string, id)
-        const newFields = {upvotes: numUpvotes+1}
-        await updateDoc(reviewDoc, newFields)
+      const upVote = async (id, numupvotes) => { // NEW CHANGE
+        const reviewDoc = doc(db, string, id);
+        const newFields = {upvotes: numupvotes + 1};
+        await updateDoc(reviewDoc, newFields);
       }
+
+      const downVote = async (id, numdownvotes) => { // NEW CHANGE
+        const reviewDoc = doc(db, string, id);
+        const newFields = {downvotes: numdownvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+      }
+
     useEffect(() => {
       
       const getReviews = async () => {
@@ -161,32 +173,36 @@ function ReviewDatabase(string){
     return (
       <div className="ReviewDatabase">
         <input
-        placeholder="Review..."
+        placeholder="Review (Optional). . ."
         onChange={(event) => {
           setNewReview(event.target.value);
         }}class= "ReviewBox"/>
       <input
         type="number"
-        placeholder="Rating..."
+        placeholder="1-5"
         onChange={(event) => {
           setNewRating(event.target.value);
         }}class= "RatingBox"
       />
 
-      <button onClick={createReview}> Add Review</button>
+      <button onClick={createReview}>Submit Review</button>
       {Reviews.map((review) => {
         return (
-          <div>
-            <p>Review: {review.Review}</p>
-            <p>Rating: {review.Rating}</p>
-            <p>Upvotes: {review.upvotes}</p>
-            <button onClick={() => {updateReview(review.id, review.upvotes)}}>Upvote</button>{/*upvote button */}
-                </div>
-                );
-          })}
-    </div>
-    );
-  }
+          <div className="eachReview">
+              <p>Comment: {review.Review}</p>
+              <p>Rating: {review.Rating}/5  <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+  &#x1F44D;</span></button>{review.upvotes}
+              <button onClick={() => {downVote(review.id, review.downvotes)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
+  &#x1F44E;
+</span></button>{review.downvotes}</p>
+              
+          </div>
+          );
+    })}
+</div>
+);
+}
+
   
 
 export default DiningHalls;
