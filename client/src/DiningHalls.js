@@ -180,7 +180,7 @@ function ReviewDatabase(string){
         }}class= "ReviewBox"/>
       <input
         type="number"
-        placeholder="1-5"
+        placeholder="0-5"
         min={0}
         max={5}
         onChange={(event) => {

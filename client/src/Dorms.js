@@ -172,7 +172,7 @@ function ReviewDatabase(string){
     />
 
     <input 
-      placeholder="1-5" 
+      placeholder="0-5" 
       type="number"
       min={0}
       max={5}

@@ -154,7 +154,7 @@ function ReviewDatabase(string){
         type="number"
         min={0}
         max={5}
-        placeholder="1-5"
+        placeholder="0-5"
         onChange={(event) => {
           setRating(event.target.value);
         }}
