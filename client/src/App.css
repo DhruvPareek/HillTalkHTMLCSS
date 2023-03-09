@@ -131,6 +131,8 @@
 .ReviewBox{
 	border: 2px solid #000000;
 	margin-right: 10px;
+  width: 725px;
+  text-align: left;
   }
 
   .RatingBox{
