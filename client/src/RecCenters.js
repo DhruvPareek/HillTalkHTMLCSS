@@ -99,15 +99,20 @@ function clickedSort(props)
 
 function ReviewDatabase(string){
     const [input, setInput] = useState(""); //this will be the input review from the user
-    const [rating, setRating] = useState(0); //this will be the inout rating from the user
+    const [rating, setRating] = useState(-1); //this will be the inout rating from the user
     const [reviews, setReview] = useState([]);
     const reviewCollectionRef = collection(db, string)
     const createReview = async() => {
     if (logged){
-      await addDoc(reviewCollectionRef, { TextReview: input , Rating : rating, upvotes: Number(0), downvotes: Number(0) })
+      if (rating != -1) {
+        await addDoc(reviewCollectionRef, { TextReview: input , Rating : rating, upvotes: Number(0), downvotes: Number(0) })
+      }
+      else{
+          alert("Please leave a rating (1-5) in order to submit")
+      }
     }
     else{
-      alert("Need to be logged in to create a Review!!")
+      alert("Please login at Home Page before leaving a review")
     }
     };
     
@@ -138,10 +143,12 @@ function ReviewDatabase(string){
       <div className="ReviewDatabase">
 
       <input
-        placeholder="Review..."
+        placeholder="Review (Optional). . ."
         onChange={(event) => {
           setInput(event.target.value);
-        }}/>
+        }}
+        class="ReviewBox"
+        />
       <input
         type="number"
         min={0}
@@ -150,8 +157,9 @@ function ReviewDatabase(string){
         onChange={(event) => {
           setRating(event.target.value);
         }}
+        class="RatingBox"
         />
-        <button onClick={createReview}>Add a rating</button>
+        <button onClick={createReview}>Submit Rating</button>
           {reviews.map((review) => {
             return (
                 <div className="eachReview">
