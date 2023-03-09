@@ -104,11 +104,12 @@ function ReviewDatabase(string){
     const reviewCollectionRef = collection(db, string)
     const createReview = async() => {
     if (logged){
-      if (rating != -1) {
+      if (rating != -1 && input != "" && rating >= 0 && rating <= 5) {
         await addDoc(reviewCollectionRef, { TextReview: input , Rating : rating, upvotes: Number(0), downvotes: Number(0) })
+        alert("Review Submitted! Refresh page to view.")
       }
       else{
-          alert("Please leave a rating (1-5) in order to submit")
+          alert("Please leave a review and rating (1-5) in order to submit")
       }
     }
     else{
