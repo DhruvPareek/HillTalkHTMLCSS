@@ -3,8 +3,10 @@ import {useState, useEffect} from "react";
 import React from "react";
 import "./App.css";
 
+import{logged} from './Home.js';
+
 import {db} from "./firebase-config"
-import {collection, getDocs, addDoc} from "firebase/firestore";
+import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
 
 
 
@@ -101,9 +103,27 @@ function ReviewDatabase(string){
     const [reviews, setReview] = useState([]);
     const reviewCollectionRef = collection(db, string)
     const createReview = async() => {
-        await addDoc(reviewCollectionRef, { TextReview: input , Rating : rating })
+    if (logged){
+      await addDoc(reviewCollectionRef, { TextReview: input , Rating : rating, upvotes: Number(0), downvotes: Number(0) })
+    }
+    else{
+      alert("Need to be logged in to create a Review!!")
+    }
+    };
+    
+    //for updating review when upvote button clicked
+    const upVote = async (id, numupvotes) => { // NEW CHANGE
+      const reviewDoc = doc(db, string, id);
+      const newFields = {upvotes: numupvotes + 1};
+      await updateDoc(reviewDoc, newFields);
     }
   
+    const downVote = async (id, numdownvotes) => { // NEW CHANGE
+      const reviewDoc = doc(db, string, id);
+      const newFields = {downvotes: numdownvotes + 1};
+      await updateDoc(reviewDoc, newFields);
+    }
+
     useEffect(() => {
       
       const getReviews = async () => {
@@ -117,18 +137,17 @@ function ReviewDatabase(string){
     return (
       <div className="ReviewDatabase">
 
-        <input 
-            placeholder="Add Review Here"
-            onChange={(event) => 
-                {setInput(event.target.value)}
-            }
-        />
-        <input 
-            placeholder="Add Rating(/5) Here"
-            type="number"
-            onChange={(event) => 
-                {setRating(event.target.value)}
-            }
+      <input
+        placeholder="Review..."
+        onChange={(event) => {
+          setInput(event.target.value);
+        }}/>
+      <input
+        type="number"
+        placeholder="Rating..."
+        onChange={(event) => {
+          setRating(event.target.value);
+        }}
         />
         <button onClick={createReview}>Add a rating</button>
           {reviews.map((review) => {
@@ -136,6 +155,11 @@ function ReviewDatabase(string){
                 <div className="eachReview">
                     <p>Comment: {review.TextReview}</p>
                     <p>Rating: {review.Rating}/5</p>
+                    <p>Upvotes: {review.upvotes}  Downvotes: {review.downvotes}</p>
+
+                    <button onClick={() => {upVote(review.id, review.upvotes)}}>Upvote</button> 
+                    <button onClick={() => {downVote(review.id, review.downvotes)}}>Downvote</button>
+                    <p>{review.DownVotes}</p>
                 </div>
                 );
           })}
