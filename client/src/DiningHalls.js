@@ -164,13 +164,13 @@ function ReviewDatabase(string){
         placeholder="Review..."
         onChange={(event) => {
           setNewReview(event.target.value);
-        }}/>
+        }}class= "ReviewBox"/>
       <input
         type="number"
         placeholder="Rating..."
         onChange={(event) => {
           setNewRating(event.target.value);
-        }}
+        }}class= "RatingBox"
       />
 
       <button onClick={createReview}> Add Review</button>

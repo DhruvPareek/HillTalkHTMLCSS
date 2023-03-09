@@ -3,9 +3,12 @@
 import {useState, useEffect} from "react";
 import React from "react";
 import "./App.css";
+import{logged} from './Home.js';
 
 import {db} from "./firebase-config"
 import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
+
+<i class='fas fa-thumbs-up'></i>
 
 function Dorms(){
   return (
@@ -119,7 +122,13 @@ function ReviewDatabase(string){
   const reviewCollectionRef = collection(db, string) //grabbing "CentennialReviews" collection and sets it equal to var
 
   const createReview = async () => {
-    await addDoc(reviewCollectionRef, { TextReview : input, Rating: rating, upvotes: Number(0), downvotes: Number(0)})
+    if (logged){
+      await addDoc(reviewCollectionRef, { TextReview : input, Rating: rating, upvotes: Number(0), downvotes: Number(0)})
+    }
+    else{
+      alert("Need to be logged in to create a Review!!")
+    }
+    
   }
 
   const upVote = async (id, numupvotes) => { // NEW CHANGE
@@ -145,6 +154,7 @@ function ReviewDatabase(string){
     getReviews()
   }, [])
 
+  
 
   return (
     <div className="ReviewDatabase">
@@ -154,6 +164,7 @@ function ReviewDatabase(string){
       onChange={(event) => 
         {setInput(event.target.value)
       }}
+      class="ReviewBox"
     />
 
     <input 
@@ -162,6 +173,7 @@ function ReviewDatabase(string){
       onChange={(event) => 
         {setRating(event.target.value)
       }}
+      class="RatingBox"
     />
     <button onClick={createReview}> Add a review</button> 
 
@@ -171,9 +183,11 @@ function ReviewDatabase(string){
               <p>Review: {review.TextReview}</p> 
               <p>Rating: {review.Rating}</p> 
               <p>Upvotes: {review.upvotes}  Downvotes: {review.downvotes}</p>
-
-              <button onClick={() => {upVote(review.id, review.upvotes)}}>Upvote</button> 
-              <button onClick={() => {downVote(review.id, review.downvotes)}}>Downvote</button>
+              <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+        &#x1F44D;</span></button> 
+              <button onClick={() => {downVote(review.id, review.downvotes)}}class="thumbsdown"><span role="img" aria-label="thumbs-down">
+        &#x1F44E;
+      </span></button>
               <p>{review.DownVotes}</p>
               </div>
               );

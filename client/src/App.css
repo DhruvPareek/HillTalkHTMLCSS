@@ -127,3 +127,30 @@
   background: #ffffff;
   transition: .6s;
 }
+
+.ReviewBox{
+	border: 2px solid #000000;
+	margin-right: 10px;
+  }
+
+  .RatingBox{
+	width: 40px;
+	border: 2px solid #000000;
+	margin-right: 10px;
+  }
+
+  
+.thumbsup{
+	font-size: 20px;
+	margin: 4px;
+	border: 2px solid #268b3c;
+}
+
+.thumbsdown{
+	font-size: 20px;
+	margin: 4px;
+	border: 2px solid #cf3131;
+}
+
+
+ 
