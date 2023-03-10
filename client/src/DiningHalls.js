@@ -209,50 +209,65 @@ function ReviewDatabase(string){
 
     return (
       <div className="ReviewDatabase">
+      <div className="form-container">
+      
         <input
-        placeholder="Review..."
+        placeholder="Review (Optional)..."
         onChange={(event) => {
           setNewReview(event.target.value);
-        }}/>
-      <input
+        }}
+        class="ReviewBox"/>
+      <div className="input-group-horiz">
+      <p className="no-margin">Health: 
+        <input
         type="number"
         min={0}
         max={5}
-        placeholder="Health Rating..."
+        placeholder="0-5"
         onChange={(event) => {
           setNewHealthRating(event.target.value);
         }}
+        class="RatingBox"
       />
+      </p>
+      <p className="no-margin">Quality: 
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Quality Rating..."
+        placeholder="0-5"
         onChange={(event) => {
           setNewQualityRating(event.target.value);
         }}
-      />
+        class="RatingBox"
+      /></p>
+      <p className="no-margin">Time: 
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Time Rating..."
+        placeholder="0-5"
         onChange={(event) => {
           setNewTimeRating(event.target.value);
         }}
-      />
+        class="RatingBox"
+      /></p>
+      <p className="no-margin">Location: 
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Location Rating..."
+        placeholder="0-5"
         onChange={(event) => {
           setNewLocationRating(event.target.value);
         }}
-      />
+        class="RatingBox"
+      /></p>
 
 
-      <button onClick={createReview}> Submit Review</button>
+      <button onClick={createReview} className="rev-button"> Submit Review</button>
+      </div>
+      </div>
       {Reviews.map((review) => {
         return (
           <div className="eachReview">

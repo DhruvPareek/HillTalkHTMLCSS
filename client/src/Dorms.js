@@ -184,6 +184,7 @@ function ReviewDatabase(string){
   return (
     <div className="ReviewDatabase">
     
+    <div className="form-container">
     <input 
       placeholder="Review (Optional). . ." 
       onChange={(event) => 
@@ -192,8 +193,10 @@ function ReviewDatabase(string){
       class="ReviewBox"
     />
 
+    <div className="input-group-horiz">
+    <p className="no-margin">Cleanliness: 
     <input 
-      placeholder="Cleanliness Rating" 
+      placeholder="0-5" 
       type="number"
       min={0}
       max={5}
@@ -201,9 +204,11 @@ function ReviewDatabase(string){
         {setCleanlinessRating(event.target.value)
       }}
       class="RatingBox"
-    />
-        <input 
-      placeholder="Quality Rating" 
+    /></p>
+
+    <p className="no-margin">Quality: 
+    <input 
+      placeholder="0-5" 
       type="number"
       min={0}
       max={5}
@@ -211,10 +216,11 @@ function ReviewDatabase(string){
         {setQualityRating(event.target.value)
       }}
       class="RatingBox"
-    />
-
-<input 
-      placeholder="Space Rating" 
+    /></p>
+    
+    <p className="no-margin">Space: 
+    <input 
+      placeholder="0-5" 
       type="number"
       min={0}
       max={5}
@@ -222,10 +228,11 @@ function ReviewDatabase(string){
         {setSpaceRating(event.target.value)
       }}
       class="RatingBox"
-    />
+    /></p>
 
-<input 
-      placeholder="Location Rating" 
+    <p className="no-margin">Location: 
+    <input 
+      placeholder="0-5" 
       type="number"
       min={0}
       max={5}
@@ -233,9 +240,12 @@ function ReviewDatabase(string){
         {setLocationRating(event.target.value)
       }}
       class="RatingBox"
-    />
+    /></p>
     
-    <button onClick={createReview}>Submit Review</button> 
+    <button onClick={createReview} className="rev-button">Submit Review</button> 
+    </div>
+    </div>
+
 
         {allReviews.map((review) => {
           return (
@@ -257,6 +267,7 @@ function ReviewDatabase(string){
     </div>
   );
 }
+
 
 function clickedSort(props)
 {

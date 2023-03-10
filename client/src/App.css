@@ -141,6 +141,14 @@
 	margin-right: 10px;
   }
 
+.loginBox{
+	border: 2px solid #000000;
+	margin-right: 10px;
+  width: 250px;
+  text-align: left;
+  margin-bottom: 5px;
+}
+
   
 .thumbsup{
 	font-size: 20px;
@@ -160,5 +168,26 @@
   margin-right: 275px;
 }
 
+.form-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	/* height: 100vh; */
+  }
+  
+  .input-group-horiz {
+	display: flex;
+	flex-direction: row;
+	margin-left: 10px;
+	margin-right: 5px;
+  }
 
- 
+  .no-margin{
+	margin: 10px;
+  }
+
+  .rev-button{
+	margin: 10px;
+	height: 20px;
+  }

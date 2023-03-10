@@ -9,6 +9,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { auth } from "./firebase-config";
+import "./App.css";
 
 export let logged = false;
 export default function Home() {
@@ -75,6 +76,7 @@ export default function Home() {
 <img src="http://www.housing.ucla.edu/maps/ochmap.jpg" alt="map" width="720" height="405" class = "map" />
 <p class ="description">A Place To Rate, Review, and Discuss the Different Features of the Hill</p>
 <br></br>
+
 <div>
   <p>Register User</p>
   <input
@@ -82,12 +84,14 @@ export default function Home() {
           onChange={(event) => {
             setRegisterEmail(event.target.value);
           }}
+          className="loginBox"
         />
         <input
           placeholder="Password..."
           onChange={(event) => {
             setRegisterPassword(event.target.value);
           }}
+          className="loginBox"
         />
 
   <button onClick={register}>Create User</button>
@@ -101,12 +105,14 @@ export default function Home() {
           onChange={(event) => {
             setLoginEmail(event.target.value);
           }}
+          className="loginBox"
         />
         <input
           placeholder="Password..."
           onChange={(event) => {
             setLoginPassword(event.target.value);
           }}
+          className="loginBox"
         />
 
   <button onClick={login}>Login</button>
@@ -115,7 +121,7 @@ export default function Home() {
 
 <h>User Logged In: </h>
 {user?user.email:"Not Logged In"}
-<button onClick={logout}> Sign Out </button>
+<button onClick={logout} className="rev-button"> Sign Out </button>
 </body>
 </html>
 

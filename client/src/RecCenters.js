@@ -166,6 +166,7 @@ function ReviewDatabase(string){
 
     return (
       <div className="ReviewDatabase">
+      <div className="form-container">
 
       <input
         placeholder="Review (Optional). . ."
@@ -174,17 +175,20 @@ function ReviewDatabase(string){
         }}
         class="ReviewBox"
         />
+      <div className="input-group-horiz">
+      <p className="no-margin">Facility Quality:
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Facility Quality Rating"
+        placeholder="0-5"
         onChange={(event) => {
           setFacilityQRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
 
+      <p className="no-margin">Hours:
       <input
         type="number"
         min={0}
@@ -194,42 +198,48 @@ function ReviewDatabase(string){
           setHoursRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
+
+      <p className="no-margin">Space:
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Space Rating"
+        placeholder="0-5"
         onChange={(event) => {
           setSpaceRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
 
+      <p className="no-margin">Location:
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Location Rating"
+        placeholder="0-5"
         onChange={(event) => {
           setLocationRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
+      <p className="no-margin">Business:
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Business Rating"
+        placeholder="0-5"
         onChange={(event) => {
           setBusinessRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
 
         
         
-        <button onClick={createReview}>Submit Review</button>
+        <button onClick={createReview} className="rev-button">Submit Review</button>
+        </div>
+        </div>
           {reviews.map((review) => {
             return (
                 <div className="eachReview">
