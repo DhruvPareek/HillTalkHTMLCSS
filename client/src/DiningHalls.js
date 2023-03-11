@@ -26,13 +26,12 @@ function DiningHalls() {
         <body>
           <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20160/56a670f2bd26f54876001535_UCLAOlympicVillage6/UCLAOlympicVillage6_4d51350a-2c04-4d93-8fe3-ac4e6b248efc-prv.jpg" alt="Bplate" width="720" height="405" class = "Bplate" />
           <p>This page contains every dining hall, takeout and buffet style places from around the hill.</p>
-           <p>Sort By:</p>
+           <b>Sort By:</b>
            <ul>
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(1);}}>Health{}</button></ol>
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(2);}}>Quality{}</button></ol>
-          {/* <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(3);}}>Time{}</button></ol> */}
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(3);}}>Hours{}</button></ol>
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button></ol>
+            <button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Healthiness{}</button>  
+            <button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Tastiness{}</button>  
+            <button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Wait Time{}</button>  
+            <button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Availability of Seating{}</button>
             </ul> 
             <br></br>
         <h3>Rendezvous</h3>
@@ -159,7 +158,7 @@ function ReviewDatabase(string){
     const [newHealthRating, setNewHealthRating] = useState(0);
     const [newQualityRating, setNewQualityRating] = useState(0);
     const [newTimeRating, setNewTimeRating] = useState(0);
-    const [newLocationRating, setNewLocationRating] = useState(0);
+    const [newSeatingRating, setNewSeatingRating] = useState(0);
 
 
     const [user, setUser] = useState({});
@@ -178,8 +177,9 @@ function ReviewDatabase(string){
     //end of what you need to copy
     const createReview = async () => {
       if (logged){
-        if((newLocationRating !=-1 && newTimeRating !=-1 && newHealthRating != -1 && newQualityRating != -1 && newReview != "" &&  newLocationRating >=0 && newLocationRating <=5 && newTimeRating >= 0 && newTimeRating <= 5 && newHealthRating >= 0 && newHealthRating <= 5 && newQualityRating >= 0 && newQualityRating <= 5)){
-        await addDoc(ReviewCollectionRef, { Review: newReview,LocationRating: Number(newLocationRating), TimeRating: Number(newTimeRating), HealthRating: Number(newHealthRating),QualityRating: Number(newQualityRating), upvotes: Number(0) });
+        if((newSeatingRating !=-1 && newTimeRating !=-1 && newHealthRating != -1 && newQualityRating != -1 && newReview != "" &&  newSeatingRating >=0 && newSeatingRating <=5 && newTimeRating >= 0 && newTimeRating <= 5 && newHealthRating >= 0 && newHealthRating <= 5 && newQualityRating >= 0 && newQualityRating <= 5)){
+        await addDoc(ReviewCollectionRef, { Review: newReview, SeatingRating: Number(newSeatingRating), TimeRating: Number(newTimeRating), HealthRating: Number(newHealthRating), QualityRating: Number(newQualityRating), 
+          Overall: ((Number(newSeatingRating) + Number(newTimeRating) + Number(newHealthRating) + Number(newQualityRating))/4), upvotes: Number(0), downvotes: Number(0) });
         alert("Review Submitted!! Refresh page to view.")
       }
       else{
@@ -192,11 +192,20 @@ function ReviewDatabase(string){
       };
 
       //for updating review when upvote button clicked
-      const updateReview = async (id, numUpvotes) => {
+      const upVote = async (id, numUpvotes) => {
         const reviewDoc = doc(db, string, id)
         const newFields = {upvotes: numUpvotes+1}
         await updateDoc(reviewDoc, newFields)
+        alert("Upvote counted!! Refresh page to view.")
       }
+
+      const downVote = async (id, numdownvotes) => { // NEW CHANGE
+        const reviewDoc = doc(db, string, id);
+        const newFields = {downvotes: numdownvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+        alert("Downvote counted!! Refresh page to view.")
+      }
+
     useEffect(() => {
       
       const getReviews = async () => {
@@ -218,7 +227,7 @@ function ReviewDatabase(string){
         }}
         class="ReviewBox"/>
       <div className="input-group-horiz">
-      <p className="no-margin">Health: 
+      <p className="no-margin">Healthiness: 
         <input
         type="number"
         min={0}
@@ -230,7 +239,7 @@ function ReviewDatabase(string){
         class="RatingBox"
       />
       </p>
-      <p className="no-margin">Quality: 
+      <p className="no-margin">Tastiness: 
       <input
         type="number"
         min={0}
@@ -241,7 +250,7 @@ function ReviewDatabase(string){
         }}
         class="RatingBox"
       /></p>
-      <p className="no-margin">Time: 
+      <p className="no-margin">Wait Time: 
       <input
         type="number"
         min={0}
@@ -252,14 +261,14 @@ function ReviewDatabase(string){
         }}
         class="RatingBox"
       /></p>
-      <p className="no-margin">Location: 
+      <p className="no-margin">Availability of Seating: 
       <input
         type="number"
         min={0}
         max={5}
         placeholder="0-5"
         onChange={(event) => {
-          setNewLocationRating(event.target.value);
+          setNewSeatingRating(event.target.value);
         }}
         class="RatingBox"
       /></p>
@@ -272,15 +281,17 @@ function ReviewDatabase(string){
         return (
           <div className="eachReview">
 
-            <p>Review: {review.Review}</p>
+            <p><b>Review: </b>{review.Review}</p>
+            <p><b>Overall Rating: </b>{review.Overall}</p>
+            <p>Healthiness: {review.HealthRating}/5  |  Tastiness: {review.QualityRating}/5  |  Wait Time: {review.TimeRating}/5  |  Availability of Seating: {review.SeatingRating}/5</p>
 
-            <p>Health Rating: {review.HealthRating}</p>
-            <p>Quality Rating: {review.QualityRating}</p>
-            <p>Time Rating: {review.TimeRating}</p>
-            <p>Location Rating: {review.LocationRating}</p>
-            <p>Upvotes: {review.upvotes}</p>
-            <button onClick={() => {updateReview(review.id, review.upvotes)}}>Upvote</button>{/*upvote button */}
+            <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+        &#x1F44D;</span></button>{review.upvotes}
+        <button onClick={() => {downVote(review.id, review.downvotes)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
+        &#x1F44E;
+      </span></button>{review.downvotes}      
                 </div>
+            
                 );
           })}
     </div>
