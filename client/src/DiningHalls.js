@@ -1,4 +1,4 @@
-import {useState, useEffect, useCallback} from "react";
+import {useState, useEffect, useReducer} from "react";
 import React from 'react';
 import './App.css';
 
@@ -14,8 +14,6 @@ import {
 import { auth } from "./firebase-config";
 
 
-
-
 function DiningHalls() {
     return (
         <html>
@@ -23,15 +21,14 @@ function DiningHalls() {
         <title>HillTalk</title>
         </head>
         <body>
-          <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20160/56a670f2bd26f54876001535_UCLAOlympicVillage6/UCLAOlympicVillage6_4d51350a-2c04-4d93-8fe3-ac4e6b248efc-prv.jpg" alt="Bplate" width="720" height="405" class = "Bplate" />
+          <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20160/56a670f2bd26f54876001535_UCLAOlympicVillage6/UCLAOlympicVillage6_4d51350a-2c04-4d93-8fe3-ac4e6b248efc-prv.jpg" alt="Bplate" width="720" height="405" class = "DiningHallCover" />
           <p>This page contains every dining hall, takeout and buffet style places from around the hill.</p>
-           <p>Sort By:</p>
+           <b>Sort By:</b>
            <ul>
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(1);}}>Health{}</button></ol>
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(2);}}>Quality{}</button></ol>
-          {/* <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(3);}}>Time{}</button></ol> */}
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(3);}}>Hours{}</button></ol>
-            <ol><button type='button' className="btn-btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button></ol>
+            <button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Healthiness{}</button>  
+            <button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Tastiness{}</button>  
+            <button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Wait Time{}</button>  
+            <button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Availability of Seating{}</button>
             </ul> 
             <br></br>
         <h3>Rendezvous</h3>
@@ -43,7 +40,7 @@ function DiningHalls() {
         <br />
         <br></br>
         <h3>De Neve</h3>
-        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_DeNeve.png"  width="250" height="200" class="DeNeve"></img>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_DeNeve.png"  width="250" height="200" class="DeNeveDH"></img>
         <div class="ListOfReviews">
           <h3>Reviews:</h3><br></br>
         {ReviewDatabase("De Neve")}
@@ -67,7 +64,7 @@ function DiningHalls() {
         <br />
         <br></br>
         <h3>The Study</h3>
-        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_TheStudyatHedrick.png"  width="250" height="200" class="The Study"></img>
+        <img src="https://portal.housing.ucla.edu/sites/default/files/media/images/DiningWebsite_HeaderImages_TheStudyatHedrick.png"  width="250" height="200" class="TheStudy"></img>
         <div class="ListOfReviews">
           <h3>Reviews:</h3><br></br>
         {ReviewDatabase("Study")}
@@ -158,12 +155,9 @@ function ReviewDatabase(string){
     const [newHealthRating, setNewHealthRating] = useState(0);
     const [newQualityRating, setNewQualityRating] = useState(0);
     const [newTimeRating, setNewTimeRating] = useState(0);
-    const [newLocationRating, setNewLocationRating] = useState(0);
-    const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
+    const [newSeatingRating, setNewSeatingRating] = useState(0);
+    const [reducerValue, forceUpdate] = useReducer(x => x+1, 0);
 
-   //const [, updateState] = useState();
-   //const forceUpdate = useCallback(() => updateState({}), []);
-    const forceUpdate = useForceUpdate();
 
     const [user, setUser] = useState({});
     useEffect(() => {
@@ -177,14 +171,15 @@ function ReviewDatabase(string){
           logged = false;//we are logged out now
         }
       });
-      })
+      }, [reducerValue])
     //end of what you need to copy
     const createReview = async () => {
       if (logged){
-        if((newLocationRating !=-1 && newTimeRating !=-1 && newHealthRating != -1 && newQualityRating != -1 && newReview != "" &&  newLocationRating >=0 && newLocationRating <=5 && newTimeRating >= 0 && newTimeRating <= 5 && newHealthRating >= 0 && newHealthRating <= 5 && newQualityRating >= 0 && newQualityRating <= 5)){
-        await addDoc(ReviewCollectionRef, { Review: newReview,LocationRating: Number(newLocationRating), TimeRating: Number(newTimeRating), HealthRating: Number(newHealthRating),QualityRating: Number(newQualityRating), upvotes: Number(0) });
-        //alert("Review Submitted!! Refresh page to view.")
-
+        if((newSeatingRating !=-1 && newTimeRating !=-1 && newHealthRating != -1 && newQualityRating != -1 && newReview != "" &&  newSeatingRating >=0 && newSeatingRating <=5 && newTimeRating >= 0 && newTimeRating <= 5 && newHealthRating >= 0 && newHealthRating <= 5 && newQualityRating >= 0 && newQualityRating <= 5)){
+        await addDoc(ReviewCollectionRef, { Review: newReview, SeatingRating: Number(newSeatingRating), TimeRating: Number(newTimeRating), HealthRating: Number(newHealthRating), QualityRating: Number(newQualityRating), 
+          Overall: ((Number(newSeatingRating) + Number(newTimeRating) + Number(newHealthRating) + Number(newQualityRating))/4), upvotes: Number(0), downvotes: Number(0) });
+        forceUpdate();
+          //alert("Review Submitted!! Refresh page to view.")
       }
       else{
         alert("Please leave a review and rating for each field (1-5) in order to submit")
@@ -193,20 +188,34 @@ function ReviewDatabase(string){
       else{
         alert("Please Login at Home Page before leaving a review")
       }
-      forceUpdate();
       };
 
-      //for updating review when upvote button clicked
-      const updateReview = async (id, numUpvotes) => {
-        const reviewDoc = doc(db, string, id)
-        const newFields = {upvotes: numUpvotes+1}
-      //for updating review when upvote button clicked
-      const updateReview = async (id, numUpvotes) => {
-        const reviewDoc = doc(db, string, id)
-        const newFields = {upvotes: numUpvotes+1}
-        await updateDoc(reviewDoc, newFields)
-        forceUpdate()
+     //for updating review when upvote button clicked if user is logged in
+     const upVote = async (id, numupvotes) => { // NEW CHANGE
+      if(logged){
+        const reviewDoc = doc(db, string, id);
+        const newFields = {upvotes: numupvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+        forceUpdate();
+        //alert("Upvote counted!! Refresh page to view.")
+      }else{
+        alert("Please login at Home Page before upvoting")
       }
+    }
+  
+    //for updating review when downvote button clicked if user is logged in
+    const downVote = async (id, numdownvotes) => { // NEW CHANGE
+      if(logged){
+        const reviewDoc = doc(db, string, id);
+        const newFields = {downvotes: numdownvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+        forceUpdate();
+        //alert("Downvote counted!! Refresh page to view.")
+      }else{
+        alert("Please login at Home Page before downvoting")
+      }
+    }
+
     useEffect(() => {
       
       const getReviews = async () => {
@@ -215,68 +224,84 @@ function ReviewDatabase(string){
       }
   
       getReviews()  
-    }, [])
+    }, [reducerValue])
 
     return (
       <div className="ReviewDatabase">
+      <div className="form-container">
+      
         <input
-        placeholder="Review..."
+        placeholder="Review (Optional)..."
         onChange={(event) => {
           setNewReview(event.target.value);
-        }}/>
-      <input
+        }}
+        class="ReviewBox"/>
+      <div className="input-group-horiz">
+      <p className="no-margin">Healthiness: 
+        <input
         type="number"
         min={0}
         max={5}
-        placeholder="Health Rating..."
+        placeholder="0-5"
         onChange={(event) => {
           setNewHealthRating(event.target.value);
         }}
+        class="RatingBox"
       />
+      </p>
+      <p className="no-margin">Tastiness: 
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Quality Rating..."
+        placeholder="0-5"
         onChange={(event) => {
           setNewQualityRating(event.target.value);
         }}
-      />
+        class="RatingBox"
+      /></p>
+      <p className="no-margin">Wait Time: 
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Time Rating..."
+        placeholder="0-5"
         onChange={(event) => {
           setNewTimeRating(event.target.value);
         }}
-      />
+        class="RatingBox"
+      /></p>
+      <p className="no-margin">Availability of Seating: 
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Location Rating..."
+        placeholder="0-5"
         onChange={(event) => {
-          setNewLocationRating(event.target.value);
+          setNewSeatingRating(event.target.value);
         }}
-      />
+        class="RatingBox"
+      /></p>
 
 
-      <button onClick={createReview}> Submit Review</button>
-      {/* <button onClick={forceUpdate}>Force refresh </button> */}
+      <button onClick={createReview} className="rev-button"> Submit Review</button>
+      </div>
+      </div>
       {Reviews.map((review) => {
         return (
           <div className="eachReview">
 
-            <p>Review: {review.Review}</p>
+            <p><b>Review: </b>{review.Review}</p>
+            <p><b>Overall Rating: </b>{review.Overall}</p>
+            <p>Healthiness: {review.HealthRating}/5  |  Tastiness: {review.QualityRating}/5  |  Wait Time: {review.TimeRating}/5  |  Availability of Seating: {review.SeatingRating}/5</p>
 
-            <p>Health Rating: {review.HealthRating}</p>
-            <p>Quality Rating: {review.QualityRating}</p>
-            <p>Time Rating: {review.TimeRating}</p>
-            <p>Location Rating: {review.LocationRating}</p>
-            <p>Upvotes: {review.upvotes}</p>
-            <button onClick={() => {updateReview(review.id, review.upvotes)}}>Upvote</button>{/*upvote button */}
+            <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+        &#x1F44D;</span></button>{review.upvotes}
+        <button onClick={() => {downVote(review.id, review.downvotes)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
+        &#x1F44E;
+      </span></button>{review.downvotes}      
                 </div>
+            
                 );
           })}
     </div>

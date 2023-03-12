@@ -1,6 +1,6 @@
 // About.js
 
-import {useState, useEffect} from "react";
+import {useState, useEffect, useReducer} from "react";
 import React from "react";
 import "./App.css";
 
@@ -126,7 +126,7 @@ function ReviewDatabase(string){
 
   const [allReviews, setReview] = useState([]);
   const reviewCollectionRef = collection(db, string) //grabbing "CentennialReviews" collection and sets it equal to var
-
+  const [reducerValue, forceUpdate] = useReducer(x => x+1, 0);
 
   const [user, setUser] = useState({});
     useEffect(() => {
@@ -140,13 +140,14 @@ function ReviewDatabase(string){
           logged = false;//we are logged out now
         }
       });
-      })
+      },[reducerValue])
   const createReview = async () => {
     if (logged){
       if (LocationRating !=1 && SpaceRating !=-1 && NoiseRating !=-1 && CleanlinessRating != -1 && LocationRating <= 5 && LocationRating >= 0 && SpaceRating <= 5 && SpaceRating >= 0 && NoiseRating <=5 && NoiseRating >=0 && CleanlinessRating <= 5 && CleanlinessRating >= 0 && input != "") {
         await addDoc(reviewCollectionRef, { Review: input , LocationRating: Number(LocationRating), NoiseRating: Number(NoiseRating), SpaceRating: Number(SpaceRating), CleanlinessRating: Number(CleanlinessRating), 
           Overall: ((Number(NoiseRating) + Number(LocationRating) + Number(SpaceRating) + Number(CleanlinessRating))/4),upvotes: Number(0), downvotes: Number(0) })
-        alert("Review Submitted! Refresh page to view.")
+        forceUpdate();
+          //alert("Review Submitted! Refresh page to view.")
       }
       else{
         alert("Please leave a review and rating (1-5) in order to submit")
@@ -163,7 +164,8 @@ function ReviewDatabase(string){
         const reviewDoc = doc(db, string, id);
         const newFields = {upvotes: numupvotes + 1};
         await updateDoc(reviewDoc, newFields);
-        alert("Upvote counted!! Refresh page to view.")
+        forceUpdate();
+        //alert("Upvote counted!! Refresh page to view.")
       }else{
         alert("Please login at Home Page before upvoting")
       }
@@ -175,7 +177,8 @@ function ReviewDatabase(string){
         const reviewDoc = doc(db, string, id);
         const newFields = {downvotes: numdownvotes + 1};
         await updateDoc(reviewDoc, newFields);
-        alert("Downvote counted!! Refresh page to view.")
+        forceUpdate();
+        //alert("Downvote counted!! Refresh page to view.")
       }else{
         alert("Please login at Home Page before downvoting")
       }
@@ -190,7 +193,7 @@ function ReviewDatabase(string){
     }
 
     getReviews()
-  }, [])
+  }, [reducerValue])
 
   
 
