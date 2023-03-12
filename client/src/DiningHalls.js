@@ -207,17 +207,17 @@ function ReviewDatabase(string){
       }
 
       //sort reviews by popularity (within same collection)
-  const sortReview = async () => {
-    const querySnapshot = await getDocs(ReviewCollectionRef);
+    const sortReview = async () => {
+      const querySnapshot = await getDocs(ReviewCollectionRef);
 
-    // create array of reviews from collection
-    const readInReviews = [];
-    
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      data.id = doc.id;
-      readInReviews.push(data);
-    });
+      // create array of reviews from collection
+      const readInReviews = [];
+      
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        data.id = doc.id;
+        readInReviews.push(data);
+      });
 
     readInReviews.sort((a, b) => b.upvotes - a.upvotes); //sorts from most popular -> least 
 
@@ -293,7 +293,7 @@ function ReviewDatabase(string){
 
 
       <button onClick={createReview} className="rev-button"> Submit Review</button>
-      <button onClick={sortReview} className="rev-button">Sort Reviews by Popularity</button> 
+      <button onClick={sortReview} className="rev-button">Sort by Popularity</button> 
 
       </div>
       </div>

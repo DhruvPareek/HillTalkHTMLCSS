@@ -3,8 +3,6 @@ import {useState, useEffect} from "react";
 import React from "react";
 import "./App.css";
 
-
-
 import {db} from "./firebase-config"
 import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
 
@@ -30,6 +28,8 @@ function RecCenters() {
     <button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button>
     <button type='button' className="btn btn-primary" onClick={() => { clickedSort(5);}}>Activity Level{}</button>
     </ul>
+
+    {/* print sorted array here */}
     <br></br>
         <h3>John Wooden Center</h3>
         <img src="https://pbs.twimg.com/media/CgMViMxUIAAIU-p.jpg:large"  width="250" height="200" class="JWC"></img>
@@ -68,6 +68,7 @@ function RecCenters() {
         <div class="ListOfReviews">
           <h3>Reviews:</h3><br></br>
         {ReviewDatabase("IMFieldReviews")}
+
         </div>
         <br />
 </body>
@@ -77,27 +78,178 @@ function RecCenters() {
 
 function clickedSort(props)
 {     
-    if(props === 1)
-    {
-        alert('hello, this should show up if the page rendered lol, Sort by Facility Quaity') 
-    }
-    if(props === 2)
-    {
-        alert('hello, this should show up if the page rendered lol, Sort by Hours');  
-    }
-    if(props === 3)
-    {
-        alert('hello, this should show up if the page rendered lol, Sort by Space');  
-    }
-    if(props === 4)
-    {
-        alert('hello, this should show up if the page rendered lol, Sort by Location'); 
-    }
-    if(props === 5)
-    {
-        alert('hello, this should show up if the page rendered lol, Sort by Business');  
-    }
+
+  let woodenAvg = -1;
+  let imAvg = -1;
+  let hitchAvg = -1;
+  let sunsetAvg = -1;
+  let bfitAvg = -1;
+
+  //compute the averages 
+
+  if(props === 1)
+  {
+    const category = "facility";
+    (async () => {
+      woodenAvg = await computeAverage("JWCReviews", category);
+      imAvg = await computeAverage("IMFieldReviews", category);
+      hitchAvg = await computeAverage("HitchBBReviews", category);
+      sunsetAvg = await computeAverage("SunsetRecReviews", category);
+      bfitAvg = await computeAverage("BFITReviews", category);
+
+      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
+
+      alert("Avg Ratings sorted from high -> low :" + sorted);    })()
+  }
+  if(props === 2)
+  {
+    const category = "hours";
+    (async () => {
+      woodenAvg = await computeAverage("JWCReviews", category);
+      imAvg = await computeAverage("IMFieldReviews", category);
+      hitchAvg = await computeAverage("HitchBBReviews", category);
+      sunsetAvg = await computeAverage("SunsetRecReviews", category);
+      bfitAvg = await computeAverage("BFITReviews", category);
+
+      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
+
+      alert("Avg Ratings sorted from high -> low : " + sorted);    })()
+  }
+  if(props === 3)
+  {
+    const category = "space";
+    (async () => {
+      woodenAvg = await computeAverage("JWCReviews", category);
+      imAvg = await computeAverage("IMFieldReviews", category);
+      hitchAvg = await computeAverage("HitchBBReviews", category);
+      sunsetAvg = await computeAverage("SunsetRecReviews", category);
+      bfitAvg = await computeAverage("BFITReviews", category);
+
+      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
+
+      alert("Avg Ratings sorted from high -> low : " + sorted);
+    })() 
+  }
+  if(props === 4)
+  {
+    const category = "location";
+    (async () => {
+      woodenAvg = await computeAverage("JWCReviews", category);
+      imAvg = await computeAverage("IMFieldReviews", category);
+      hitchAvg = await computeAverage("HitchBBReviews", category);
+      sunsetAvg = await computeAverage("SunsetRecReviews", category);
+      bfitAvg = await computeAverage("BFITReviews", category);
+
+      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
+
+      alert("Avg Ratings sorted from high -> low :" + sorted);
+    })()
+  }
+  if(props === 5)
+  {
+    const category = "activity level";
+    (async () => {
+      woodenAvg = await computeAverage("JWCReviews", category);
+      imAvg = await computeAverage("IMFieldReviews", category);
+      hitchAvg = await computeAverage("HitchBBReviews", category);
+      sunsetAvg = await computeAverage("SunsetRecReviews", category);
+      bfitAvg = await computeAverage("BFITReviews", category);
+
+      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
+
+      alert("Avg Ratings sorted from high -> low : " + sorted);      
+    })() 
+  }
 }
+
+
+const computeAverage = async(collectionName, category) => {
+// function computeAverage(collectionName, category){
+
+  const reviewCollectionRef = collection(db, collectionName);
+
+  const readInReviews = await readInData(reviewCollectionRef); //read in data from review
+
+  const length = readInReviews.length; //number of reviews
+  
+  let avgRating = 0;
+
+  //don't need to do any read in data
+  if (length == 0){
+    return avgRating;
+  }
+
+  //read in data from collection that string specifies 
+  if (category == "facility"){
+    //compute average of facility quality 
+    let totalRating = 0;
+
+    readInReviews.forEach((review) =>{
+      totalRating += parseInt(review.FacilityQRating); //add up facility rating for each review
+    });
+
+    avgRating = totalRating / length;
+  }
+
+  if (category == "hours") {
+    let totalRating = 0;
+
+    readInReviews.forEach((review) => {
+      totalRating += parseInt(review.HoursRating); //add up facility rating for each review
+    });
+
+    avgRating = totalRating / length;
+  }
+
+  if (category == "space"){
+    let totalRating = 0;
+
+    readInReviews.forEach((review) =>{
+      totalRating += parseInt(review.SpaceRating); //add up facility rating for each review
+    });
+
+    avgRating = totalRating / length;
+  }
+
+  if (category == "location"){
+    let totalRating = 0;
+
+    readInReviews.forEach((review) =>{
+      totalRating += parseInt(review.LocationRating); //add up facility rating for each review
+    });
+
+    avgRating = totalRating / length;
+  }
+
+  if (category == "activity level"){
+    let totalRating = 0;
+
+    readInReviews.forEach((review) =>{
+      totalRating += parseInt(review.BusinessRating); //add up facility rating for each review
+    });
+
+    avgRating = totalRating / length;
+  }
+
+  return avgRating;
+  }
+  
+  //take snapshot and read in data from backend 
+  const readInData = async (reviewCollectionRef) => {
+    const querySnapshot = await getDocs(reviewCollectionRef);
+
+    // create array of reviews from collection
+    const readInReviews = [];
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      data.id = doc.id;
+      readInReviews.push(data);
+    });
+
+    return readInReviews;
+  }
+
 
 let logged = false;
 function ReviewDatabase(string){
@@ -107,6 +259,7 @@ function ReviewDatabase(string){
     const [SpaceRating, setSpaceRating] = useState(-1); //this will be the inout rating from the user
     const [LocationRating, setLocationRating] = useState(-1); //this will be the inout rating from the user
     const [BusinessRating, setBusinessRating] = useState(-1); //this will be the inout rating from the user
+    
     
     const [reviews, setReview] = useState([]);
     const reviewCollectionRef = collection(db, string)
@@ -257,7 +410,7 @@ function ReviewDatabase(string){
         
         
         <button onClick={createReview} className="rev-button">Submit Review</button>
-        <button onClick={sortReview} className="rev-button">Sort Reviews by Popularity</button> 
+        <button onClick={sortReview} className="rev-button">Sort by Popularity</button> 
         </div>
         </div>
           {reviews.map((review) => {
@@ -280,5 +433,7 @@ function ReviewDatabase(string){
     );
   }
 
+
+  
 
 export default RecCenters;
