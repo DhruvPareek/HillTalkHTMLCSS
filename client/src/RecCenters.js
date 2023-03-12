@@ -155,6 +155,24 @@ function ReviewDatabase(string){
       alert("Downvote counted!! Refresh page to view.")
     }
 
+    //sort reviews by popularity (within same collection)
+    const sortReview = async () => {
+      const querySnapshot = await getDocs(reviewCollectionRef);
+  
+      // create array of reviews from collection
+      const readInReviews = [];
+      
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        data.id = doc.id;
+        readInReviews.push(data);
+      });
+  
+      readInReviews.sort((a, b) => b.upvotes - a.upvotes); //sorts from most popular -> least 
+  
+      setReview(readInReviews);
+    }
+
     useEffect(() => {
       
       const getReviews = async () => {
@@ -239,6 +257,7 @@ function ReviewDatabase(string){
         
         
         <button onClick={createReview} className="rev-button">Submit Review</button>
+        <button onClick={sortReview} className="rev-button">Sort Reviews by Popularity</button> 
         </div>
         </div>
           {reviews.map((review) => {

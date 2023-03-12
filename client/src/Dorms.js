@@ -12,6 +12,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "./firebase-config";
+import { async } from "@firebase/util";
 
 <i class='fas fa-thumbs-up'></i>
 
@@ -171,6 +172,24 @@ function ReviewDatabase(string){
     alert("Downvote counted!! Refresh page to view.")
   }
 
+  //sort reviews by popularity (within same collection)
+  const sortReview = async () => {
+    const querySnapshot = await getDocs(reviewCollectionRef);
+
+    // create array of reviews from collection
+    const readInReviews = [];
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      data.id = doc.id;
+      readInReviews.push(data);
+    });
+
+    readInReviews.sort((a, b) => b.upvotes - a.upvotes); //sorts from most popular -> least 
+
+    setReview(readInReviews);
+  }
+
 
   useEffect(() => {
     
@@ -182,7 +201,7 @@ function ReviewDatabase(string){
     getReviews()
   }, [])
 
-  
+    
 
   return (
     <div className="ReviewDatabase">
@@ -246,6 +265,10 @@ function ReviewDatabase(string){
     /></p>
     
     <button onClick={createReview} className="rev-button">Submit Review</button> 
+
+    <button onClick={sortReview} className="rev-button">Sort Reviews by Popularity</button> 
+
+
     </div>
     </div>
 
@@ -292,3 +315,26 @@ function clickedSort(props)
 }
 
 export default Dorms;
+
+
+// //ADDED March 9th
+// const sortReviews = async (string) => {
+
+  
+//   //orderBy() method specifies that the documents should be ordered by the value of the "rating" field in descending order
+
+//   const querySnapshot = await query(reviewCollectionRef, orderBy("upvotes", "desc")); // 'query' method returns a QuerySnapshot object that contains the results of the query
+//   console.log(typeof querySnapshot.docs);
+
+//   // if (querySnapshot.docs.length > 0) {
+//   //   const sortedReviews = querySnapshot.docs.map((doc) => doc.data()); //maps snapshots to data objects
+//   //   console.log("Sorted reviews:", sortedReviews);
+//   //   // Update the state of your component with the sorted reviews data
+//   // } else {
+//   //   console.warn("No reviews found.");
+//   // }
+
+//   // const sortedReviews = querySnapshot.docs.map((doc) => doc.data()); //maps snapshots to data objects
+//   // console.log(sortedReviews);
+//   // setReviews(sortedReviews); 
+// };
