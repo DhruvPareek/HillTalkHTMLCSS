@@ -225,7 +225,7 @@
 }
 
 .rev-button:active {
-    color: rgb(247, 239, 228)
+    color: rgb(195, 121, 18)
 }
 
 .rev-button:active:after {
@@ -247,9 +247,10 @@
     top: 0;
     border-radius: 10px;
 }
-
+/* glowing animation around border */
 @keyframes glowing {
     0% { background-position: 0 0; }
     50% { background-position: 400% 0; }
     100% { background-position: 0 0; }
 }
+
