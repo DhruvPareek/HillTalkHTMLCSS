@@ -150,7 +150,7 @@ function ReviewDatabase(string){
           //alert("Review Submitted! Refresh page to view.")
       }
       else{
-        alert("Please leave a review and rating (1-5) in order to submit")
+        alert("Please leave a review and rating (0-5) in order to submit")
       }
     }
     else{
