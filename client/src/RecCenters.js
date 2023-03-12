@@ -20,15 +20,15 @@ function RecCenters() {
 <title>HillTalk</title>
 </head>
 <body>
-<img src="https://linespace.com/wp-content/uploads/2018/03/UCLA_BeFit_091615_04-1170x658.jpg" alt="BFit" width="720" height="405" class = "Bfit"/>
+<img src="https://linespace.com/wp-content/uploads/2018/03/UCLA_BeFit_091615_04-1170x658.jpg" alt="BFit" width="720" height="405" class = "RecCenterCover"/>
   <p>Here you can find every recreation center on campus.</p>
-   <p>Sort By:</p>
+   <b>Sort By:</b>
    <ul>
-    <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Facility Quality{}</button></ol>
-    <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Hours{}</button></ol>
-    <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Space{}</button></ol>
-    <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button></ol>
-    <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(5);}}>Business{}</button></ol>
+    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Facility Maintenance{}</button>
+    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Hours{}</button>
+    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Space{}</button>
+    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button>
+    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(5);}}>Activity Level{}</button>
     </ul>
     <br></br>
         <h3>John Wooden Center</h3>
@@ -107,11 +107,9 @@ function ReviewDatabase(string){
     const [SpaceRating, setSpaceRating] = useState(-1); //this will be the inout rating from the user
     const [LocationRating, setLocationRating] = useState(-1); //this will be the inout rating from the user
     const [BusinessRating, setBusinessRating] = useState(-1); //this will be the inout rating from the user
-
     
     const [reviews, setReview] = useState([]);
     const reviewCollectionRef = collection(db, string)
-
     const [user, setUser] = useState({});
     useEffect(() => {
 
@@ -129,11 +127,12 @@ function ReviewDatabase(string){
     const createReview = async() => {
     if (logged){
       if (BusinessRating != -1 && LocationRating != -1 && SpaceRating != -1 && HoursRating != -1 && FacilityQRating != -1 && input != "" && BusinessRating <= 5 && BusinessRating >= 0 && LocationRating <= 5 && LocationRating >= 0 && SpaceRating >= 0 && SpaceRating <= 5 && HoursRating >= 0 && HoursRating <= 5 && FacilityQRating >= 0 && FacilityQRating <= 5) {
-        await addDoc(reviewCollectionRef, { TextReview: input ,BusinessRating: BusinessRating, LocationRating: LocationRating, SpaceRating: SpaceRating, HoursRating: HoursRating, FacilityQRating : FacilityQRating, upvotes: Number(0), downvotes: Number(0) })
+        await addDoc(reviewCollectionRef, { TextReview: input ,BusinessRating: BusinessRating, LocationRating: LocationRating, SpaceRating: SpaceRating, HoursRating: HoursRating, FacilityQRating : FacilityQRating, 
+          Overall: ((Number(BusinessRating) + Number(LocationRating) + Number(SpaceRating) + Number(HoursRating) + Number(FacilityQRating))/5), upvotes: Number(0), downvotes: Number(0) })
         alert("Review Submitted! Refresh page to view.")
       }
       else{
-          alert("Please leave a review and rating (1-5) in order to submit")
+          alert("Please leave a review and rating (0-5) in order to submit")
       }
     }
     else{
@@ -141,17 +140,28 @@ function ReviewDatabase(string){
     }
     };
     
-    //for updating review when upvote button clicked
+    //for updating review when upvote button clicked if user is logged in
     const upVote = async (id, numupvotes) => { // NEW CHANGE
-      const reviewDoc = doc(db, string, id);
-      const newFields = {upvotes: numupvotes + 1};
-      await updateDoc(reviewDoc, newFields);
+      if(logged){
+        const reviewDoc = doc(db, string, id);
+        const newFields = {upvotes: numupvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+        alert("Upvote counted!! Refresh page to view.")
+      }else{
+        alert("Please login at Home Page before upvoting")
+      }
     }
   
+    //for updating review when downvote button clicked if user is logged in
     const downVote = async (id, numdownvotes) => { // NEW CHANGE
-      const reviewDoc = doc(db, string, id);
-      const newFields = {downvotes: numdownvotes + 1};
-      await updateDoc(reviewDoc, newFields);
+      if(logged){
+        const reviewDoc = doc(db, string, id);
+        const newFields = {downvotes: numdownvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+        alert("Downvote counted!! Refresh page to view.")
+      }else{
+        alert("Please login at Home Page before downvoting")
+      }
     }
 
     useEffect(() => {
@@ -166,6 +176,7 @@ function ReviewDatabase(string){
 
     return (
       <div className="ReviewDatabase">
+      <div className="form-container">
 
       <input
         placeholder="Review (Optional). . ."
@@ -174,71 +185,77 @@ function ReviewDatabase(string){
         }}
         class="ReviewBox"
         />
+      <div className="input-group-horiz">
+      <p className="no-margin">Facility Maintenance:
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Facility Quality Rating"
+        placeholder="0-5"
         onChange={(event) => {
           setFacilityQRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
 
+      <p className="no-margin">Hours:
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Hours Rating"
+        placeholder="0-5"
         onChange={(event) => {
           setHoursRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
+
+      <p className="no-margin">Space:
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Space Rating"
+        placeholder="0-5"
         onChange={(event) => {
           setSpaceRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
 
+      <p className="no-margin">Location:
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Location Rating"
+        placeholder="0-5"
         onChange={(event) => {
           setLocationRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
+      <p className="no-margin">Activity Level:
       <input
         type="number"
         min={0}
         max={5}
-        placeholder="Business Rating"
+        placeholder="0-5"
         onChange={(event) => {
           setBusinessRating(event.target.value);
         }}
         class="RatingBox"
-        />
+        /></p>
 
         
         
-        <button onClick={createReview}>Submit Review</button>
+        <button onClick={createReview} className="rev-button">Submit Review</button>
+        </div>
+        </div>
           {reviews.map((review) => {
             return (
                 <div className="eachReview">
-                    <p>Comment: {review.TextReview}</p>
-                    <p>Facility Quality Rating: {review.FacilityQRating}/5 </p>
-                    <p>Hours Rating: {review.HoursRating}/5 </p>
-                    <p>Space Rating: {review.SpaceRating}/5 </p>
-                    <p>Location Rating: {review.LocationRating}/5 </p>
-                    <p>Business Rating: {review.BusinessRating}/5 </p>
+                    <p><b>Review: </b>{review.TextReview}</p>
+                    <p><b>Overall Rating: </b>{review.Overall}/5</p>
+                    <p>Facility Maintenance: {review.FacilityQRating}/5  |  Hours: {review.HoursRating}/5  |  Space: {review.SpaceRating}/5  |  Location: {review.LocationRating}/5  |  Activity Level: {review.BusinessRating}/5 </p>
 
                      <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
         &#x1F44D;</span></button>{review.upvotes}

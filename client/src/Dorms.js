@@ -22,16 +22,16 @@ function Dorms(){
     <title>HillTalk</title>
     </head>
     <body>
-    <img src="https://i.pinimg.com/736x/26/04/67/2604674112dd693949fa3cc6babe7c71--dorm-ideas-hall.jpg" alt="tripleClassic" width="720" height="405" class = "tripleClassic"/>
+    <img src="https://i.pinimg.com/736x/26/04/67/2604674112dd693949fa3cc6babe7c71--dorm-ideas-hall.jpg" alt="tripleClassic" width="720" height="405" class = "DormsCover"/>
       <p>Here you can find every dorm on campus.</p>
 
 
-       <p>Sort By:</p>
+       <b>Sort By:</b>
        <ul>
-        <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Cleanliness{}</button></ol>
-        <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Quality{}</button></ol>
-        <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Space{}</button></ol>
-        <ol><button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button></ol>
+        <button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Cleanliness{}</button>
+        <button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Noise{}</button>
+        <button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Living Space{}</button>
+        <button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button>
         </ul>
         <br></br>
 
@@ -120,7 +120,7 @@ function ReviewDatabase(string){
 
   const [input, setInput] = useState("");   
   const [CleanlinessRating, setCleanlinessRating] = useState(-1); 
-  const [QualityRating, setQualityRating] = useState(-1);   
+  const [NoiseRating, setNoiseRating] = useState(-1);   
   const [SpaceRating, setSpaceRating] = useState(-1);  
   const [LocationRating, setLocationRating] = useState(-1);  
 
@@ -143,8 +143,9 @@ function ReviewDatabase(string){
       })
   const createReview = async () => {
     if (logged){
-      if (LocationRating !=1 && SpaceRating !=-1 && QualityRating !=-1 && CleanlinessRating != -1 && LocationRating <= 5 && LocationRating >= 0 && SpaceRating <= 5 && SpaceRating >= 0 && QualityRating <=5 && QualityRating >=0 && CleanlinessRating <= 5 && CleanlinessRating >= 0 && input != "") {
-        await addDoc(reviewCollectionRef, { Review: input , LocationRating: Number(LocationRating), QualityRating: Number(QualityRating), SpaceRating: Number(SpaceRating), CleanlinessRating: Number(CleanlinessRating), upvotes: Number(0), downvotes: Number(0) })
+      if (LocationRating !=1 && SpaceRating !=-1 && NoiseRating !=-1 && CleanlinessRating != -1 && LocationRating <= 5 && LocationRating >= 0 && SpaceRating <= 5 && SpaceRating >= 0 && NoiseRating <=5 && NoiseRating >=0 && CleanlinessRating <= 5 && CleanlinessRating >= 0 && input != "") {
+        await addDoc(reviewCollectionRef, { Review: input , LocationRating: Number(LocationRating), NoiseRating: Number(NoiseRating), SpaceRating: Number(SpaceRating), CleanlinessRating: Number(CleanlinessRating), 
+          Overall: ((Number(NoiseRating) + Number(LocationRating) + Number(SpaceRating) + Number(CleanlinessRating))/4),upvotes: Number(0), downvotes: Number(0) })
         alert("Review Submitted! Refresh page to view.")
       }
       else{
@@ -156,17 +157,29 @@ function ReviewDatabase(string){
     }
   }
 
-  const upVote = async (id, numupvotes) => { // NEW CHANGE
-    const reviewDoc = doc(db, string, id);
-    const newFields = {upvotes: numupvotes + 1};
-    await updateDoc(reviewDoc, newFields);
-  }
-
-  const downVote = async (id, numdownvotes) => { // NEW CHANGE
-    const reviewDoc = doc(db, string, id);
-    const newFields = {downvotes: numdownvotes + 1};
-    await updateDoc(reviewDoc, newFields);
-  }
+    //for updating review when upvote button clicked if user is logged in
+    const upVote = async (id, numupvotes) => { // NEW CHANGE
+      if(logged){
+        const reviewDoc = doc(db, string, id);
+        const newFields = {upvotes: numupvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+        alert("Upvote counted!! Refresh page to view.")
+      }else{
+        alert("Please login at Home Page before upvoting")
+      }
+    }
+  
+    //for updating review when downvote button clicked if user is logged in
+    const downVote = async (id, numdownvotes) => { // NEW CHANGE
+      if(logged){
+        const reviewDoc = doc(db, string, id);
+        const newFields = {downvotes: numdownvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+        alert("Downvote counted!! Refresh page to view.")
+      }else{
+        alert("Please login at Home Page before downvoting")
+      }
+    }
 
 
   useEffect(() => {
@@ -184,6 +197,7 @@ function ReviewDatabase(string){
   return (
     <div className="ReviewDatabase">
     
+    <div className="form-container">
     <input 
       placeholder="Review (Optional). . ." 
       onChange={(event) => 
@@ -192,8 +206,10 @@ function ReviewDatabase(string){
       class="ReviewBox"
     />
 
+    <div className="input-group-horiz">
+    <p className="no-margin">Cleanliness: 
     <input 
-      placeholder="Cleanliness Rating" 
+      placeholder="0-5" 
       type="number"
       min={0}
       max={5}
@@ -201,20 +217,23 @@ function ReviewDatabase(string){
         {setCleanlinessRating(event.target.value)
       }}
       class="RatingBox"
-    />
-        <input 
-      placeholder="Quality Rating" 
+    /></p>
+
+    <p className="no-margin">Noise: 
+    <input 
+      placeholder="0-5" 
       type="number"
       min={0}
       max={5}
       onChange={(event) => 
-        {setQualityRating(event.target.value)
+        {setNoiseRating(event.target.value)
       }}
       class="RatingBox"
-    />
-
-<input 
-      placeholder="Space Rating" 
+    /></p>
+    
+    <p className="no-margin">Living Space: 
+    <input 
+      placeholder="0-5" 
       type="number"
       min={0}
       max={5}
@@ -222,10 +241,11 @@ function ReviewDatabase(string){
         {setSpaceRating(event.target.value)
       }}
       class="RatingBox"
-    />
+    /></p>
 
-<input 
-      placeholder="Location Rating" 
+    <p className="no-margin">Location: 
+    <input 
+      placeholder="0-5" 
       type="number"
       min={0}
       max={5}
@@ -233,18 +253,19 @@ function ReviewDatabase(string){
         {setLocationRating(event.target.value)
       }}
       class="RatingBox"
-    />
+    /></p>
     
-    <button onClick={createReview}>Submit Review</button> 
+    <button onClick={createReview} className="rev-button">Submit Review</button> 
+    </div>
+    </div>
+
 
         {allReviews.map((review) => {
           return (
             <div className="eachReview">
-              <p>Comment: {review.Review}</p> 
-              <p>Cleanliness Rating: {review.CleanlinessRating}/5  </p>
-              <p>Quality Rating: {review.QualityRating}/5</p>
-              <p>Space Rating: {review.SpaceRating}/5</p>
-              <p>Location Rating: {review.LocationRating}/5</p>
+              <p><b>Review: </b>{review.Review}</p> 
+              <p><b>Overall Rating: </b>{review.Overall}/5</p>
+              <p>Cleanliness: {review.CleanlinessRating}/5  |  Noise: {review.NoiseRating}/5  |  Living Space: {review.SpaceRating}/5  |  Location: {review.LocationRating}/5</p>
               <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
         &#x1F44D;</span></button>{review.upvotes}
               <button onClick={() => {downVote(review.id, review.downvotes)}}class="thumbsdown"><span role="img" aria-label="thumbs-down">
@@ -257,6 +278,7 @@ function ReviewDatabase(string){
     </div>
   );
 }
+
 
 function clickedSort(props)
 {

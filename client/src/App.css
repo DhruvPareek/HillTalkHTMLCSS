@@ -21,7 +21,8 @@
   margin: 10px;
   }
 
-
+  /* FORMATTING NAVIGATION LINKS*/
+  /* FORMATTING NAVIGATION LINKS*/
   nav{
     display: flex;
     padding: 1% 2%;
@@ -58,6 +59,8 @@
   .nav-links ul li:hover::after{
       width:100%;
   }
+  /* FORMATTING NAVIGATION LINKS*/
+  /* FORMATTING NAVIGATION LINKS*/
   
   /* HILLTALK logo on top left corner  */
   h1 {
@@ -67,6 +70,7 @@
 	  padding: 0px 12px;
   }
   
+  /* FORMATTING MAP ON FRONT PAGE*/
   .map{
 	  display: block;
 	  margin-left: auto;
@@ -81,8 +85,9 @@
   background-color: rgb(247, 239, 228);
   }
 
-  /* borders for pictures on each page  */
-  .Bplate{
+  /* formatting the main picture on each page  */
+ /* formatting the main picture on each page  */
+  .DiningHallCover{
 	  display: block;
 	  margin-left: auto;
 	  margin-right: auto;
@@ -90,7 +95,7 @@
 	border: 5px solid #555;
   }
   
-  .tripleClassic{
+  .DormsCover{
 	  display: block;
 	  margin-left: auto;
 	  margin-right: auto;
@@ -98,18 +103,143 @@
 	border: 5px solid #555;
   }
   
-  .Bfit{
+  .RecCenterCover{
 	  display: block;
 	  margin-left: auto;
 	  margin-right: auto;
 	  width: 48%;
 	border: 5px solid #555;
   }
+  /* formatting the main picture on each page  */
+  /* formatting the main picture on each page  */
   
+  /*formatting pictures of each dorm*/
+  /*formatting pictures of each dorm*/
   .CentennialOlympic{
 	  border: 5px solid #555;
   }
+  .DeNeveDorms{
+    border: 5px solid #555;
+  }
+  .HollyGardenia{
+    border: 5px solid #555;
+  }
+  .HSummit{
+    border: 5px solid #555;
+  }
 
+  .Dykstra{
+    border: 5px solid #555;
+    width: 22%;
+  }
+
+  .HedrickPic{
+    border: 5px solid #555;
+  }
+
+  .HitchSuitesPics{
+    border: 5px solid #555;
+    width: 23%;
+  }
+
+  .rieberHall{
+    border: 5px solid #555;
+    width: 25%;
+  }
+
+  .RieberTerraceVista{
+    border: 5px solid #555;
+    width: 25%;
+  }
+  /*formatting pictures of each dorm*/
+  /*formatting pictures of each dorm*/
+
+  /*formatting pictures of each dining hall*/
+  /*formatting pictures of each dining hall*/
+
+  .Rendezvous{
+    border: 5px solid #555;
+    width: 22%;
+  }
+
+  .DeNeveDH{
+    border: 5px solid #555;
+    width: 20%;
+  }
+
+  .Epicuria{
+    border: 5px solid #555;
+    width: 20%;
+
+  }
+
+  .Bplate{
+    border: 5px solid #555;
+    width: 20%;
+
+  }
+
+  .TheStudy{
+    border: 5px solid #555;
+  }
+
+  .BCafe{
+    border: 5px solid #555;
+    width: 20%;
+  }
+
+  .BruinBowl{
+    border: 5px solid #555;
+    width: 22%;
+
+  }
+
+  .FEAST{
+    border: 5px solid #555;
+  }
+
+  .Drey{
+    border: 5px solid #555;
+    width: 20%;
+  }
+  /*formatting pictures of each dining hall*/
+  /*formatting pictures of each dining hall*/
+
+  /*formatting pictures of each Rec center*/
+  /*formatting pictures of each Rec center*/
+  
+  .JWC{
+    border: 5px solid #555;
+    width: 23%;
+  }
+
+  .BFIT{
+    border: 5px solid #555;
+    width: 23%;
+  }
+
+  .SUNSETREC{
+    border: 5px solid #555;
+    width: 20%;
+
+  }
+
+  .HITCHBB{
+    border: 5px solid #555;
+    width: 26%;
+  }
+
+  .IMFIELD{
+    border: 5px solid #555;
+    width: 23%;
+  }
+
+
+  /*formatting pictures of each Rec center*/
+  /*formatting pictures of each Rec center*/
+
+/*formatting sort buttons*/
+/*formatting sort buttons*/
 .btn-primary{
   display: inline-block;
   text-decoration: none;
@@ -127,6 +257,8 @@
   background: #ffffff;
   transition: .6s;
 }
+/*formatting sort buttons*/
+/*formatting sort buttons*/
 
 .ReviewBox{
 	border: 2px solid #000000;
@@ -140,6 +272,14 @@
 	border: 2px solid #000000;
 	margin-right: 10px;
   }
+
+.loginBox{
+	border: 2px solid #000000;
+	margin-right: 10px;
+  width: 250px;
+  text-align: left;
+  margin-bottom: 5px;
+}
 
   
 .thumbsup{
@@ -160,5 +300,26 @@
   margin-right: 275px;
 }
 
+.form-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	/* height: 100vh; */
+  }
+  
+  .input-group-horiz {
+	display: flex;
+	flex-direction: row;
+	margin-left: 10px;
+	margin-right: 5px;
+  }
 
- 
+  .no-margin{
+	margin: 10px;
+  }
+
+  .rev-button{
+	margin: 10px;
+	height: 20px;
+  }

@@ -1,4 +1,4 @@
-import {useState, useEffect, useReducer} from "react";
+import {useState, useEffect, useCallback} from "react";
 import React from 'react';
 import './App.css';
 
@@ -15,10 +15,10 @@ import { auth } from "./firebase-config";
 
 
 
-// function useForceUpdate() {
-//   const [value, setValue] = useState(0);
-//   return () => setValue((value) => value + 1);
-// }
+function useForceUpdate() {
+  const [value, setValue] = useState(0);
+  return () => setValue((value) => value + 1);
+}
 
 function DiningHalls() {
     return (
@@ -167,7 +167,7 @@ function ReviewDatabase(string){
 
    //const [, updateState] = useState();
    //const forceUpdate = useCallback(() => updateState({}), []);
-
+    const forceUpdate = useForceUpdate();
 
     const [user, setUser] = useState({});
     useEffect(() => {
@@ -181,7 +181,7 @@ function ReviewDatabase(string){
           logged = false;//we are logged out now
         }
       });
-      }, [reducerValue])
+      })
     //end of what you need to copy
     const createReview = async () => {
       if (logged){
@@ -204,8 +204,12 @@ function ReviewDatabase(string){
       const updateReview = async (id, numUpvotes) => {
         const reviewDoc = doc(db, string, id)
         const newFields = {upvotes: numUpvotes+1}
+      //for updating review when upvote button clicked
+      const updateReview = async (id, numUpvotes) => {
+        const reviewDoc = doc(db, string, id)
+        const newFields = {upvotes: numUpvotes+1}
         await updateDoc(reviewDoc, newFields)
-        forceUpdate();
+        forceUpdate()
       }
     useEffect(() => {
       
@@ -215,7 +219,7 @@ function ReviewDatabase(string){
       }
   
       getReviews()  
-    }, [reducerValue])
+    }, [])
 
     return (
       <div className="ReviewDatabase">
