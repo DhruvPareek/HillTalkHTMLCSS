@@ -140,19 +140,28 @@ function ReviewDatabase(string){
     }
     };
     
-    //for updating review when upvote button clicked
+    //for updating review when upvote button clicked if user is logged in
     const upVote = async (id, numupvotes) => { // NEW CHANGE
-      const reviewDoc = doc(db, string, id);
-      const newFields = {upvotes: numupvotes + 1};
-      await updateDoc(reviewDoc, newFields);
-      alert("Upvote counted!! Refresh page to view.")
+      if(logged){
+        const reviewDoc = doc(db, string, id);
+        const newFields = {upvotes: numupvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+        alert("Upvote counted!! Refresh page to view.")
+      }else{
+        alert("Please login at Home Page before upvoting")
+      }
     }
   
+    //for updating review when downvote button clicked if user is logged in
     const downVote = async (id, numdownvotes) => { // NEW CHANGE
-      const reviewDoc = doc(db, string, id);
-      const newFields = {downvotes: numdownvotes + 1};
-      await updateDoc(reviewDoc, newFields);
-      alert("Downvote counted!! Refresh page to view.")
+      if(logged){
+        const reviewDoc = doc(db, string, id);
+        const newFields = {downvotes: numdownvotes + 1};
+        await updateDoc(reviewDoc, newFields);
+        alert("Downvote counted!! Refresh page to view.")
+      }else{
+        alert("Please login at Home Page before downvoting")
+      }
     }
 
     useEffect(() => {
