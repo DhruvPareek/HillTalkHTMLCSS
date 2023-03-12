@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useReducer} from "react";
 import React from 'react';
 import './App.css';
 
@@ -15,7 +15,10 @@ import { auth } from "./firebase-config";
 
 
 
-
+// function useForceUpdate() {
+//   const [value, setValue] = useState(0);
+//   return () => setValue((value) => value + 1);
+// }
 
 function DiningHalls() {
     return (
@@ -160,6 +163,10 @@ function ReviewDatabase(string){
     const [newQualityRating, setNewQualityRating] = useState(0);
     const [newTimeRating, setNewTimeRating] = useState(0);
     const [newLocationRating, setNewLocationRating] = useState(0);
+    const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
+
+   //const [, updateState] = useState();
+   //const forceUpdate = useCallback(() => updateState({}), []);
 
 
     const [user, setUser] = useState({});
@@ -174,13 +181,14 @@ function ReviewDatabase(string){
           logged = false;//we are logged out now
         }
       });
-      })
+      }, [reducerValue])
     //end of what you need to copy
     const createReview = async () => {
       if (logged){
         if((newLocationRating !=-1 && newTimeRating !=-1 && newHealthRating != -1 && newQualityRating != -1 && newReview != "" &&  newLocationRating >=0 && newLocationRating <=5 && newTimeRating >= 0 && newTimeRating <= 5 && newHealthRating >= 0 && newHealthRating <= 5 && newQualityRating >= 0 && newQualityRating <= 5)){
         await addDoc(ReviewCollectionRef, { Review: newReview,LocationRating: Number(newLocationRating), TimeRating: Number(newTimeRating), HealthRating: Number(newHealthRating),QualityRating: Number(newQualityRating), upvotes: Number(0) });
-        alert("Review Submitted!! Refresh page to view.")
+        //alert("Review Submitted!! Refresh page to view.")
+
       }
       else{
         alert("Please leave a review and rating for each field (1-5) in order to submit")
@@ -189,6 +197,7 @@ function ReviewDatabase(string){
       else{
         alert("Please Login at Home Page before leaving a review")
       }
+      forceUpdate();
       };
 
       //for updating review when upvote button clicked
@@ -196,6 +205,7 @@ function ReviewDatabase(string){
         const reviewDoc = doc(db, string, id)
         const newFields = {upvotes: numUpvotes+1}
         await updateDoc(reviewDoc, newFields)
+        forceUpdate();
       }
     useEffect(() => {
       
@@ -205,7 +215,7 @@ function ReviewDatabase(string){
       }
   
       getReviews()  
-    }, [])
+    }, [reducerValue])
 
     return (
       <div className="ReviewDatabase">
@@ -253,6 +263,7 @@ function ReviewDatabase(string){
 
 
       <button onClick={createReview}> Submit Review</button>
+      {/* <button onClick={forceUpdate}>Force refresh </button> */}
       {Reviews.map((review) => {
         return (
           <div className="eachReview">
