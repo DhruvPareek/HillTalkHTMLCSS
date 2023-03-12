@@ -20,7 +20,7 @@ function RecCenters() {
 <title>HillTalk</title>
 </head>
 <body>
-<img src="https://linespace.com/wp-content/uploads/2018/03/UCLA_BeFit_091615_04-1170x658.jpg" alt="BFit" width="720" height="405" class = "Bfit"/>
+<img src="https://linespace.com/wp-content/uploads/2018/03/UCLA_BeFit_091615_04-1170x658.jpg" alt="BFit" width="720" height="405" class = "RecCenterCover"/>
   <p>Here you can find every recreation center on campus.</p>
    <b>Sort By:</b>
    <ul>
