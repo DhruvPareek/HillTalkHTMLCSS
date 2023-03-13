@@ -16,6 +16,17 @@ import { auth } from "./firebase-config";
 <i class='fas fa-thumbs-up'></i>
 
 function Dorms(){
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [matchingResults, setMatchingResults] = useState([]);
+
+  function handleSearch() {
+    helperSearchFunc(searchTerm).then((hedrickMatches) => {
+      setMatchingResults(hedrickMatches);
+    });
+    setShowSearchResults(true);
+  }
+
   return (
     <html>
     <head>
@@ -35,11 +46,26 @@ function Dorms(){
         </ul>
         <br></br>
 
+        <div class="searchBox">
+        <h4>Search:</h4>
+        <input type="text" value = {searchTerm}  onChange={event => setSearchTerm(event.target.value)} 
+        id="searchBox" placeholder="Enter keywords..."></input>
+       <button onClick={handleSearch}>Search</button><br />
+       </div>
+
+       <div class="SearchResults">  {showSearchResults ? (
+    <div>
+      {matchingResults.map((result) => (
+        <p key={result}>{result}<br /><br /></p>
+      ))}
+    </div>
+  ) : null}</div><br /><br />
+
 
         <h3>Centennial/Olympic</h3>
         <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20218/614102382cfac27232f4ea45_Olympic+and+Centennial+Hall_5DM47510_Ext2/Olympic+and+Centennial+Hall_5DM47510_Ext2_hero.jpg"  width="250" height="200" class="CentennialOlympic"></img>
         <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
+          <h3>Reviews:</h3><br /><br />
         {ReviewDatabase("Centennial")}
         </div>
         <br />
@@ -114,6 +140,62 @@ function Dorms(){
     </html>
   );
 }
+
+// function retrieveMatchingResults(props){
+//   let hedrickMatches;
+
+//   (async () => {
+//     hedrickMatches = await findMatches("Hedrick", props);
+//     alert("Hedrick: " + hedrickMatches);    })()
+// }
+
+async function retrieveMatchingResults(props){
+  let hedrickMatches = await findMatches("Hedrick", props);
+  return hedrickMatches;
+}
+
+async function helperSearchFunc(props){
+  let hedrickMatches = await retrieveMatchingResults(props);
+  return hedrickMatches;
+  // do something with hedrickMatches
+}
+
+const readInData = async (reviewCollectionRef) => {
+  const querySnapshot = await getDocs(reviewCollectionRef);
+
+  // create array of reviews from collection
+  const readInReviews = [];
+  
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    data.id = doc.id;
+    readInReviews.push(data);
+  });
+
+  return readInReviews;
+}
+
+const findMatches = async(collectionName, userSearch) => {
+  const reviewCollectionRef = collection(db, collectionName);
+  const readInReviews = await readInData(reviewCollectionRef);
+
+  let allRevs = [];
+
+  readInReviews.forEach((review) => {
+    allRevs.push(review.Review); //add up facility rating for each review
+  });
+
+  let matchingElements = [];
+  allRevs.forEach(item => {
+    if (item.toLowerCase().includes(userSearch.toLowerCase())) {
+      matchingElements.push(item)
+    }
+  });
+
+  return matchingElements;
+}
+
+
 let logged = false;
 //centennial 
 function ReviewDatabase(string){

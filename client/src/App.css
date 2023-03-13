@@ -323,3 +323,15 @@
 	margin: 10px;
 	height: 20px;
   }
+
+  .SearchResults{
+    border: 1px solid #555;
+    margin-left: 275px;
+    margin-right: 275px;
+  }
+
+  .searchBox{
+    border: 1px solid #555;
+    margin-left: 275px;
+    margin-right: 275px;
+  }
