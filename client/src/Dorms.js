@@ -21,7 +21,7 @@ function Dorms(){
   const [matchingResults, setMatchingResults] = useState([]);
 
   function handleSearch() {
-    helperSearchFunc(searchTerm).then((hedrickMatches) => {
+    retrieveMatchingResults(searchTerm).then((hedrickMatches) => {
       setMatchingResults(hedrickMatches);
     });
     setShowSearchResults(true);
@@ -152,11 +152,6 @@ function Dorms(){
 async function retrieveMatchingResults(props){
   let hedrickMatches = await findMatches(props);
   return hedrickMatches;
-}
-
-async function helperSearchFunc(props){
-  let hedrickMatches = await retrieveMatchingResults(props);
-  return hedrickMatches;
   // do something with hedrickMatches
 }
 
@@ -170,6 +165,7 @@ const readInSearchData = async (reviewCollectionRef) => {
     const data = doc.data();
     data.id = doc.id;
     readInReviews.push(data);
+    console.log(typeof data);
   });
 
   return readInReviews;
@@ -198,35 +194,36 @@ const findMatches = async(userSearch) => {
   let allRevs = [];
 
   readInHedrickReviews.forEach((review) => {
-    allRevs.push(review.Review); 
+    allRevs.push("Hedrick Hall: \"" + review.Review + "\""); 
+    
   });
 
   readInCentennialReviews.forEach((review) => {
-    allRevs.push(review.Review); 
+    allRevs.push("Centennial/Olympic Halls: \"" + review.Review + "\""); 
   });
 
   readInDeNeveAFReviews.forEach((review) => {
-    allRevs.push(review.Review); 
+    allRevs.push("De Neve Acacia, Birch, Cedar, Dogwood, Evergreen, Fir: \"" + review.Review + "\""); 
   });
 
   readInHollyGardeniaReviews.forEach((review) => {
-    allRevs.push(review.Review); 
+    allRevs.push("De Neve Gardenia/Holly: \"" + review.Review + "\""); 
   });
 
   readInHeddySummitReviews.forEach((review) => {
-    allRevs.push(review.Review); 
+    allRevs.push("Hedrick Summit: \"" + review.Review + "\""); 
   });
 
   readInDykstraReviews.forEach((review) => {
-    allRevs.push(review.Review); 
+    allRevs.push("Dykstra Hall: \"" + review.Review + "\""); 
   });
 
   readInHitchReviews.forEach((review) => {
-    allRevs.push(review.Review); 
+    allRevs.push("Hitch Suites: \"" + review.Review + "\""); 
   });
 
   readInVistaTerraceReviews.forEach((review) => {
-    allRevs.push(review.Review); 
+    allRevs.push("Rieber Vista/Terrace: \"" + review.Review + "\""); 
   });
 
   let matchingElements = [];
