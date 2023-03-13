@@ -29,8 +29,16 @@ function RecCenters() {
     <button type='button' className="btn btn-primary" onClick={() => { clickedSort(5);}}>Activity Level{}</button>
     </ul>
 
-    {/* print sorted array here */}
-    <br></br>
+    
+      
+      if (isSorted){
+        sorted.forEach((element) => {
+          printSort(element.name)
+        })
+      }
+      else{
+        <div> 
+        <br></br>
         <h3>John Wooden Center</h3>
         <img src="https://pbs.twimg.com/media/CgMViMxUIAAIU-p.jpg:large"  width="250" height="200" class="JWC"></img>
         <div class="ListOfReviews">
@@ -71,14 +79,23 @@ function RecCenters() {
 
         </div>
         <br />
-</body>
-</html>
+
+        </div>
+      
+      }
+    {/* print sorted array here */}
+    </body>
+  </html>
     );
 }
 
+let sorted = [];
+let isSorted = false;
+
 function clickedSort(props)
 {     
-
+  isSorted = !isSorted; 
+  
   let woodenAvg = -1;
   let imAvg = -1;
   let hitchAvg = -1;
@@ -97,9 +114,22 @@ function clickedSort(props)
       sunsetAvg = await computeAverage("SunsetRecReviews", category);
       bfitAvg = await computeAverage("BFITReviews", category);
 
-      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
 
-      alert("Avg Ratings sorted from high -> low :" + sorted);    })()
+
+      const variables = [
+        { name: 'Wooden', value: woodenAvg },
+        { name: 'IMfields', value: imAvg },
+        { name: 'Hitch', value: hitchAvg },
+        { name: 'Sunset', value: sunsetAvg },
+        { name: 'BFIT', value: bfitAvg },
+      ];
+
+      sorted = variables.sort((a, b) => b.value - a.value);
+
+      // alert("Avg Ratings sorted from high -> low :" + sorted[2].value);   
+      
+      console.log(sorted);
+    })()
   }
   if(props === 2)
   {
@@ -431,6 +461,35 @@ function ReviewDatabase(string){
           })}
       </div>
     );
+  }
+
+
+  function printSort(name){
+    if (name == "BFIT"){
+
+    }
+    else if (name == "Wooden"){
+      return ( <div>
+        <br></br>
+        <h3>John Wooden Center</h3>
+        <img src="https://pbs.twimg.com/media/CgMViMxUIAAIU-p.jpg:large"  width="250" height="200" class="JWC"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("JWCReviews")}
+        </div>
+        <br />
+        </div>
+      )
+    }
+    else if (name == "IMFields"){
+
+    }
+    else if (name == "Sunset"){
+
+    }
+    else if (name == "Hitch"){
+      return 
+    }
   }
 
 
