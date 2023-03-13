@@ -21,8 +21,8 @@ function Dorms(){
   const [matchingResults, setMatchingResults] = useState([]);
 
   function handleSearch() {
-    retrieveMatchingResults(searchTerm).then((hedrickMatches) => {
-      setMatchingResults(hedrickMatches);
+    retrieveMatchingResults(searchTerm).then((searchMatches) => {
+      setMatchingResults(searchMatches);
     });
     setShowSearchResults(true);
   }
@@ -47,7 +47,7 @@ function Dorms(){
         <br></br>
 
         <div class="searchBox">
-        <h4>Search:</h4>
+        <h4>Search For Keywords in Reviews:</h4>
         <input type="text" value = {searchTerm}  onChange={event => setSearchTerm(event.target.value)} 
         id="searchBox" placeholder="Enter keywords..."></input>
        <button onClick={handleSearch}>Search</button><br />
@@ -141,18 +141,9 @@ function Dorms(){
   );
 }
 
-// function retrieveMatchingResults(props){
-//   let hedrickMatches;
-
-//   (async () => {
-//     hedrickMatches = await findMatches("Hedrick", props);
-//     alert("Hedrick: " + hedrickMatches);    })()
-// }
-
 async function retrieveMatchingResults(props){
   let searchMatches = await findMatches(props);
   return searchMatches;
-  // do something with hedrickMatches
 }
 
 const readInSearchData = async (reviewCollectionRef) => {

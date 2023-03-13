@@ -14,6 +14,16 @@ import {
 import { auth } from "./firebase-config";
 
 function RecCenters() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [matchingResults, setMatchingResults] = useState([]);
+
+  function handleSearch() {
+    retrieveMatchingResults(searchTerm).then((hedrickMatches) => {
+      setMatchingResults(hedrickMatches);
+    });
+    setShowSearchResults(true);
+  }
     return (
         <html>
 <head>
@@ -29,7 +39,23 @@ function RecCenters() {
     <button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Space{}</button>
     <button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button>
     <button type='button' className="btn btn-primary" onClick={() => { clickedSort(5);}}>Activity Level{}</button>
-    </ul>
+    </ul><br /><br />
+
+    <div class="searchBox">
+        <h4>Search For Keywords in Reviews:</h4>
+        <input type="text" value = {searchTerm}  onChange={event => setSearchTerm(event.target.value)} 
+        id="searchBox" placeholder="Enter keywords..."></input>
+       <button onClick={handleSearch}>Search</button><br />
+       </div>
+
+       <div class="SearchResults">  {showSearchResults ? (
+    <div>
+      {matchingResults.map((result) => (
+        <p key={result}>{result}<br /><br /><br /></p>
+      ))}
+    </div>
+  ) : null}</div><br /><br />
+
     <br></br>
         <h3>John Wooden Center</h3>
         <img src="https://pbs.twimg.com/media/CgMViMxUIAAIU-p.jpg:large"  width="250" height="200" class="JWC"></img>
@@ -74,6 +100,74 @@ function RecCenters() {
 </body>
 </html>
     );
+}
+
+async function retrieveMatchingResults(props){
+  let searchMatches = await findMatches(props);
+  return searchMatches;
+  // do something with hedrickMatches
+}
+
+const readInSearchData = async (reviewCollectionRef) => {
+  const querySnapshot = await getDocs(reviewCollectionRef);
+
+  // create array of reviews from collection
+  const readInReviews = [];
+  
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    data.id = doc.id;
+    readInReviews.push(data);
+    console.log(typeof data);
+  });
+
+  return readInReviews;
+}
+
+const findMatches = async(userSearch) => {
+  const JWCCollectionRef = collection(db, "JWCReviews");
+  const bFitCollectionRef = collection(db, "BFITReviews");
+  const sunsetCollectionRef = collection(db, "SunsetRecReviews");
+  const hitchBBCollectionRef = collection(db, "HitchBBReviews");
+  const IMFieldCollectionRef = collection(db, "IMFieldReviews");
+
+  const readInJWCReviews = await readInSearchData(JWCCollectionRef);
+  const readInBFITReviews = await readInSearchData(bFitCollectionRef);
+  const readInSunsetReviews = await readInSearchData(sunsetCollectionRef);
+  const readInHitchBBReviews = await readInSearchData(hitchBBCollectionRef);
+  const readInIMFieldReviews = await readInSearchData(IMFieldCollectionRef);
+
+  let allRevs = [];
+
+  readInJWCReviews.forEach((review) => {
+    allRevs.push("John Wooden Center: \"" + review.TextReview + "\""); 
+    
+  });
+
+  readInBFITReviews.forEach((review) => {
+    allRevs.push("BFit: \"" + review.TextReview + "\""); 
+  });
+
+  readInSunsetReviews.forEach((review) => {
+    allRevs.push("Sunset Rec: \"" + review.TextReview + "\""); 
+  });
+
+  readInHitchBBReviews.forEach((review) => {
+    allRevs.push("Hitch Basketball Courts: \"" + review.TextReview + "\""); 
+  });
+
+  readInIMFieldReviews.forEach((review) => {
+    allRevs.push("Intramural Fields: \"" + review.TextReview + "\""); 
+  });
+
+  let matchingElements = [];
+  allRevs.forEach(item => {
+    if (item.toLowerCase().includes(userSearch.toLowerCase())) {
+      matchingElements.push(item)
+    }
+  });
+
+  return matchingElements;
 }
 
 function clickedSort(props)
