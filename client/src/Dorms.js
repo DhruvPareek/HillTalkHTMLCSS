@@ -16,6 +16,17 @@ import { auth } from "./firebase-config";
 <i class='fas fa-thumbs-up'></i>
 
 function Dorms(){
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [matchingResults, setMatchingResults] = useState([]);
+
+  function handleSearch() {
+    retrieveMatchingResults(searchTerm).then((hedrickMatches) => {
+      setMatchingResults(hedrickMatches);
+    });
+    setShowSearchResults(true);
+  }
+
   return (
     <html>
     <head>
@@ -35,11 +46,26 @@ function Dorms(){
         </ul>
         <br></br>
 
+        <div class="searchBox">
+        <h4>Search:</h4>
+        <input type="text" value = {searchTerm}  onChange={event => setSearchTerm(event.target.value)} 
+        id="searchBox" placeholder="Enter keywords..."></input>
+       <button onClick={handleSearch}>Search</button><br />
+       </div>
+
+       <div class="SearchResults">  {showSearchResults ? (
+    <div>
+      {matchingResults.map((result) => (
+        <p key={result}>{result}<br /><br /><br /></p>
+      ))}
+    </div>
+  ) : null}</div><br /><br />
+
 
         <h3>Centennial/Olympic</h3>
         <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20218/614102382cfac27232f4ea45_Olympic+and+Centennial+Hall_5DM47510_Ext2/Olympic+and+Centennial+Hall_5DM47510_Ext2_hero.jpg"  width="250" height="200" class="CentennialOlympic"></img>
         <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
+          <h3>Reviews:</h3><br /><br />
         {ReviewDatabase("Centennial")}
         </div>
         <br />
@@ -114,6 +140,103 @@ function Dorms(){
     </html>
   );
 }
+
+// function retrieveMatchingResults(props){
+//   let hedrickMatches;
+
+//   (async () => {
+//     hedrickMatches = await findMatches("Hedrick", props);
+//     alert("Hedrick: " + hedrickMatches);    })()
+// }
+
+async function retrieveMatchingResults(props){
+  let hedrickMatches = await findMatches(props);
+  return hedrickMatches;
+  // do something with hedrickMatches
+}
+
+const readInSearchData = async (reviewCollectionRef) => {
+  const querySnapshot = await getDocs(reviewCollectionRef);
+
+  // create array of reviews from collection
+  const readInReviews = [];
+  
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    data.id = doc.id;
+    readInReviews.push(data);
+    console.log(typeof data);
+  });
+
+  return readInReviews;
+}
+
+const findMatches = async(userSearch) => {
+  const hedrickCollectionRef = collection(db, "Hedrick");
+  const centennialCollectionRef = collection(db, "Centennial");
+  const deNeveAFCollectionRef = collection(db, "DeNeve");
+  const hollyGardeniaCollectionRef = collection(db, "HollyGardenia");
+  const hedrickSummitCollectionRef = collection(db, "HeddySummit");
+  const dykstraCollectionRef = collection(db, "Dykstra");
+  const hitchCollectionRef = collection(db, "Hitch");
+  const rieberHallCollectionRef = collection(db, "RieberHall");
+  const vistaTerraceCollectionRef = collection(db, "RieberVista");
+
+  const readInHedrickReviews = await readInSearchData(hedrickCollectionRef);
+  const readInCentennialReviews = await readInSearchData(centennialCollectionRef);
+  const readInDeNeveAFReviews = await readInSearchData(deNeveAFCollectionRef);
+  const readInHollyGardeniaReviews = await readInSearchData(hollyGardeniaCollectionRef);
+  const readInHeddySummitReviews = await readInSearchData(hedrickSummitCollectionRef);
+  const readInDykstraReviews = await readInSearchData(dykstraCollectionRef);
+  const readInHitchReviews = await readInSearchData(hitchCollectionRef);
+  const readInVistaTerraceReviews = await readInSearchData(vistaTerraceCollectionRef);
+
+  let allRevs = [];
+
+  readInHedrickReviews.forEach((review) => {
+    allRevs.push("Hedrick Hall: \"" + review.Review + "\""); 
+    
+  });
+
+  readInCentennialReviews.forEach((review) => {
+    allRevs.push("Centennial/Olympic Halls: \"" + review.Review + "\""); 
+  });
+
+  readInDeNeveAFReviews.forEach((review) => {
+    allRevs.push("De Neve Acacia, Birch, Cedar, Dogwood, Evergreen, Fir: \"" + review.Review + "\""); 
+  });
+
+  readInHollyGardeniaReviews.forEach((review) => {
+    allRevs.push("De Neve Gardenia/Holly: \"" + review.Review + "\""); 
+  });
+
+  readInHeddySummitReviews.forEach((review) => {
+    allRevs.push("Hedrick Summit: \"" + review.Review + "\""); 
+  });
+
+  readInDykstraReviews.forEach((review) => {
+    allRevs.push("Dykstra Hall: \"" + review.Review + "\""); 
+  });
+
+  readInHitchReviews.forEach((review) => {
+    allRevs.push("Hitch Suites: \"" + review.Review + "\""); 
+  });
+
+  readInVistaTerraceReviews.forEach((review) => {
+    allRevs.push("Rieber Vista/Terrace: \"" + review.Review + "\""); 
+  });
+
+  let matchingElements = [];
+  allRevs.forEach(item => {
+    if (item.toLowerCase().includes(userSearch.toLowerCase())) {
+      matchingElements.push(item)
+    }
+  });
+
+  return matchingElements;
+}
+
+
 let logged = false;
 //centennial 
 function ReviewDatabase(string){
