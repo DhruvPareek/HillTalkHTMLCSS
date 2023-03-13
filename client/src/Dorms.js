@@ -56,7 +56,7 @@ function Dorms(){
        <div class="SearchResults">  {showSearchResults ? (
     <div>
       {matchingResults.map((result) => (
-        <p key={result}>{result}<br /><br /></p>
+        <p key={result}>{result}<br /><br /><br /></p>
       ))}
     </div>
   ) : null}</div><br /><br />
