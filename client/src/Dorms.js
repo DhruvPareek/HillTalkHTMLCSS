@@ -150,8 +150,8 @@ function Dorms(){
 // }
 
 async function retrieveMatchingResults(props){
-  let hedrickMatches = await findMatches(props);
-  return hedrickMatches;
+  let searchMatches = await findMatches(props);
+  return searchMatches;
   // do something with hedrickMatches
 }
 
@@ -189,6 +189,7 @@ const findMatches = async(userSearch) => {
   const readInHeddySummitReviews = await readInSearchData(hedrickSummitCollectionRef);
   const readInDykstraReviews = await readInSearchData(dykstraCollectionRef);
   const readInHitchReviews = await readInSearchData(hitchCollectionRef);
+  const readInRieberHallReviews = await readInSearchData(rieberHallCollectionRef);
   const readInVistaTerraceReviews = await readInSearchData(vistaTerraceCollectionRef);
 
   let allRevs = [];
@@ -220,6 +221,10 @@ const findMatches = async(userSearch) => {
 
   readInHitchReviews.forEach((review) => {
     allRevs.push("Hitch Suites: \"" + review.Review + "\""); 
+  });
+
+  readInRieberHallReviews.forEach((review) => {
+    allRevs.push("Rieber Hall: \"" + review.Review + "\""); 
   });
 
   readInVistaTerraceReviews.forEach((review) => {
