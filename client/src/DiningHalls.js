@@ -15,6 +15,17 @@ import { auth } from "./firebase-config";
 
 
 function DiningHalls() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [matchingResults, setMatchingResults] = useState([]);
+
+  function handleSearch() {
+    retrieveMatchingResults(searchTerm).then((searchMatches) => {
+      setMatchingResults(searchMatches);
+    });
+    setShowSearchResults(true);
+  }
+
     return (
         <html>
         <head>
@@ -31,6 +42,22 @@ function DiningHalls() {
             <button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Availability of Seating{}</button>
             </ul> 
             <br></br>
+
+            <div class="searchBox">
+        <h4>Search For Keywords in Reviews:</h4>
+        <input type="text" value = {searchTerm}  onChange={event => setSearchTerm(event.target.value)} 
+        id="searchBox" placeholder="Enter keywords..."></input>
+       <button onClick={handleSearch}>Search</button><br />
+       </div>
+
+       <div class="SearchResults">  {showSearchResults ? (
+    <div>
+      {matchingResults.map((result) => (
+        <p key={result}>{result}<br /><br /><br /></p>
+      ))}
+    </div>
+  ) : null}</div><br /><br />
+
         <h3>Rendezvous</h3>
         <img src="https://www.sustain.ucla.edu/wp-content/uploads/2013/05/RNDZ_3_web_960x450.jpg"  width="250" height="200" class="Rendezvous"></img>
         <div class="ListOfReviews">
@@ -107,6 +134,99 @@ function DiningHalls() {
         </html>
     );
   }
+
+  async function retrieveMatchingResults(props){
+    let searchMatches = await findMatches(props);
+    return searchMatches;
+    // do something with hedrickMatches
+  }
+  
+  const readInSearchData = async (reviewCollectionRef) => {
+    const querySnapshot = await getDocs(reviewCollectionRef);
+  
+    // create array of reviews from collection
+    const readInReviews = [];
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      data.id = doc.id;
+      readInReviews.push(data);
+      console.log(typeof data);
+    });
+  
+    return readInReviews;
+  }
+
+  const findMatches = async(userSearch) => {
+    const rendeCollectionRef = collection(db, "Rendezvous");
+    const bCafeCollectionRef = collection(db, "Bcafe");
+    const bPlateCollectionRef = collection(db, "Bplate");
+    const bBowlCollectionRef = collection(db, "BruinBowl");
+    const dNeveCollectionRef = collection(db, "De Neve");
+    const dreyCollectionRef = collection(db, "Drey");
+    const epicCollectionRef = collection(db, "Epicuria");
+    const feastCollectionRef = collection(db, "Feast");
+    const studyCollectionRef = collection(db, "Study");
+  
+    const readInRendeReviews = await readInSearchData(rendeCollectionRef);
+    const readInBCafeReviews = await readInSearchData(bCafeCollectionRef);
+    const readInBPlateReviews = await readInSearchData(bPlateCollectionRef);
+    const readInBBowlReviews = await readInSearchData(bBowlCollectionRef);
+    const readInDNeveReviews = await readInSearchData(dNeveCollectionRef);
+    const readInDreyReviews = await readInSearchData(dreyCollectionRef);
+    const readInEpicReviews = await readInSearchData(epicCollectionRef);
+    const readInFeastReviews = await readInSearchData(feastCollectionRef);
+    const readInStudyReviews = await readInSearchData(studyCollectionRef);
+  
+    let allRevs = [];
+  
+    readInRendeReviews.forEach((review) => {
+      allRevs.push("Rendezvous: \"" + review.Review + "\""); 
+      
+    });
+  
+    readInBCafeReviews.forEach((review) => {
+      allRevs.push("BCafe: \"" + review.Review + "\""); 
+    });
+  
+    readInBPlateReviews.forEach((review) => {
+      allRevs.push("BPlate: \"" + review.Review + "\""); 
+    });
+  
+    readInBBowlReviews.forEach((review) => {
+      allRevs.push("Bruin Bowl: \"" + review.Review + "\""); 
+    });
+  
+    readInDNeveReviews.forEach((review) => {
+      allRevs.push("De Neve: \"" + review.Review + "\""); 
+    });
+
+    readInDreyReviews.forEach((review) => {
+      allRevs.push("Drey: \"" + review.Review + "\""); 
+    });
+
+    readInEpicReviews.forEach((review) => {
+      allRevs.push("Epicuria: \"" + review.Review + "\""); 
+    });
+
+    readInFeastReviews.forEach((review) => {
+      allRevs.push("Feast: \"" + review.Review + "\""); 
+    });
+
+    readInStudyReviews.forEach((review) => {
+      allRevs.push("The Study: \"" + review.Review + "\""); 
+    });
+  
+    let matchingElements = [];
+    allRevs.forEach(item => {
+      if (item.toLowerCase().includes(userSearch.toLowerCase())) {
+        matchingElements.push(item)
+      }
+    });
+  
+    return matchingElements;
+  }
+
 let clickedHealth = false;
 let clickedQuality = false;
 let clickedTime = false;

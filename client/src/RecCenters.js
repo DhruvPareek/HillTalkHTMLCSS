@@ -19,8 +19,8 @@ function RecCenters() {
   const [matchingResults, setMatchingResults] = useState([]);
 
   function handleSearch() {
-    retrieveMatchingResults(searchTerm).then((hedrickMatches) => {
-      setMatchingResults(hedrickMatches);
+    retrieveMatchingResults(searchTerm).then((searchMatches) => {
+      setMatchingResults(searchMatches);
     });
     setShowSearchResults(true);
   }
