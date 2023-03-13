@@ -150,7 +150,7 @@ function Dorms(){
 // }
 
 async function retrieveMatchingResults(props){
-  let hedrickMatches = await findMatches("Hedrick", props);
+  let hedrickMatches = await findMatches(props);
   return hedrickMatches;
 }
 
@@ -160,7 +160,7 @@ async function helperSearchFunc(props){
   // do something with hedrickMatches
 }
 
-const readInData = async (reviewCollectionRef) => {
+const readInSearchData = async (reviewCollectionRef) => {
   const querySnapshot = await getDocs(reviewCollectionRef);
 
   // create array of reviews from collection
@@ -175,14 +175,58 @@ const readInData = async (reviewCollectionRef) => {
   return readInReviews;
 }
 
-const findMatches = async(collectionName, userSearch) => {
-  const reviewCollectionRef = collection(db, collectionName);
-  const readInReviews = await readInData(reviewCollectionRef);
+const findMatches = async(userSearch) => {
+  const hedrickCollectionRef = collection(db, "Hedrick");
+  const centennialCollectionRef = collection(db, "Centennial");
+  const deNeveAFCollectionRef = collection(db, "DeNeve");
+  const hollyGardeniaCollectionRef = collection(db, "HollyGardenia");
+  const hedrickSummitCollectionRef = collection(db, "HeddySummit");
+  const dykstraCollectionRef = collection(db, "Dykstra");
+  const hitchCollectionRef = collection(db, "Hitch");
+  const rieberHallCollectionRef = collection(db, "RieberHall");
+  const vistaTerraceCollectionRef = collection(db, "RieberVista");
+
+  const readInHedrickReviews = await readInSearchData(hedrickCollectionRef);
+  const readInCentennialReviews = await readInSearchData(centennialCollectionRef);
+  const readInDeNeveAFReviews = await readInSearchData(deNeveAFCollectionRef);
+  const readInHollyGardeniaReviews = await readInSearchData(hollyGardeniaCollectionRef);
+  const readInHeddySummitReviews = await readInSearchData(hedrickSummitCollectionRef);
+  const readInDykstraReviews = await readInSearchData(dykstraCollectionRef);
+  const readInHitchReviews = await readInSearchData(hitchCollectionRef);
+  const readInVistaTerraceReviews = await readInSearchData(vistaTerraceCollectionRef);
 
   let allRevs = [];
 
-  readInReviews.forEach((review) => {
-    allRevs.push(review.Review); //add up facility rating for each review
+  readInHedrickReviews.forEach((review) => {
+    allRevs.push(review.Review); 
+  });
+
+  readInCentennialReviews.forEach((review) => {
+    allRevs.push(review.Review); 
+  });
+
+  readInDeNeveAFReviews.forEach((review) => {
+    allRevs.push(review.Review); 
+  });
+
+  readInHollyGardeniaReviews.forEach((review) => {
+    allRevs.push(review.Review); 
+  });
+
+  readInHeddySummitReviews.forEach((review) => {
+    allRevs.push(review.Review); 
+  });
+
+  readInDykstraReviews.forEach((review) => {
+    allRevs.push(review.Review); 
+  });
+
+  readInHitchReviews.forEach((review) => {
+    allRevs.push(review.Review); 
+  });
+
+  readInVistaTerraceReviews.forEach((review) => {
+    allRevs.push(review.Review); 
   });
 
   let matchingElements = [];
