@@ -12,6 +12,56 @@ import {
 import { auth } from "./firebase-config";
 
 function RecCenters() {
+  const [showSortedResults, setShowSortedResults] = useState(false);
+  const [JWCAverage, setJWCAverage] = useState(0);
+  const [IMAverage, setIMAverage] = useState(0);
+  const [hitchAverage, setHitchAverage] = useState(0);
+  const [sunsetAverage, setSunsetAverage] = useState(0);
+  const [BFitAverage, setBFitAverage] = useState(0);
+  const [sortedWithStrings, setSortedWithStrings] = useState([]);
+
+  function getAverages(props) {
+    setSortedWithStrings(sortedWithStrings=>[]);
+    retrieveAverages("JWCReviews", props).then((averageValue) => {
+      setJWCAverage(averageValue);
+    });
+    retrieveAverages("IMFieldReviews", props).then((averageValue) => {
+      setIMAverage(averageValue);
+    });
+    retrieveAverages("HitchBBReviews", props).then((averageValue) => {
+      setHitchAverage(averageValue);
+    });
+    retrieveAverages("SunsetRecReviews", props).then((averageValue) => {
+      setSunsetAverage(averageValue);
+    });
+    retrieveAverages("BFITReviews", props).then((averageValue) => {
+      setBFitAverage(averageValue);
+    });
+
+    let foundJWC, foundIM, foundHitch, foundSunset, foundBFit = false;
+    let sortedNums = [JWCAverage, IMAverage, hitchAverage, sunsetAverage, BFitAverage].sort((a, b) => b - a);
+    for(let i = 0; i < sortedNums.length; i++){
+      if(sortedNums[i] === JWCAverage && !foundJWC){
+        foundJWC = true;
+        setSortedWithStrings(sortedWithStrings=>[sortedWithStrings, "John Wooden Center: " + JWCAverage.toString() + " "]);
+      }else if(sortedNums[i] === IMAverage && !foundIM){
+        foundIM = true;
+        setSortedWithStrings(sortedWithStrings=>[sortedWithStrings, "Intramural Fields: " + IMAverage.toString()+ " "]);
+      }else if(sortedNums[i] === hitchAverage && !foundHitch){
+        foundHitch = true;
+        setSortedWithStrings(sortedWithStrings=>[sortedWithStrings, "Hitch Basetball Courts: " + hitchAverage.toString()+ " "]);        
+      }else if(sortedNums[i] === sunsetAverage && !foundSunset){
+        foundSunset = true;
+        setSortedWithStrings(sortedWithStrings=>[sortedWithStrings, "Sunset Rec: " + sunsetAverage.toString()+ " "]);  
+      }else if(sortedNums[i] === BFitAverage && !foundBFit){
+        foundBFit = true;
+        setSortedWithStrings(sortedWithStrings=>[sortedWithStrings, "Bfit: " + BFitAverage.toString()+ " "]); 
+      }
+    }
+
+    setShowSortedResults(true);
+  }
+
     return (
         <html>
 <head>
@@ -22,23 +72,22 @@ function RecCenters() {
   <p>Here you can find every recreation center on campus.</p>
    <b>Sort By:</b>
    <ul>
-    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Facility Maintenance{}</button>
-    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Hours{}</button>
-    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Space{}</button>
-    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button>
-    <button type='button' className="btn btn-primary" onClick={() => { clickedSort(5);}}>Activity Level{}</button>
+    <button type='button' className="btn btn-primary" onClick={() => { getAverages(1);}}>Facility Maintenance{}</button>
+    <button type='button' className="btn btn-primary" onClick={() => { getAverages(2);}}>Hours{}</button>
+    <button type='button' className="btn btn-primary" onClick={() => { getAverages(3);}}>Space{}</button>
+    <button type='button' className="btn btn-primary" onClick={() => { getAverages(4);}}>Location{}</button>
+    <button type='button' className="btn btn-primary" onClick={() => { getAverages(5);}}>Activity Level{}</button>
     </ul>
+    <br></br>
 
-    
-      
-      if (isSorted){
-        sorted.forEach((element) => {
-          printSort(element.name)
-        })
-      }
-      else{
-        <div> 
-        <br></br>
+    <div class="SortedResults">  {showSortedResults ? (
+    <div>
+      {sortedWithStrings.map((result) => (
+        <p key={result}>{result}<br /></p>
+      ))}
+    </div>
+  ) : null}</div><br /><br />
+
         <h3>John Wooden Center</h3>
         <img src="https://pbs.twimg.com/media/CgMViMxUIAAIU-p.jpg:large"  width="250" height="200" class="JWC"></img>
         <div class="ListOfReviews">
@@ -79,117 +128,27 @@ function RecCenters() {
 
         </div>
         <br />
-
-        </div>
-      
-      }
-    {/* print sorted array here */}
-    </body>
-  </html>
+</body>
+</html>
     );
 }
 
-let sorted = [];
-let isSorted = false;
-
-function clickedSort(props)
-{     
-  isSorted = !isSorted; 
-  
-  let woodenAvg = -1;
-  let imAvg = -1;
-  let hitchAvg = -1;
-  let sunsetAvg = -1;
-  let bfitAvg = -1;
-
-  //compute the averages 
-
-  if(props === 1)
-  {
-    const category = "facility";
-    (async () => {
-      woodenAvg = await computeAverage("JWCReviews", category);
-      imAvg = await computeAverage("IMFieldReviews", category);
-      hitchAvg = await computeAverage("HitchBBReviews", category);
-      sunsetAvg = await computeAverage("SunsetRecReviews", category);
-      bfitAvg = await computeAverage("BFITReviews", category);
-
-
-
-      const variables = [
-        { name: 'Wooden', value: woodenAvg },
-        { name: 'IMfields', value: imAvg },
-        { name: 'Hitch', value: hitchAvg },
-        { name: 'Sunset', value: sunsetAvg },
-        { name: 'BFIT', value: bfitAvg },
-      ];
-
-      sorted = variables.sort((a, b) => b.value - a.value);
-
-      // alert("Avg Ratings sorted from high -> low :" + sorted[2].value);   
-      
-      console.log(sorted);
-    })()
+async function retrieveAverages(facilityName, category){
+  let aspect = "";
+  if(category === 1){
+    aspect = "facility";
+  }else if(category === 2){
+    aspect = "hours";
+  }else if(category === 3){
+    aspect = "space";
+  }else if(category === 4){
+    aspect = "location";
+  }else{//category === 5
+    aspect = "activity level";
   }
-  if(props === 2)
-  {
-    const category = "hours";
-    (async () => {
-      woodenAvg = await computeAverage("JWCReviews", category);
-      imAvg = await computeAverage("IMFieldReviews", category);
-      hitchAvg = await computeAverage("HitchBBReviews", category);
-      sunsetAvg = await computeAverage("SunsetRecReviews", category);
-      bfitAvg = await computeAverage("BFITReviews", category);
-
-      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
-
-      alert("Avg Ratings sorted from high -> low : " + sorted);    })()
-  }
-  if(props === 3)
-  {
-    const category = "space";
-    (async () => {
-      woodenAvg = await computeAverage("JWCReviews", category);
-      imAvg = await computeAverage("IMFieldReviews", category);
-      hitchAvg = await computeAverage("HitchBBReviews", category);
-      sunsetAvg = await computeAverage("SunsetRecReviews", category);
-      bfitAvg = await computeAverage("BFITReviews", category);
-
-      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
-
-      alert("Avg Ratings sorted from high -> low : " + sorted);
-    })() 
-  }
-  if(props === 4)
-  {
-    const category = "location";
-    (async () => {
-      woodenAvg = await computeAverage("JWCReviews", category);
-      imAvg = await computeAverage("IMFieldReviews", category);
-      hitchAvg = await computeAverage("HitchBBReviews", category);
-      sunsetAvg = await computeAverage("SunsetRecReviews", category);
-      bfitAvg = await computeAverage("BFITReviews", category);
-
-      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
-
-      alert("Avg Ratings sorted from high -> low :" + sorted);
-    })()
-  }
-  if(props === 5)
-  {
-    const category = "activity level";
-    (async () => {
-      woodenAvg = await computeAverage("JWCReviews", category);
-      imAvg = await computeAverage("IMFieldReviews", category);
-      hitchAvg = await computeAverage("HitchBBReviews", category);
-      sunsetAvg = await computeAverage("SunsetRecReviews", category);
-      bfitAvg = await computeAverage("BFITReviews", category);
-
-      let sorted = [woodenAvg, imAvg, hitchAvg, sunsetAvg, bfitAvg].sort((a, b) => b - a);
-
-      alert("Avg Ratings sorted from high -> low : " + sorted);      
-    })() 
-  }
+  let averageValue = await computeAverage(facilityName, aspect);
+  return averageValue;
+  // do something with hedrickMatches
 }
 
 
@@ -461,35 +420,6 @@ function ReviewDatabase(string){
           })}
       </div>
     );
-  }
-
-
-  function printSort(name){
-    if (name == "BFIT"){
-
-    }
-    else if (name == "Wooden"){
-      return ( <div>
-        <br></br>
-        <h3>John Wooden Center</h3>
-        <img src="https://pbs.twimg.com/media/CgMViMxUIAAIU-p.jpg:large"  width="250" height="200" class="JWC"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("JWCReviews")}
-        </div>
-        <br />
-        </div>
-      )
-    }
-    else if (name == "IMFields"){
-
-    }
-    else if (name == "Sunset"){
-
-    }
-    else if (name == "Hitch"){
-      return 
-    }
   }
 
 
