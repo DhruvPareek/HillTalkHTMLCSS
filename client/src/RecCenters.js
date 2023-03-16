@@ -166,13 +166,21 @@ function RecCenters() {
     </ul>
     <br></br>
 
-    {/* <div class="SortedResults">  {showSortedResults ? (
+    <div class="searchBox">
+        <h4>Search For Keywords in Reviews:</h4>
+        <input type="text" value = {searchTerm}  onChange={event => setSearchTerm(event.target.value)} 
+        id="searchBox" placeholder="Enter keywords..."></input>
+       <button onClick={handleSearch}>Search</button><br />
+       </div>
+
+       <div class="SearchResults">  {showSearchResults ? (
     <div>
-      {sortedNames.map((result) => (
-        <p key={result}>{result}<br /></p>
+      {matchingResults.map((result) => (
+        <p key={result}>{result}<br /><br /><br /></p>
       ))}
     </div>
-  ) : null}</div><br /><br /> */}
+  ) : null}</div><br /><br />
+  
   {showSortedResults ? 
   (<div>
           {sortedNames[0]()}
