@@ -486,7 +486,7 @@ function ReviewDatabase(string){
       <div className="form-container">
 
       <input
-        placeholder="Review (Optional). . ."
+        placeholder="Review. . ."
         onChange={(event) => {
           setInput(event.target.value);
         }}
