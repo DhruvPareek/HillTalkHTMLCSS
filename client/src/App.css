@@ -400,3 +400,24 @@
     100% { background-position: 0 0; }
 }
 
+.background-img{
+  background-image: url(https://cdn2.lamag.com/wp-content/uploads/sites/6/2022/09/UCLA.jpg);
+  background-size:cover;
+  height: 600px;
+  position: relative;
+  filter: blur(2px)
+}
+
+h5{
+  font-family: "Lucida Console";
+	text-align: center;
+	font-size: 60px;
+	padding: 0px 12px;
+}
+
+.ContactBox{
+	border: 2px solid #000000;
+	margin: 10px;
+  width: 425px;
+  text-align: left;
+  }
