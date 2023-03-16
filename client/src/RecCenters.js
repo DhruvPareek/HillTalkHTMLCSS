@@ -383,7 +383,7 @@ function ReviewDatabase(string){
     const reviewCollectionRef = collection(db, string)
     const [user, setUser] = useState({});
     useEffect(() => {
-
+      forceUpdate();
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         if (currentUser){
@@ -471,6 +471,7 @@ function ReviewDatabase(string){
   
       getReviews()
     }, [reducerValue])
+    //forceUpdate();
 
     return (
       <div className="ReviewDatabase">

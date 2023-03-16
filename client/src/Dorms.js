@@ -157,7 +157,6 @@ const readInSearchData = async (reviewCollectionRef) => {
     const data = doc.data();
     data.id = doc.id;
     readInReviews.push(data);
-    console.log(typeof data);
   });
 
   return readInReviews;
@@ -338,8 +337,6 @@ function ReviewDatabase(string){
 
     getReviews()
   }, [reducerValue])
-
-    
 
   return (
     <div className="ReviewDatabase">
