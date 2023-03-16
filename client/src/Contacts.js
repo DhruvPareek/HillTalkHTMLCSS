@@ -48,7 +48,14 @@
                 padding: '0px 12px'
               }}>
                 <h5>Contact Us</h5>
-                <p>We'd love to hear from you!</p>
+                <b>We'd love to hear from you!</b>
+                <br></br>
+                <div>
+                <p class="ContactText">This project was built by some of the best and brightest young minds at the University of California, Los Angeles for 
+                  our Computer Science 35L class of Winter Quarter, 2023. We hope you find it helpful!<br></br>
+                Creators: Aarya Tallada, Colin Hoggatt, Dhruv Pareek, Lakshman Sundaram, Ryan Miller
+                </p>
+                </div>
               </div>
           </div>
        
@@ -56,7 +63,7 @@
           <div style={{
             verticalAlign: "middle"
           }}>
-    
+{/*     
           <div>
             <label htmlFor="name">Name:</label>
             <input
@@ -87,7 +94,7 @@
               // margin="10px"
             />
           </div>
-          <button type="submit">Submit</button>
+          <button type="submit">Submit</button> */}
           </div>
         </form>
       );
