@@ -279,7 +279,7 @@ function ReviewDatabase(string){
     const [newSeatingRating, setNewSeatingRating] = useState(0);
     const [reducerValue, forceUpdate] = useReducer(x => x+1, 0);
 
-    const[newUserEmail, setnewUserEmail] = useState([""]);
+    
 
 
     const [user, setUser] = useState({});
@@ -289,7 +289,6 @@ function ReviewDatabase(string){
         setUser(currentUser);
         if (currentUser){
           logged = true; //we are logged in 
-          //setnewUserEmail([...newUserEmail, auth.currentUser.email])
         }
         else{
           logged = false;//we are logged out now
