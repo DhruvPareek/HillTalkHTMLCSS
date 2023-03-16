@@ -262,7 +262,7 @@ function ReviewDatabase(string){
       },[reducerValue])
   const createReview = async () => {
     if (logged){
-      if (LocationRating !=1 && SpaceRating !=-1 && NoiseRating !=-1 && CleanlinessRating != -1 && LocationRating <= 5 && LocationRating >= 0 && SpaceRating <= 5 && SpaceRating >= 0 && NoiseRating <=5 && NoiseRating >=0 && CleanlinessRating <= 5 && CleanlinessRating >= 0 && input != "") {
+      if (LocationRating !=-1 && SpaceRating !=-1 && NoiseRating !=-1 && CleanlinessRating != -1 && LocationRating <= 5 && LocationRating >= 0 && SpaceRating <= 5 && SpaceRating >= 0 && NoiseRating <=5 && NoiseRating >=0 && CleanlinessRating <= 5 && CleanlinessRating >= 0 && input != "") {
         await addDoc(reviewCollectionRef, { Review: input , LocationRating: Number(LocationRating), NoiseRating: Number(NoiseRating), SpaceRating: Number(SpaceRating), CleanlinessRating: Number(CleanlinessRating), 
           Overall: ((Number(NoiseRating) + Number(LocationRating) + Number(SpaceRating) + Number(CleanlinessRating))/4),upvotes: Number(0), downvotes: Number(0), userEmail: "" })
         forceUpdate();
