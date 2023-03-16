@@ -225,7 +225,7 @@ function ReviewDatabase(string){
     if (logged){
       if (BusinessRating != -1 && LocationRating != -1 && SpaceRating != -1 && HoursRating != -1 && FacilityQRating != -1 && input != "" && BusinessRating <= 5 && BusinessRating >= 0 && LocationRating <= 5 && LocationRating >= 0 && SpaceRating >= 0 && SpaceRating <= 5 && HoursRating >= 0 && HoursRating <= 5 && FacilityQRating >= 0 && FacilityQRating <= 5) {
         await addDoc(reviewCollectionRef, { TextReview: input ,BusinessRating: BusinessRating, LocationRating: LocationRating, SpaceRating: SpaceRating, HoursRating: HoursRating, FacilityQRating : FacilityQRating, 
-          Overall: ((Number(BusinessRating) + Number(LocationRating) + Number(SpaceRating) + Number(HoursRating) + Number(FacilityQRating))/5), upvotes: Number(0), downvotes: Number(0) })
+          Overall: ((Number(BusinessRating) + Number(LocationRating) + Number(SpaceRating) + Number(HoursRating) + Number(FacilityQRating))/5), upvotes: Number(0), downvotes: Number(0), userEmail: "" })
         forceUpdate();
         //  alert("Review Submitted! Refresh page to view.")
       }
@@ -239,10 +239,13 @@ function ReviewDatabase(string){
     };
     
     //for updating review when upvote button clicked if user is logged in
-    const upVote = async (id, numupvotes) => { // NEW CHANGE
-      if(logged){
+    const upVote = async (id, numupvotes, userEmail) => { // NEW CHANGE
+      if(userEmail.includes(auth.currentUser.email)){
+        alert("Cannot Vote again!!")
+      }
+      else if(logged){
         const reviewDoc = doc(db, string, id);
-        const newFields = {upvotes: numupvotes + 1};
+        const newFields = {upvotes: numupvotes + 1, userEmail: [...userEmail, auth.currentUser.email]};
         await updateDoc(reviewDoc, newFields);
         forceUpdate();
         //alert("Upvote counted!! Refresh page to view.")
@@ -252,10 +255,13 @@ function ReviewDatabase(string){
     }
   
     //for updating review when downvote button clicked if user is logged in
-    const downVote = async (id, numdownvotes) => { // NEW CHANGE
-      if(logged){
+    const downVote = async (id, numdownvotes, userEmail) => { // NEW CHANGE
+      if(userEmail.includes(auth.currentUser.email)){
+        alert("Cannot Vote again!!")
+      }
+      else if(logged){
         const reviewDoc = doc(db, string, id);
-        const newFields = {downvotes: numdownvotes + 1};
+        const newFields = {downvotes: numdownvotes + 1, userEmail: [...userEmail, auth.currentUser.email]};
         await updateDoc(reviewDoc, newFields);
         forceUpdate();
         //alert("Downvote counted!! Refresh page to view.")
@@ -357,9 +363,9 @@ function ReviewDatabase(string){
                     <p><b>Overall Rating: </b>{review.Overall}/5</p>
                     <p>Facility Maintenance: {review.FacilityQRating}/5  |  Hours: {review.HoursRating}/5  |  Space: {review.SpaceRating}/5  |  Location: {review.LocationRating}/5  |  Activity Level: {review.BusinessRating}/5 </p>
 
-                     <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+                     <button onClick={() => {upVote(review.id, review.upvotes, review.userEmail)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
         &#x1F44D;</span></button>{review.upvotes}
-                    <button onClick={() => {downVote(review.id, review.downvotes)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
+                    <button onClick={() => {downVote(review.id, review.downvotes, review.userEmail)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
         &#x1F44E;
       </span></button>{review.downvotes}
                     
