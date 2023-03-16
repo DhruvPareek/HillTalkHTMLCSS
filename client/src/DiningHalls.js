@@ -268,6 +268,7 @@ function clickedSort(props)
 
 // copy this into every file where there are reviews for authenticatio, also need one import statement thats at the top
 let logged = false;
+let currUsername = "";
 function ReviewDatabase(string){
     const [Reviews, setReview] = useState([]); //hook instead of class
     const ReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
@@ -278,6 +279,8 @@ function ReviewDatabase(string){
     const [newSeatingRating, setNewSeatingRating] = useState(0);
     const [reducerValue, forceUpdate] = useReducer(x => x+1, 0);
 
+    const[newUserEmail, setnewUserEmail] = useState([""]);
+
 
     const [user, setUser] = useState({});
     useEffect(() => {
@@ -286,6 +289,7 @@ function ReviewDatabase(string){
         setUser(currentUser);
         if (currentUser){
           logged = true; //we are logged in 
+          //setnewUserEmail([...newUserEmail, auth.currentUser.email])
         }
         else{
           logged = false;//we are logged out now
@@ -297,7 +301,7 @@ function ReviewDatabase(string){
       if (logged){
         if((newSeatingRating !=-1 && newTimeRating !=-1 && newHealthRating != -1 && newQualityRating != -1 && newReview != "" &&  newSeatingRating >=0 && newSeatingRating <=5 && newTimeRating >= 0 && newTimeRating <= 5 && newHealthRating >= 0 && newHealthRating <= 5 && newQualityRating >= 0 && newQualityRating <= 5)){
         await addDoc(ReviewCollectionRef, { Review: newReview, SeatingRating: Number(newSeatingRating), TimeRating: Number(newTimeRating), HealthRating: Number(newHealthRating), QualityRating: Number(newQualityRating), 
-          Overall: ((Number(newSeatingRating) + Number(newTimeRating) + Number(newHealthRating) + Number(newQualityRating))/4), upvotes: Number(0), downvotes: Number(0) });
+          Overall: ((Number(newSeatingRating) + Number(newTimeRating) + Number(newHealthRating) + Number(newQualityRating))/4), upvotes: Number(0), downvotes: Number(0), userEmail: ""});
         forceUpdate();
           //alert("Review Submitted!! Refresh page to view.")
       }
@@ -311,10 +315,13 @@ function ReviewDatabase(string){
       };
 
      //for updating review when upvote button clicked if user is logged in
-     const upVote = async (id, numupvotes) => { // NEW CHANGE
-      if(logged){
+     const upVote = async (id, numupvotes, userEmail) => { // NEW CHANGE
+      if(userEmail.includes(auth.currentUser.email)){
+        alert("Cannot Vote again!!")
+      }
+      else if(logged){
         const reviewDoc = doc(db, string, id);
-        const newFields = {upvotes: numupvotes + 1};
+        const newFields = {upvotes: numupvotes + 1, userEmail: [...userEmail, auth.currentUser.email]};
         await updateDoc(reviewDoc, newFields);
         forceUpdate();
         //alert("Upvote counted!! Refresh page to view.")
@@ -324,10 +331,13 @@ function ReviewDatabase(string){
     }
   
     //for updating review when downvote button clicked if user is logged in
-    const downVote = async (id, numdownvotes) => { // NEW CHANGE
-      if(logged){
+    const downVote = async (id, numdownvotes, userEmail) => { // NEW CHANGE
+      if(userEmail.includes(auth.currentUser.email)){
+        alert("Cannot vote again!")
+      }
+      else if(logged){
         const reviewDoc = doc(db, string, id);
-        const newFields = {downvotes: numdownvotes + 1};
+        const newFields = {downvotes: numdownvotes + 1, userEmail: [...userEmail, auth.currentUser.email]};
         await updateDoc(reviewDoc, newFields);
         forceUpdate();
         //alert("Downvote counted!! Refresh page to view.")
@@ -415,9 +425,9 @@ function ReviewDatabase(string){
             <p><b>Overall Rating: </b>{review.Overall}</p>
             <p>Healthiness: {review.HealthRating}/5  |  Tastiness: {review.QualityRating}/5  |  Wait Time: {review.TimeRating}/5  |  Availability of Seating: {review.SeatingRating}/5</p>
 
-            <button onClick={() => {upVote(review.id, review.upvotes)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
+            <button onClick={() => {upVote(review.id, review.upvotes, review.userEmail)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
         &#x1F44D;</span></button>{review.upvotes}
-        <button onClick={() => {downVote(review.id, review.downvotes)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
+        <button onClick={() => {downVote(review.id, review.downvotes, review.userEmail)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
         &#x1F44E;
       </span></button>{review.downvotes}      
                 </div>
