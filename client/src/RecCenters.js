@@ -152,13 +152,6 @@ function RecCenters() {
     </ul>
     <br></br>
 
-    {/* <div class="SortedResults">  {showSortedResults ? (
-    <div>
-      {sortedNames.map((result) => (
-        <p key={result}>{result}<br /></p>
-      ))}
-    </div>
-  ) : null}</div><br /><br /> */}
   {showSortedResults ? 
   (<div>
           {sortedNames[0]()}
