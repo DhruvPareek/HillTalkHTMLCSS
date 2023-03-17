@@ -726,7 +726,7 @@ function ReviewDatabase(string){
 
       
       <button onClick={createReview} className="rev-button"> Submit Review</button>
-      <button onClick={sortReview} className="rev-button">Sort by Popularity</button> 
+      {/* <button onClick={sortReview} className="rev-button">Sort by Popularity</button>  */}
 
       </div>
       </div>
