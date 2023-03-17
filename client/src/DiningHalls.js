@@ -17,6 +17,7 @@ import { auth } from "./firebase-config";
 import Swal from "sweetalert2";
 
 
+//Dining Halls function
 function DiningHalls() {
   //hooks for search functionality 
   const [searchTerm, setSearchTerm] = useState('');
@@ -251,7 +252,7 @@ function DiningHalls() {
     });
     setShowSearchResults(true);
   }
-
+    // Returned jsx to display content on page
     return (
         <html>
         <head>
@@ -262,6 +263,7 @@ function DiningHalls() {
           <p>This page contains every dining hall, takeout and buffet style places from around the hill.</p>
            <b>Sort By:</b>
            <ul>
+            {/* Buttons for sorting */}
             <button type='button' className="btn btn-primary" onClick={() => { getAverages(1);}}>Healthiness{}</button>  
             <button type='button' className="btn btn-primary" onClick={() => { getAverages(2);}}>Tastiness{}</button>  
             <button type='button' className="btn btn-primary" onClick={() => { getAverages(3);}}>Wait Time{}</button>  
@@ -269,6 +271,7 @@ function DiningHalls() {
             </ul> 
             <br></br>
 
+            {/* Searchbox implementation */}
             <div class="searchBox">
         <h4>Search For Keywords in Reviews:</h4>
         <input type="text" value = {searchTerm}  onChange={event => setSearchTerm(event.target.value)} 
@@ -284,6 +287,7 @@ function DiningHalls() {
     </div>
   ) : null}</div><br /><br />
   {showSortedResults ? 
+  // display sorted dining halls
   (<div>
         {sortedNames[0]()}
         <br />
@@ -346,13 +350,13 @@ function DiningHalls() {
       );
 }
 
-
+// function to match user input search with keywords in reviews
 async function retrieveMatchingResults(props){
   let searchMatches = await findMatches(props);
   return searchMatches;
   // do something with hedrickMatches
 }
-
+// read in text from reviews to match with user's search
 const readInSearchData = async (reviewCollectionRef) => {
   const querySnapshot = await getDocs(reviewCollectionRef);
 
@@ -369,6 +373,7 @@ const readInSearchData = async (reviewCollectionRef) => {
   return readInReviews;
 }
 
+// findMatches function that reads in the reviews for each dining hall and stores the text they display
 const findMatches = async(userSearch) => {
   const rendeCollectionRef = collection(db, "Rendezvous");
   const bCafeCollectionRef = collection(db, "Bcafe");
@@ -390,43 +395,45 @@ const findMatches = async(userSearch) => {
   const readInFeastReviews = await readInSearchData(feastCollectionRef);
   const readInStudyReviews = await readInSearchData(studyCollectionRef);
 
+  // Empty review function to store reviews to display that have a matching keyword
   let allRevs = [];
 
+  // Push matching reviews from each dining hall to the allRevs array
   readInRendeReviews.forEach((review) => {
-    allRevs.push("Rendezvous: \"" + review.Review + "\""); 
+    allRevs.push("Rendezvous: \"" + review.Review + "\""); // Push the dining hall followed by its matching review
     
   });
 
   readInBCafeReviews.forEach((review) => {
-    allRevs.push("BCafe: \"" + review.Review + "\""); 
+    allRevs.push("BCafe: \"" + review.Review + "\""); // Push the dining hall followed by its matching review
   });
 
   readInBPlateReviews.forEach((review) => {
-    allRevs.push("BPlate: \"" + review.Review + "\""); 
+    allRevs.push("B-Plate: \"" + review.Review + "\""); // Push the dining hall followed by its matching review
   });
 
   readInBBowlReviews.forEach((review) => {
-    allRevs.push("Bruin Bowl: \"" + review.Review + "\""); 
+    allRevs.push("Bruin Bowl: \"" + review.Review + "\""); // Push the dining hall followed by its matching review
   });
 
   readInDNeveReviews.forEach((review) => {
-    allRevs.push("De Neve: \"" + review.Review + "\""); 
+    allRevs.push("De Neve: \"" + review.Review + "\""); // Push the dining hall followed by its matching review
   });
 
   readInDreyReviews.forEach((review) => {
-    allRevs.push("Drey: \"" + review.Review + "\""); 
+    allRevs.push("Drey: \"" + review.Review + "\""); // Push the dining hall followed by its matching review
   });
 
   readInEpicReviews.forEach((review) => {
-    allRevs.push("Epicuria: \"" + review.Review + "\""); 
+    allRevs.push("Epicuria: \"" + review.Review + "\""); // Push the dining hall followed by its matching review
   });
 
   readInFeastReviews.forEach((review) => {
-    allRevs.push("Feast: \"" + review.Review + "\""); 
+    allRevs.push("Feast: \"" + review.Review + "\""); // Push the dining hall followed by its matching review
   });
 
   readInStudyReviews.forEach((review) => {
-    allRevs.push("The Study: \"" + review.Review + "\""); 
+    allRevs.push("The Study: \"" + review.Review + "\""); // Push the dining hall followed by its matching review
   });
 
   let matchingElements = [];
@@ -439,7 +446,7 @@ const findMatches = async(userSearch) => {
   return matchingElements;
 }
 
-
+// function that calls computeAverage and returns average values for ratings
 async function retrieveAverages(facilityName, category){
   let averageValue = await computeAverage(facilityName, category);
   return averageValue;
@@ -492,8 +499,7 @@ const computeAverage = async(collectionName, category) => {
       });
     }
 
-    console.log(collectionName + ". Average:" + (totalRating / length));
-
+    // return the average rating 
     return totalRating / length;
 
   
@@ -526,10 +532,10 @@ function ReviewDatabase(string){
     const [Reviews, setReview] = useState([]); //hook instead of class
     const ReviewCollectionRef = collection(db, string) //gets the collection of reviews from the database and stores into var
     const [newReview, setNewReview] = useState("");
-    const [newHealthRating, setNewHealthRating] = useState(0);
-    const [newQualityRating, setNewQualityRating] = useState(0);
-    const [newTimeRating, setNewTimeRating] = useState(0);
-    const [newSeatingRating, setNewSeatingRating] = useState(0);
+    const [newHealthRating, setNewHealthRating] = useState(-1);
+    const [newQualityRating, setNewQualityRating] = useState(-1);
+    const [newTimeRating, setNewTimeRating] = useState(-1);
+    const [newSeatingRating, setNewSeatingRating] = useState(-1);
     const [reducerValue, forceUpdate] = useReducer(x => x+1, 0);
 
     const [user, setUser] = useState({});
@@ -550,7 +556,7 @@ function ReviewDatabase(string){
     //end of what you need to copy
     const createReview = async () => {
       if (logged){
-        if((newSeatingRating !=-1 && newTimeRating !=-1 && newHealthRating != -1 && newQualityRating != -1 && newReview != "" &&  newSeatingRating >=0 && newSeatingRating <=5 && newTimeRating >= 0 && newTimeRating <= 5 && newHealthRating >= 0 && newHealthRating <= 5 && newQualityRating >= 0 && newQualityRating <= 5)){
+        if((newSeatingRating != -1 && newTimeRating != -1 && newHealthRating != -1 && newQualityRating != -1 && newReview != "" &&  newSeatingRating >=0 && newSeatingRating <=5 && newTimeRating >= 0 && newTimeRating <= 5 && newHealthRating >= 0 && newHealthRating <= 5 && newQualityRating >= 0 && newQualityRating <= 5)){
         await addDoc(ReviewCollectionRef, { Review: newReview, SeatingRating: Number(newSeatingRating), TimeRating: Number(newTimeRating), HealthRating: Number(newHealthRating), QualityRating: Number(newQualityRating), 
           Overall: ((Number(newSeatingRating) + Number(newTimeRating) + Number(newHealthRating) + Number(newQualityRating))/4), upvotes: Number(0), downvotes: Number(0), userEmail: ""});
         forceUpdate();
@@ -660,6 +666,7 @@ function ReviewDatabase(string){
       getReviews()  
     }, [reducerValue])
 
+    // jsx that displays on the Dining Halls page
     return (
       <div className="ReviewDatabase">
       <div className="form-container">
@@ -717,7 +724,7 @@ function ReviewDatabase(string){
         class="RatingBox"
       /></p>
 
-
+      
       <button onClick={createReview} className="rev-button"> Submit Review</button>
       <button onClick={sortReview} className="rev-button">Sort by Popularity</button> 
 
@@ -727,10 +734,12 @@ function ReviewDatabase(string){
         return (
           <div className="eachReview">
 
+            {/* Display each rating and the reviews */}
             <p><b>Review: </b>{review.Review}</p>
             <p><b>Overall Rating: </b>{review.Overall}</p>
             <p>Healthiness: {review.HealthRating}/5  |  Tastiness: {review.QualityRating}/5  |  Wait Time: {review.TimeRating}/5  |  Availability of Seating: {review.SeatingRating}/5</p>
 
+            {/* Display upvotes */}
             <button onClick={() => {upVote(review.id, review.upvotes, review.userEmail)}} class="thumbsup"><span role="img" aria-label="thumbs-up">
         &#x1F44D;</span></button>{review.upvotes}
         <button onClick={() => {downVote(review.id, review.downvotes, review.userEmail)}} class="thumbsdown"><span role="img" aria-label="thumbs-down">
