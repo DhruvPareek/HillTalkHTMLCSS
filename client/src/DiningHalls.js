@@ -14,6 +14,9 @@ import {
 import { auth } from "./firebase-config";
 
 
+import Swal from "sweetalert2";
+
+
 function DiningHalls() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -305,18 +308,36 @@ function ReviewDatabase(string){
           //alert("Review Submitted!! Refresh page to view.")
       }
       else{
-        alert("Please leave a review and rating for each field (0-5) in order to submit")
+        Swal.fire({
+          
+          icon: 'error',
+          title: 'Oops...',
+          text: "Please leave a review and rating for each field (0-5) in order to submit",
+          footer: '<a href="/contact">Having Issues? - Contact Us!</a>'
+        })  
       }
       }
       else{
-        alert("Please Login at Home Page before leaving a review")
+
+        Swal.fire({
+          
+          icon: 'error',
+          title: 'Oops...',
+          text: "Please Login at Home Page before leaving a review",
+          footer: '<a href="/contact">Having Issues? - Contact Us!</a>'
+        }) 
       }
       };
 
      //for updating review when upvote button clicked if user is logged in
      const upVote = async (id, numupvotes, userEmail) => { // NEW CHANGE
       if(userEmail.includes(auth.currentUser.email)){
-        alert("Cannot Vote again!!")
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'You have already voted on this review!',
+          footer: '<a href="/contact">Having Issues? - Contact Us!</a>'
+        })
       }
       else if(logged){
         const reviewDoc = doc(db, string, id);
@@ -325,14 +346,25 @@ function ReviewDatabase(string){
         forceUpdate();
         //alert("Upvote counted!! Refresh page to view.")
       }else{
-        alert("Please login at Home Page before upvoting")
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please Login at Home Page before Upvoting!',
+          footer: '<a href="/contact">Having Issues? - Contact Us!</a>'
+        })
       }
     }
   
     //for updating review when downvote button clicked if user is logged in
     const downVote = async (id, numdownvotes, userEmail) => { // NEW CHANGE
       if(userEmail.includes(auth.currentUser.email)){
-        alert("Cannot vote again!")
+        Swal.fire({
+          
+          icon: 'error',
+          title: 'Oops...',
+          text: 'You have already voted on this review!',
+          footer: '<a href="/contact">Having Issues? - Contact Us!</a>'
+        })
       }
       else if(logged){
         const reviewDoc = doc(db, string, id);
@@ -341,7 +373,13 @@ function ReviewDatabase(string){
         forceUpdate();
         //alert("Downvote counted!! Refresh page to view.")
       }else{
-        alert("Please login at Home Page before downvoting")
+        Swal.fire({
+          
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Please Login at Home Page before Downvoting!',
+          footer: '<a href="/contact">Having Issues? - Contact Us!</a>'
+        })
       }
     }
 
