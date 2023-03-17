@@ -8,26 +8,45 @@
     //         </div>
     //     );
     // }
+    import './App.css';
     import React, { useState } from 'react';
+    import {db} from "./firebase-config";
+    import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
+    import Swal from "sweetalert2";
+
     
     function ContactUs() {
-      const [name, setName] = useState('');
-      const [email, setEmail] = useState('');
-      const [message, setMessage] = useState('');
+      const [name, setName] = useState("");
+      const [email, setEmail] = useState("");
+      const [message, setMessage] = useState("");
+      const reviewCollectionRef = collection(db, "Messages")
     
-      function handleSubmit(event) {
-        event.preventDefault();
-        console.log('Name:', name);
-        console.log('Email:', email);
-        console.log('Message:', message);
-        // You can add your own logic here to send the form data to your backend
-      }
+      const createReview = async () => {
+        
+        if(name != "" && email != "" && message != ""){
+          await addDoc(reviewCollectionRef, { Name : name, Email : email, Message : message });
+          Swal.fire({
+            
+            icon: 'success',
+            title: 'Success!',
+            text: "Your inquiry has been submitted.",
+            footer: '<a href="/contact">Having Issues? - Contact Us!</a>'
+          })  
+            //alert("Review Submitted!! Refresh page to view.")
+        }
+        else{
+          Swal.fire({
+            
+            icon: 'error',
+            title: 'Oops...',
+            text: "Please fill out all sections before submitting.",
+            footer: '<a href="/contact">Having Issues? - Contact Us!</a>'
+          })  
+        }
+        };
     
       return (
-        
-    //Was having difficulty getting background to display correctly in the CSS file so put it here instead
-        <form onSubmit={handleSubmit}>
-    
+        <div>
           <div style={{ position: 'relative' }}>
               <div style={{ 
                 backgroundImage: 'url(https://cdn2.lamag.com/wp-content/uploads/sites/6/2022/09/UCLA.jpg)',
@@ -58,18 +77,18 @@
                 </div>
               </div>
           </div>
-       
-    
+          
+              
           <div style={{
             verticalAlign: "middle"
           }}>
-{/*     
+          <b>Please submit issues below.</b>
           <div>
             <label htmlFor="name">Name:</label>
             <input
               type="text"
               id="name"
-              value={name}
+              // value={name}
               onChange={(event) => setName(event.target.value)}
               class="ContactBox"
             />
@@ -79,7 +98,7 @@
             <input
               type="email"
               id="email"
-              value={email}
+              // value={email}
               onChange={(event) => setEmail(event.target.value)}
               class="ContactBox"
             />
@@ -88,15 +107,15 @@
             <label htmlFor="message">Message:</label>
             <textarea
               id="message"
-              value={message}
+              // value={message}
               onChange={(event) => setMessage(event.target.value)}
               class="ContactBox"
               // margin="10px"
             />
           </div>
-          <button type="submit">Submit</button> */}
+          <button onClick={createReview} type="submit">Submit</button> 
           </div>
-        </form>
+        </div>
       );
     }
     
