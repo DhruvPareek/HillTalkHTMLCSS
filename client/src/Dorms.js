@@ -21,6 +21,227 @@ function Dorms(){
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [matchingResults, setMatchingResults] = useState([]);
 
+  //hooks for sorting functionality 
+  const [centennial, setCentennial] = useState(0);
+  const [deNeve, setDeNeve] = useState(0);
+  const [hollyGardenia, setHollyGardenia] = useState(0);
+  const [hedrickSummit, setHedrickSummit] = useState(0);
+  const [dykstra, setDykstra] = useState(0);
+  const [hedrickHall, setHedrickHall] = useState(0);
+  const [hitch, setHitch] = useState(0);
+  const [rieberHall, setRieberhall] = useState(0);
+  const [rieberVista, setRieberVista] = useState(0);
+
+  const [sortedAspect, setSortedAspect] = useState("");
+  const [sortedNames, setSortedNames] = useState([]);
+  const [showSortedResults, setShowSortedResults] = useState(false);
+
+  useEffect(() => {
+    let foundCentennial, foundDeNeve, foundHolly, foundHeddySummit, foundDykstra, foundHeddyHall, foundHitch, foundRieberHall, foundRieberVista = false;
+    setSortedNames(prevArray=>[]);
+    let sortedNums = [centennial, deNeve, hollyGardenia, hedrickSummit, dykstra, hedrickHall, hitch, rieberHall, rieberVista].sort((a, b) => b - a);
+    // console.log("inside useEffect(): ")
+    // console.log("bplate avg " + centennial);
+    // console.log("epic avg " + deNeve);
+    // console.log("drey avg " + hollyGardenia);
+    // console.log("rende avg" + hedrickSummit);
+    // console.log("bcafe avg " + dykstra);
+    // console.log("bruin bowl avg " + hedrickHall);
+    // console.log("de neve avg " + hitch);
+    // console.log("feast avg " + rieberHall);
+    // console.log("study avg " + rieberVista);
+    
+    for(let i = 0; i < sortedNums.length; i++){
+      if(sortedNums[i] === centennial && !foundCentennial){
+        foundCentennial = true;
+        setSortedNames(prevArray=>[...prevArray, displayCentennial]);
+      }else if(sortedNums[i] === deNeve && !foundDeNeve){
+        foundDeNeve = true;
+        setSortedNames(prevArray=>[...prevArray, displayDeNeve]);
+      }else if(sortedNums[i] === hollyGardenia && !foundHolly){
+        foundHolly = true;
+        setSortedNames(prevArray=>[...prevArray, displayHollyGardenia]);        
+      }else if(sortedNums[i] === hedrickSummit && !foundHeddySummit){
+        foundHeddySummit = true;
+        setSortedNames(prevArray=>[...prevArray, displayHeddySummit]);  
+      }else if(sortedNums[i] === dykstra && !foundDykstra){
+        foundDykstra = true;
+        setSortedNames(prevArray=>[...prevArray, displayDykstra]); 
+      }
+      else if(sortedNums[i] === hedrickHall && !foundHeddyHall){
+        foundHeddyHall = true;
+        setSortedNames(prevArray=>[...prevArray, displayHeddyHall]); 
+      }
+      else if(sortedNums[i] === hitch && !foundHitch){
+        foundHitch = true;
+        setSortedNames(prevArray=>[...prevArray, displayHitch]); 
+      }
+      else if(sortedNums[i] === rieberHall && !foundRieberHall){
+        foundRieberHall = true;
+        setSortedNames(prevArray=>[...prevArray, displayRieberHall]); 
+      }
+      else if(sortedNums[i] === rieberVista && !foundRieberVista){
+        foundRieberVista = true;
+        setSortedNames(prevArray=>[...prevArray, displayRieberVista]); 
+      }
+    }
+  }, [sortedAspect]);
+
+  async function getAverages(props) {
+    const centennialPromise = retrieveAverages("Centennial", props);
+    // console.log(retrieveAverages("JWCReviews", props));
+    const deNevePromise = retrieveAverages("DeNeve", props);
+    const hollyGardeniaPromise = retrieveAverages("HollyGardenia", props);
+    const hedrickSummitPromise = retrieveAverages("HeddySummit", props);
+    const dykstraPromise = retrieveAverages("Dykstra", props);
+    const hedrickHallPromise = retrieveAverages("Hedrick", props);
+    const hitchPromise = retrieveAverages("Hitch", props);
+    const rieberHallPromise = retrieveAverages("RieberHall", props);
+    const rieberVistaPromise = retrieveAverages("RieberVista", props);
+  
+    setCentennial(await centennialPromise);
+    setDeNeve(await deNevePromise);
+    setHollyGardenia(await hollyGardeniaPromise);
+    setHedrickSummit(await hedrickSummitPromise);
+    setDykstra(await dykstraPromise);
+    setHedrickHall(await hedrickHallPromise);
+    setHitch(await hitchPromise);
+    setRieberhall(await rieberHallPromise);
+    setRieberVista(await rieberVistaPromise);
+
+    // console.log("inside getAverages(): ")
+    // console.log("bplate avg " + centennial);
+    // console.log("epic avg " + deNeve);
+    // console.log("drey avg " + hollyGardenia);
+    // console.log("rende avg" + hedrickSummit);
+    // console.log("bcafe avg " + dykstra);
+    // console.log("bruin bowl avg " + hedrickHall);
+    // console.log("de neve avg " + hitch);
+    // console.log("feast avg " + rieberHall);
+    // console.log("study avg " + rieberVista);
+
+    setSortedAspect(props)
+    setShowSortedResults(true);
+  }
+
+  function displayHeddySummit(){
+    return (
+      <div>
+        <h3>Hedrick Summit</h3>
+        <img src="https://s3-media0.fl.yelpcdn.com/bphoto/R7x3cuexqtbDRpbZKK405w/348s.jpg"  width="250" height="200" class="HSummit"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("HeddySummit")}
+        </div>
+        </div>
+    );
+  }
+
+  function displayHitch(){
+    return (
+      <div>
+        <h3>Hitch Suites</h3>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ_zvnYnhBUwc_tFS-fniDWToVlSA_BgtF6g&usqp=CAU"  width="250" height="220" class="HitchSuitesPics"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Hitch")}
+        </div>
+      </div>
+      
+    );
+  }
+
+  function displayDeNeve(){
+    return (
+      <div>
+        <h3>De Neve Acacia, Birch, Cedar, Dogwood, Evergreen, Fir</h3>
+      <img src="https://fastly.4sqi.net/img/general/600x600/6826866_k4W8jsn53GD_Y6CHMaGW5AlGywjPaUPbG_8YXquH-5U.jpg"  width="250" height="200" class="DeNeveDorms"></img>
+      <div class="ListOfReviews">
+        <h3>Reviews:</h3><br></br>
+      {ReviewDatabase("DeNeve")}
+      </div>
+      </div>
+    );
+  }
+
+  function displayCentennial(){
+    return (
+      <div>
+        <h3>Centennial/Olympic</h3>
+        <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20218/614102382cfac27232f4ea45_Olympic+and+Centennial+Hall_5DM47510_Ext2/Olympic+and+Centennial+Hall_5DM47510_Ext2_hero.jpg"  width="250" height="200" class="CentennialOlympic"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br /><br />
+        {ReviewDatabase("Centennial")}
+        </div>
+      </div>
+    );
+  }
+
+  function displayRieberVista(){
+    return (
+      <div>
+        <h3>Rieber Terrace/Vista</h3>
+        <img src="https://conferences.ucla.edu/wp-content/uploads/2019/01/Summer_PlazaRooms_RieberVista.jpg"  width="250" height="200" class="RieberTerraceVista"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("RieberVista")}
+      </div>
+      </div>
+    );
+  }
+
+  function displayDykstra(){
+    return (
+      <div>
+        <h3>Dykstra</h3>
+        <img src="https://www.saifulbouquet.com/wp-content/uploads/2020/04/47097_web_ns_2_17_dykstramemories_picco.jpg" width="250" height="200" class="Dykstra"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Dykstra")}
+        </div>
+      </div>
+    );
+  }
+
+  function displayHeddyHall(){
+    return (
+      <div>
+        <h3>Hedrick Hall</h3>
+        <img src="https://humansofuniversity.com/wp-content/uploads/2022/05/2b0fbb098d13dd26587a5841292cd4aa-1024x768.jpg" width="250" height="200" class="HedrickPic"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("Hedrick")}
+      </div>
+      </div>
+    );
+  }
+
+  function displayRieberHall(){
+    return (
+      <div>
+        <h3>Rieber Hall</h3>
+      <img src="https://www.sgvtribune.com/wp-content/uploads/2022/03/LDN-Z-UCLA-DORMS.jpg?w=620"  width="250" height="230" class="rieberHall"></img>
+      <div class="ListOfReviews">
+        <h3>Reviews:</h3><br></br>
+      {ReviewDatabase("RieberHall")}
+      </div>
+      </div>
+    );
+  }
+
+  function displayHollyGardenia(){
+    return (
+      <div>
+      <h3>De Neve Gardenia/Holly</h3>
+        <img src="https://humansofuniversity.com/wp-content/uploads/2022/05/67658661.jpg"  width="250" height="200" class="HollyGardenia"></img>
+        <div class="ListOfReviews">
+          <h3>Reviews:</h3><br></br>
+        {ReviewDatabase("HollyGardenia")}
+        </div>
+      </div>
+    );
+  }
+
   function handleSearch() {
     retrieveMatchingResults(searchTerm).then((searchMatches) => {
       setMatchingResults(searchMatches);
@@ -40,10 +261,10 @@ function Dorms(){
 
        <b>Sort By:</b>
        <ul>
-        <button type='button' className="btn btn-primary" onClick={() => { clickedSort(1);}}>Cleanliness{}</button>
-        <button type='button' className="btn btn-primary" onClick={() => { clickedSort(2);}}>Noise{}</button>
-        <button type='button' className="btn btn-primary" onClick={() => { clickedSort(3);}}>Living Space{}</button>
-        <button type='button' className="btn btn-primary" onClick={() => { clickedSort(4);}}>Location{}</button>
+        <button type='button' className="btn btn-primary" onClick={() => { getAverages(1);}}>Cleanliness{}</button>
+        <button type='button' className="btn btn-primary" onClick={() => { getAverages(2);}}>Noise{}</button>
+        <button type='button' className="btn btn-primary" onClick={() => { getAverages(3);}}>Living Space{}</button>
+        <button type='button' className="btn btn-primary" onClick={() => { getAverages(4);}}>Location{}</button>
         </ul>
         <br></br>
 
@@ -62,84 +283,67 @@ function Dorms(){
     </div>
   ) : null}</div><br /><br />
 
-
-        <h3>Centennial/Olympic</h3>
-        <img src="https://s3.amazonaws.com/cms.ipressroom.com/173/files/20218/614102382cfac27232f4ea45_Olympic+and+Centennial+Hall_5DM47510_Ext2/Olympic+and+Centennial+Hall_5DM47510_Ext2_hero.jpg"  width="250" height="200" class="CentennialOlympic"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br /><br />
-        {ReviewDatabase("Centennial")}
-        </div>
+{showSortedResults ? 
+  (<div>
+        {sortedNames[0]()}
         <br />
-
-        <h3>De Neve Acacia, Birch, Cedar, Dogwood, Evergreen, Fir</h3>
-        <img src="https://fastly.4sqi.net/img/general/600x600/6826866_k4W8jsn53GD_Y6CHMaGW5AlGywjPaUPbG_8YXquH-5U.jpg"  width="250" height="200" class="DeNeveDorms"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("DeNeve")}
-        </div>
         <br />
-
-        <h3>De Neve Gardenia/Holly</h3>
-        <img src="https://humansofuniversity.com/wp-content/uploads/2022/05/67658661.jpg"  width="250" height="200" class="HollyGardenia"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("HollyGardenia")}
-        </div>
+        {sortedNames[1]()}
         <br />
-
-        <h3>Hedrick Summit</h3>
-        <img src="https://s3-media0.fl.yelpcdn.com/bphoto/R7x3cuexqtbDRpbZKK405w/348s.jpg"  width="250" height="200" class="HSummit"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("HeddySummit")}
-        </div>
-        <br /> 
-
-        <h3>Dykstra</h3>
-        <img src="https://www.saifulbouquet.com/wp-content/uploads/2020/04/47097_web_ns_2_17_dykstramemories_picco.jpg" width="250" height="200" class="Dykstra"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("Dykstra")}
-        </div>
         <br />
-
-
-        <h3>Hedrick Hall</h3>
-        <img src="https://humansofuniversity.com/wp-content/uploads/2022/05/2b0fbb098d13dd26587a5841292cd4aa-1024x768.jpg" width="250" height="200" class="HedrickPic"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("Hedrick")}
-        </div>
-        <br /> 
-
-        <h3>Hitch Suites</h3>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ_zvnYnhBUwc_tFS-fniDWToVlSA_BgtF6g&usqp=CAU"  width="250" height="220" class="HitchSuitesPics"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("Hitch")}
-        </div>
+        {sortedNames[2]()}
         <br />
-
-        <h3>Rieber Hall</h3>
-        <img src="https://www.sgvtribune.com/wp-content/uploads/2022/03/LDN-Z-UCLA-DORMS.jpg?w=620"  width="250" height="230" class="rieberHall"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("RieberHall")}
-        </div>
         <br />
-
-        <h3>Rieber Terrace/Vista</h3>
-        <img src="https://conferences.ucla.edu/wp-content/uploads/2019/01/Summer_PlazaRooms_RieberVista.jpg"  width="250" height="200" class="RieberTerraceVista"></img>
-        <div class="ListOfReviews">
-          <h3>Reviews:</h3><br></br>
-        {ReviewDatabase("RieberVista")}
-        </div>
+        {sortedNames[3]()}
         <br />
-
-    </body>
-    
-    </html>
-  );
+        <br />
+        {sortedNames[4]()}
+        <br />
+        <br />
+        {sortedNames[5]()}
+        <br />
+        <br />
+        {sortedNames[6]()}
+        <br />
+        <br />
+        {sortedNames[7]()}
+        <br />
+        <br />
+        {sortedNames[8]()}
+        <br />
+    </div>) : 
+      (<div>
+        {displayHeddySummit()}
+        <br />
+        <br />
+        {displayHitch()}
+        <br />
+        <br />
+        {displayDeNeve()}
+        <br />
+        <br />
+        {displayCentennial()}
+        <br />
+        <br />
+        {displayRieberVista()}
+        <br />
+        <br />
+        {displayDykstra()}
+        <br />
+        <br />
+        {displayHeddyHall()}
+        <br />
+        <br />
+        {displayRieberHall()}
+        <br />
+        <br />
+        {displayHollyGardenia()}
+        <br />
+      </div>)
+      }
+      </body>
+      </html>
+      );
 }
 
 async function retrieveMatchingResults(props){
@@ -170,7 +374,7 @@ const findMatches = async(userSearch) => {
   const hedrickSummitCollectionRef = collection(db, "HeddySummit");
   const dykstraCollectionRef = collection(db, "Dykstra");
   const hitchCollectionRef = collection(db, "Hitch");
-  const rieberHallCollectionRef = collection(db, "RieberHall");
+  const rieberHallCollectionRef = collection(db, "rieberHall");
   const vistaTerraceCollectionRef = collection(db, "RieberVista");
 
   const readInHedrickReviews = await readInSearchData(hedrickCollectionRef);
@@ -180,7 +384,7 @@ const findMatches = async(userSearch) => {
   const readInHeddySummitReviews = await readInSearchData(hedrickSummitCollectionRef);
   const readInDykstraReviews = await readInSearchData(dykstraCollectionRef);
   const readInHitchReviews = await readInSearchData(hitchCollectionRef);
-  const readInRieberHallReviews = await readInSearchData(rieberHallCollectionRef);
+  const readInrieberHallReviews = await readInSearchData(rieberHallCollectionRef);
   const readInVistaTerraceReviews = await readInSearchData(vistaTerraceCollectionRef);
 
   let allRevs = [];
@@ -214,7 +418,7 @@ const findMatches = async(userSearch) => {
     allRevs.push("Hitch Suites: \"" + review.Review + "\""); 
   });
 
-  readInRieberHallReviews.forEach((review) => {
+  readInrieberHallReviews.forEach((review) => {
     allRevs.push("Rieber Hall: \"" + review.Review + "\""); 
   });
 
@@ -231,6 +435,91 @@ const findMatches = async(userSearch) => {
 
   return matchingElements;
 }
+
+
+async function retrieveAverages(facilityName, category){
+  let averageValue = await computeAverage(facilityName, category);
+  return averageValue;
+
+}
+
+const computeAverage = async(collectionName, category) => {  
+    const reviewCollectionRef = collection(db, collectionName);
+  
+    const readInReviews = await readInData(reviewCollectionRef); //read in data from review
+  
+    const length = readInReviews.length; //number of reviews
+  
+  
+    //don't need to do any read in data
+    if (length == 0){
+      return 0;
+    }
+  
+    //read in data from collection that string specifies
+    
+    let totalRating = 0;
+    
+    if (category == "1"){
+      //compute average of facility quality 
+  
+      readInReviews.forEach((review) =>{
+        totalRating += parseInt(review.CleanlinessRating); //add up facility rating for each review
+      });
+    }
+  
+    else if (category == "2") {
+  
+      readInReviews.forEach((review) => {
+        totalRating += parseInt(review.NoiseRating); //add up facility rating for each review
+      });
+    }
+  
+    else if (category == "3"){
+  
+      readInReviews.forEach((review) =>{
+        totalRating += parseInt(review.SpaceRating); //add up facility rating for each review
+      });
+    }
+  
+    else if (category == "4"){
+  
+      readInReviews.forEach((review) =>{
+        totalRating += parseInt(review.LocationRating); //add up facility rating for each review
+      });
+    }
+
+    console.log(collectionName + ". Average:" + (totalRating / length));
+
+    return totalRating / length;
+
+  
+}
+
+//take snapshot and read in data from backend 
+const readInData = async (reviewCollectionRef) => {
+    const querySnapshot = await getDocs(reviewCollectionRef);
+
+    // create array of reviews from collection
+    const readInReviews = [];
+    
+    querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    data.id = doc.id;
+    readInReviews.push(data);
+    });
+
+    return readInReviews;
+}
+
+
+
+
+
+
+
+
+
 
 
 let logged = false;
@@ -250,6 +539,8 @@ function ReviewDatabase(string){
   const [user, setUser] = useState({});
     useEffect(() => {
 
+      forceUpdate();
+      
       onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
         if (currentUser){
@@ -330,6 +621,7 @@ function ReviewDatabase(string){
 
   useEffect(() => {
     
+
     const getReviews = async () => {
       const data = await getDocs(reviewCollectionRef);
       setReview(data.docs.map((doc) => ({...doc.data(), id: doc.id})));
