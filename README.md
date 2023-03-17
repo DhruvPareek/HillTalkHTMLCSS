@@ -14,8 +14,6 @@ The purpose of this project is to design a full-stack web appliaction. HillTalk 
 4. Users can sort the individual pages (Dorms, Dining Halls, and Recreation Centers) based on preference by clicking any of the sorting buttons under the "Sort By:" section at the top of each review page. This will rearrange the current webpage from highest to lowest rated based on the preference labeled on the button they clicked.
 5. Users can upvote or downvote reviews by clicking the thumbs up or thumbs down respectively at the bottom of each review.
     Note: A user can only upvote or downvote once per review.
-6. Users can sort the reviews under a place based on popularity by clicking the "Sort by Popularity" button which is next to the "Submit Review" button. Clicking this button rearranges the reviews from highest to lowest upvotes for the corresponding place.
-
 
 Requirements:
 This project requires requires the following modules:
