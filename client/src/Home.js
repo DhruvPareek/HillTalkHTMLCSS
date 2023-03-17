@@ -22,6 +22,7 @@ export default function Home() {
   const [user, setUser] = useState({});
   useEffect(() => {
 
+  // change the user's status to logged in/out
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
     if (currentUser){
@@ -32,6 +33,7 @@ export default function Home() {
     }
   });
   })
+  // create a valid username and password to register account
   const register = async () => {
     try {
       const user = await createUserWithEmailAndPassword(
@@ -39,12 +41,13 @@ export default function Home() {
         registerEmail,
         registerPassword
       );
-      console.log(user);
+      //console.log(user);
     } catch (error) {
-      console.log(error.message);
+      //console.log(error.message);
     }
   };
 
+  //login function that signs in user
   const login = async () => {
     try {
       const user = await signInWithEmailAndPassword(
@@ -52,9 +55,9 @@ export default function Home() {
         loginEmail,
         loginPassword
       );
-      console.log(user);
+      //console.log(user);
     } catch (error) {
-      console.log(error.message);
+      //console.log(error.message);
     }
   };
 
@@ -62,6 +65,7 @@ export default function Home() {
     await signOut(auth);
   };
 
+  // jsx that displays map, title and login/register text on the homepage
   return (
 <html>
     <head>
@@ -120,6 +124,7 @@ export default function Home() {
 </div>
 
 <h>User Logged In: </h>
+{/* Changes if user has been registered */}
 {user?user.email:"Not Logged In"}
 <button onClick={logout} className="rev-button"> Sign Out </button>
 </body>
