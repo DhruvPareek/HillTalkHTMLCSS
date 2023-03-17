@@ -6,7 +6,7 @@ The purpose of this project is to design a full-stack web appliaction. HillTalk 
     a. a text comment, 
     b. individual ratings on different aspects (ex: Dorms -> Location, Cleanliness, Noise, Living Space), 
     c. overall rating which is the average of the aspect ratings, and 
-    d. upvote and downvote buttons with the correspoding counts.
+    d. upvote and downvote buttons with the corresponding counts.
 2. Users can leave their own reviews by leaving a comment and rating (0-5) for each category of the place they are reviewing, then click the "Submit Review" button. 
     Note: Users must be signed in on the Home Page in order to leave a review. 
     Note: Users will be flagged if they do not complete all sections of the review or attempt to leave a rating outside the [0-5] inclusive range.
