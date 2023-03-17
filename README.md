@@ -28,6 +28,8 @@ Run the following in terminal in HillTalkHTMLCSS/client
     npm install
     npm install firebase
     npm install sweetalert2
+    
+In HillTalkHTMLCSS/client/src run:
     npm start
 
 Configuration:
