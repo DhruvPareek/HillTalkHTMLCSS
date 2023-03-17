@@ -1,17 +1,21 @@
-// About.js
+// import functions needed from react to use hooks so we can change the state and rerender easily
 import {useState, useEffect, useReducer} from "react";
 import React from "react";
 import "./App.css";
 
+//import the database and functions to manipulate the database
 import {db} from "./firebase-config"
 import {collection, getDocs, addDoc, updateDoc, doc} from "firebase/firestore";
 
+//import the feature of authentication that uses email and password
 import {
   onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "./firebase-config";
 
 function RecCenters() {
+//all hooks to keep track of variables that we want to either communicate to the db with or rerender the page when updated
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [matchingResults, setMatchingResults] = useState([]);
@@ -26,7 +30,7 @@ function RecCenters() {
   const [sortedNames, setSortedNames] = useState([]);
   const [sortedAspect, setSortedAspect] = useState("");
 
-
+//after rerender we want to do this
   useEffect(() => {
     let foundJWC, foundIM, foundHitch, foundSunset, foundBFit = false;
     setSortedNames(prevArray=>[]);
@@ -74,7 +78,7 @@ function RecCenters() {
     setSortedAspect(props)
     setShowSortedResults(true);
   }
-
+//Display functions for each Rec Center that get called in a certain order based on the sorted list
   function displayJWC(){
     return (
       <div>
@@ -149,6 +153,8 @@ function RecCenters() {
   
 
     return (
+
+      //return for the reviews, calls the display functions in the sorted version if the button is clicked, if not it calls the display functions in a standard order
         <html>
 <head>
 <title>HillTalk</title>
@@ -484,11 +490,11 @@ function ReviewDatabase(string){
     return (
       <div className="ReviewDatabase">
       <div className="form-container">
-
+    {/* different input boxes for the reviews */}
       <input
         placeholder="Review. . ."
         onChange={(event) => {
-          setInput(event.target.value);
+          setInput(event.target.value); //when the box is changed, we want to set the input state to that value that it has been changed to
         }}
         class="ReviewBox"
         />
@@ -500,7 +506,7 @@ function ReviewDatabase(string){
         max={5}
         placeholder="0-5"
         onChange={(event) => {
-          setFacilityQRating(event.target.value);
+          setFacilityQRating(event.target.value); //set value of quality rating when changed
         }}
         class="RatingBox"
         /></p>
@@ -553,8 +559,8 @@ function ReviewDatabase(string){
         /></p>
 
         
-        
-        <button onClick={createReview} className="rev-button">Submit Review</button>
+        {/* buttons to create and sort reviews with onclicks that call the corresponding functions */}
+        <button onClick={createReview} className="rev-button">Submit Review </button> 
         <button onClick={sortReview} className="rev-button">Sort by Popularity</button> 
         </div>
         </div>
