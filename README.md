@@ -22,7 +22,10 @@ This project requires requires the following modules:
 2. Firebase (https://firebase.google.com/)
 
 Installation:
-Run the following in terminal in HillTalkHTMLCSS/client
+First, follow the steps at this link to download Node.js:
+https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac
+
+Then, run the following in terminal in HillTalkHTMLCSS/client
 
     npm install
     npm install firebase
