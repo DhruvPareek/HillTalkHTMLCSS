@@ -82,7 +82,7 @@ export default function Home() {
 <br></br>
 
 <div>
-  <p>Register User</p>
+  <p>Register User (password must be 6 letters or longer)</p>
   <input
           placeholder="Email..."
           onChange={(event) => {
