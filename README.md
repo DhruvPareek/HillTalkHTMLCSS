@@ -38,6 +38,9 @@ To start the program, run in HillTalkHTMLCSS/client or
 Configuration:
 The module has no menu or modifiable settings. There is no configuration.
 
+Registering Account:
+Your password must be at least 6 characters long and the email must be a regular email address format.
+
 Troubleshooting & FAQ:
 If you run into any issues, please report it on the Contact Us page of the website.
 
